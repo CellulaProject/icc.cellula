@@ -8,10 +8,11 @@ from pyramid.view import view_config
 
 # @hello.get()
 
-@view_config(route_name='home')
+@view_config(route_name='home',renderer='templates/index.pt')
 def get_info(request):
     """Returns Helo."""
-    return Response("<html><body><H>Hello world</H></body></html>")
+    #return Response("<html><body><H>Hello world</H></body></html>")
+    return { 'title':'Суперсистема'}
 
 
 

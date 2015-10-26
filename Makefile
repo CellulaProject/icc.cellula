@@ -1,4 +1,5 @@
-.PHONY: env dev install test edit dev-icc.rdfservice dev-icc.restfuldocs py
+.PHONY: env dev install test edit dev-icc.rdfservice \
+    dev-icc.restfuldocs py pot init-ru update-ru
 
 LPYTHON=python3
 V=$(PWD)/../$(LPYTHON)
@@ -6,6 +7,7 @@ VB=$(V)/bin
 PYTHON=$(VB)/$(LPYTHON)
 ROOT=$(PWD)
 INI=icc.cellula
+LCAT=src/icc/cellula/locales/
 
 env:
 	[ -d $(V) ] || virtualenv  $(V)
@@ -36,3 +38,15 @@ dev-icc.restfuldocs:
 	
 py:	
 	$(PYTHON)
+	
+pot:	
+	mkdir -p $(LCAT)
+	$(VB)/pot-create src -o $(LCAT)/messages.pot
+	
+init-ru:
+	$(PYTHON) setup.py init_catalog -l ru -i $(LCAT)/messages.pot \
+                         -o $(LCAT)/ru/messages.po
+                         
+update-ru:
+	$(PYTHON) setup.py update_catalog -l ru -i $(LCAT)/messages.pot \
+                            -o $(LCAT)/ru/messages.po

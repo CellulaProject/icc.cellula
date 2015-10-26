@@ -25,6 +25,7 @@ setup(name='icc.cellula',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'setuptools',
         'rdflib',
         'rdflib-jsonld',
 	'pyramid==1.6a2',
@@ -33,6 +34,8 @@ setup(name='icc.cellula',
 	'icc.rdfservice==0.1',
 	'icc.restfuldocs==0.0.1',
 	'pyramid_debugtoolbar',
+	'Babel',
+	'lingua',
 #	'pyramid_tm',
         ],
       dependency_links = [
@@ -47,7 +50,13 @@ setup(name='icc.cellula',
       package_dir = {'': 'src'},
       entry_points = """\
       [paste.app_factory]
-      main=icc.cellula.app:main
+      main=icc.cellula:main
       """,
-      paster_plugins=['pyramid'])
+#    message_extractors = {
+#        'src/icc/cellula': [
+#            ('**.py',                'python', None),
+#            ('**/templates/**.pt',   'xml', None),
+#        ],
+#    },
+)
 
