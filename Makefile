@@ -1,15 +1,18 @@
-.PHONY: env dev install test edit dev-icc.rdfservice dev-icc.restfuldocs
+.PHONY: env dev install test edit dev-icc.rdfservice dev-icc.restfuldocs py
 
 LPYTHON=python3
 V=$(PWD)/../$(LPYTHON)
-PYTHON=$(V)/bin/$(LPYTHON)
+VB=$(V)/bin
+PYTHON=$(VB)/$(LPYTHON)
 ROOT=$(PWD)
 INI=icc.cellula
 
 env:
 	[ -d $(V) ] || virtualenv  $(V)
+	$(VB)/easy_install --upgrade pip
 
 dev:	env dev-icc.rdfservice dev-icc.restfuldocs
+	$(V)/bin/pip install rdflib
 	$(PYTHON) setup.py develop
 
 install: env
@@ -26,7 +29,10 @@ test:
 	#cd src && $(PYTHON) app.py
 
 dev-icc.rdfservice:
-	make -C ../icc.rdfservice
+	make -C ../icc.rdfservice dev
 	
 dev-icc.restfuldocs:
-	make -C ../icc.restfuldocs
+	make -C ../icc.restfuldocs dev
+	
+py:	
+	$(PYTHON)

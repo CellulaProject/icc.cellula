@@ -50,3 +50,4 @@ setup(name='icc.cellula',
       main=app:main
       """,
       paster_plugins=['pyramid'])
+
