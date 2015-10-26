@@ -30,19 +30,19 @@ setup(name='icc.cellula',
 	'pyramid==1.6a2',
 	'waitress==0.8.11dev0ipv6-1',
 	'cornice==1.2.0.dev0',
-	'icc.rdfservice',
-	'icc.restfuldocs',
-	'icc.contentstorage',
+	'icc.rdfservice==0.1',
+	'icc.restfuldocs==0.0.1',
+#	'icc.contentstorage==0.0.1',
         ],
       dependency_links = [
         'https://github.com/eugeneai/rdflib-kyotocabinet/archive/master.zip#egg=rdflib-kyotocabinet-0.1',
         'https://github.com/Pylons/pyramid/archive/1.6a2.zip#egg=pyramid-1.6a2',
         'https://github.com/eugeneai/waitress/archive/0.8.11dev0ipv6-1.zip#egg=waitress-0.8.11dev0ipv6-1',
         'https://github.com/mozilla-services/cornice/archive/master.zip#egg=cornice-1.2.0.dev0',
-        
-        'https://github.com/eugeneai/icc.restfuldocs/archive/master.zip#egg=icc.restfuldocs-0.1'
-        'https://github.com/eugeneai/icc.contentstorage/archive/master.zip#egg=icc.contentstorage-0.1'
-        'https://github.com/eugeneai/icc.rdfservice/archive/master.zip#egg=icc.rdfservice-0.1'
+
+        'https://github.com/eugeneai/icc.restfuldocs/archive/master.zip#egg=icc.restfuldocs-0.0.1',
+        #'https://github.com/eugeneai/icc.contentstorage/archive/master.zip#egg=icc.contentstorage-0.0.1',
+        'https://github.com/eugeneai/icc.rdfservice/archive/master.zip#egg=icc.rdfservice-0.1',
         ],
       package_dir = {'': 'src'},
       entry_points = """\
