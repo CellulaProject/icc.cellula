@@ -45,8 +45,8 @@ pot:
 	
 init-ru:
 	$(PYTHON) setup.py init_catalog -l ru -i $(LCAT)/messages.pot \
-                         -o $(LCAT)/ru/messages.po
+                         -d $(LCAT)
                          
 update-ru:
 	$(PYTHON) setup.py update_catalog -l ru -i $(LCAT)/messages.pot \
-                            -o $(LCAT)/ru/messages.po
+                            -d $(LCAT)
