@@ -4,6 +4,8 @@
   <include package="zope.component" file="meta.zcml" />
   <include package="icc.restfuldocs" />
   <include package="icc.contentstorage" />
+  <include package="icc.rdfservice" />
+  <include package="icc.cellula" />
 
   <!--
   <include package="icc.rake.models" />
