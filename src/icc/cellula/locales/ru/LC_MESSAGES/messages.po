@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2015-10-26 13:24+0000\n"
+"POT-Creation-Date: 2015-10-26 14:41+0000\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language: ru\n"
@@ -20,6 +20,46 @@ msgstr ""
 
 #. Default: Dashboard
 #: ./src/icc/cellula/templates/index.pt:9
+#: ./src/icc/cellula/templates/index.pt:259
 msgid "title_dashboard"
 msgstr "Информационная панель"
+
+#. Default: Cellula
+#: ./src/icc/cellula/templates/index.pt:54
+msgid "main_cellula"
+msgstr "ЭКлетка"
+
+#. Default: Search here...
+#: ./src/icc/cellula/templates/index.pt:58
+msgid "placeholder_search_here"
+msgstr "Поиск по содержимому..."
+
+#. Default: Close
+#: ./src/icc/cellula/templates/index.pt:114
+msgid "btn_close"
+msgstr "Закрыть"
+
+#. Default: Save changes
+#: ./src/icc/cellula/templates/index.pt:116
+msgid "btn_save_changes"
+msgstr "Сохранить"
+
+#. Default: Dashboard
+#: ./src/icc/cellula/templates/index.pt:135
+#: ./src/icc/cellula/templates/index.pt:264
+#: ./src/icc/cellula/templates/index.pt:265
+msgid "side_dashboard"
+msgstr "Обзор"
+
+#: ./src/icc/cellula/templates/index.pt:140
+msgid "Email"
+msgstr "Почта"
+
+#: ./src/icc/cellula/templates/index.pt:145
+msgid "Document Archive"
+msgstr "Архив документов"
+
+#: ./src/icc/cellula/templates/index.pt:263
+msgid "Home"
+msgstr "Главная"
 

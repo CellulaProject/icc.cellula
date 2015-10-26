@@ -31,7 +31,7 @@
 <body>
     <div>
         <!--BEGIN THEME SETTING-->
-        <div id="theme-setting">
+        <div id="theme-setting" tal:condition="nothing">
             <a href="#" data-toggle="dropdown" data-step="1" data-intro="&lt;b&gt;Many styles&lt;/b&gt; and &lt;b&gt;colors&lt;/b&gt; be created for you. Let choose one and enjoy it!"
                 data-position="left" class="btn-theme-setting"><i class="fa fa-cog"></i></a>
             <div class="content-theme-setting">
@@ -51,11 +51,11 @@
             <nav id="topbar" role="navigation" style="margin-bottom: 0;" data-step="3" class="navbar navbar-default navbar-static-top">
             <div class="navbar-header">
                 <button type="button" data-toggle="collapse" data-target=".sidebar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a id="logo" href="index.html" class="navbar-brand"><span class="fa fa-rocket"></span><span class="logo-text">KAdmin</span><span style="display: none" class="logo-text-icon">µ</span></a></div>
+                <a id="logo" href="/" class="navbar-brand"><span class="fa fa-rocket"></span><span class="logo-text" i18n:translate="main_cellula">Cellula</span><span style="display: none" class="logo-text-icon">µ</span></a></div>
             <div class="topbar-main"><a id="menu-toggle" href="#" class="hidden-xs"><i class="fa fa-bars"></i></a>
 
                 <form id="topbar-search" action="" method="" class="hidden-sm hidden-xs">
-                    <div class="input-icon right text-white"><a href="#"><i class="fa fa-search"></i></a><input type="text" placeholder="Search here..." class="form-control text-white"/></div>
+                    <div class="input-icon right text-white"><a href="#"><i class="fa fa-search"></i></a><input type="text" placeholder="Search here..." i18n:attributes="placeholder placeholder_search_here" class="form-control text-white"/></div>
                 </form>
                 <div class="news-update-box hidden-xs"><span class="text-uppercase mrm pull-left text-white">News:</span>
                     <ul id="news-update" class="ticker list-unstyled">
@@ -111,9 +111,9 @@
                                 ultricies felis.</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-default">
+                            <button type="button" data-dismiss="modal" class="btn btn-default" i18n:translate="btn_close">
                                 Close</button>
-                            <button type="button" class="btn btn-primary">
+                            <button type="button" class="btn btn-primary" i18n:translate="btn_save_changes">
                                 Save changes</button>
                         </div>
                     </div>
@@ -130,9 +130,21 @@
                 <ul id="side-menu" class="nav">
 
                      <div class="clearfix"></div>
-                    <li class="active"><a href="dashboard.html"><i class="fa fa-tachometer fa-fw">
+                    <li class="active"><a href="/"><i class="fa fa-tachometer fa-fw">
                         <div class="icon-bg bg-orange"></div>
-                    </i><span class="menu-title">Dashboard</span></a></li>
+                    </i><span class="menu-title" i18n:translate="side_dashboard">Dashboard</span></a>
+                    
+                    </li>
+                    <li><a href="Email.html"><i class="fa fa-envelope-o">
+                        <div class="icon-bg bg-primary"></div>
+                    </i><span class="menu-title" i18n:translate>Email</span></a>
+
+                    </li>
+                    <li><a href="DataGrid.html"><i class="fa fa-database fa-fw">
+                        <div class="icon-bg bg-red"></div>
+                    </i><span class="menu-title" i18n:translate>Document Archive</span></a>
+
+                    </li>
                     <li><a href="Layout.html"><i class="fa fa-desktop fa-fw">
                         <div class="icon-bg bg-pink"></div>
                     </i><span class="menu-title">Layouts</span></a>
@@ -153,11 +165,6 @@
                     </i><span class="menu-title">Tables</span></a>
 
                     </li>
-                    <li><a href="DataGrid.html"><i class="fa fa-database fa-fw">
-                        <div class="icon-bg bg-red"></div>
-                    </i><span class="menu-title">Data Grids</span></a>
-
-                    </li>
                     <li><a href="Pages.html"><i class="fa fa-file-o fa-fw">
                         <div class="icon-bg bg-yellow"></div>
                     </i><span class="menu-title">Pages</span></a>
@@ -171,11 +178,6 @@
                     <li><a href="Dropdown.html"><i class="fa fa-sitemap fa-fw">
                         <div class="icon-bg bg-dark"></div>
                     </i><span class="menu-title">Multi-Level Dropdown</span></a>
-
-                    </li>
-                    <li><a href="Email.html"><i class="fa fa-envelope-o">
-                        <div class="icon-bg bg-primary"></div>
-                    </i><span class="menu-title">Email</span></a>
 
                     </li>
                     <li><a href="Charts.html"><i class="fa fa-bar-chart-o fa-fw">
@@ -254,13 +256,13 @@
                 <!--BEGIN TITLE & BREADCRUMB PAGE-->
                 <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
                     <div class="page-header pull-left">
-                        <div class="page-title">
+                        <div class="page-title" i18n:translate="title_dashboard">
                             Dashboard</div>
                     </div>
                     <ol class="breadcrumb page-breadcrumb pull-right">
-                        <li><i class="fa fa-home"></i>&nbsp;<a href="dashboard.html">Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                        <li class="hidden"><a href="#">Dashboard</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                        <li class="active">Dashboard</li>
+                        <li><i class="fa fa-home"></i>&nbsp;<a href="dashboard.html" i18n:translate>Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li class="hidden"><a href="#" i18n:translate="side_dashboard">Dashboard</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li class="active" i18n:translate="side_dashboard">Dashboard</li>
                     </ol>
                     <div class="clearfix">
                     </div>

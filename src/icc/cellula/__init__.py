@@ -11,7 +11,7 @@ def main(global_config, **settings):
     config.include("cornice")
     config.include('pyramid_chameleon')
     config.include('icc.cellula.views')
-    config.add_translation_dirs('icc.cellula:locale')
+    config.add_translation_dirs('icc.cellula:locales')
 #    config.scan("icc.cellula.views")
 #    config.include('pyramid_debugtoolbar')
 #    config.scan("icc.rdfservice.views")

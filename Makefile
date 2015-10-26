@@ -1,5 +1,6 @@
 .PHONY: env dev install test edit dev-icc.rdfservice \
-    dev-icc.restfuldocs py pot init-ru update-ru comp-cat
+    dev-icc.restfuldocs py pot init-ru update-ru comp-cat \
+    upd-cat
 
 LPYTHON=python3
 V=$(PWD)/../$(LPYTHON)
@@ -54,3 +55,5 @@ update-ru:
 comp-cat:
 	$(PYTHON) setup.py compile_catalog -d $(LCAT)
 	
+upd-cat: pot update-ru comp-cat
+

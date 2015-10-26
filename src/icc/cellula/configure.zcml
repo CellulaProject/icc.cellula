@@ -1,9 +1,15 @@
 
-<configure xmlns="http://namespaces.zope.org/zope">
+<configure 
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    >
+   <i18n:registerTranslations directory="locales" />
+   
 <!--
   <utility 
     component="icc.restfuldocs.utilities.storage"
     name="documents"
     />
     -->
+    
 </configure>
