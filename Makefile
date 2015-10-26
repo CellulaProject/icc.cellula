@@ -1,5 +1,5 @@
 .PHONY: env dev install test edit dev-icc.rdfservice \
-    dev-icc.restfuldocs py pot init-ru update-ru
+    dev-icc.restfuldocs py pot init-ru update-ru comp-cat
 
 LPYTHON=python3
 V=$(PWD)/../$(LPYTHON)
@@ -17,7 +17,7 @@ dev:	env dev-icc.rdfservice dev-icc.restfuldocs
 	$(V)/bin/pip install rdflib
 	$(PYTHON) setup.py develop
 
-install: env
+install: env comp-cat
 	$(PYTHON) setup.py install
 
 edit:
@@ -50,3 +50,7 @@ init-ru:
 update-ru:
 	$(PYTHON) setup.py update_catalog -l ru -i $(LCAT)/messages.pot \
                             -d $(LCAT)
+                            
+comp-cat:
+	$(PYTHON) setup.py compile_catalog -d $(LCAT)
+	
