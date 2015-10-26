@@ -32,7 +32,8 @@ setup(name='icc.cellula',
 	'cornice==1.2.0.dev0',
 	'icc.rdfservice==0.1',
 	'icc.restfuldocs==0.0.1',
-#	'icc.contentstorage==0.0.1',
+	'pyramid_debugtoolbar',
+#	'pyramid_tm',
         ],
       dependency_links = [
         'https://github.com/eugeneai/rdflib-kyotocabinet/archive/master.zip#egg=rdflib-kyotocabinet-0.1',
@@ -41,13 +42,12 @@ setup(name='icc.cellula',
         'https://github.com/mozilla-services/cornice/archive/master.zip#egg=cornice-1.2.0.dev0',
 
         'https://github.com/eugeneai/icc.restfuldocs/archive/master.zip#egg=icc.restfuldocs-0.0.1',
-        #'https://github.com/eugeneai/icc.contentstorage/archive/master.zip#egg=icc.contentstorage-0.0.1',
         'https://github.com/eugeneai/icc.rdfservice/archive/master.zip#egg=icc.rdfservice-0.1',
         ],
       package_dir = {'': 'src'},
       entry_points = """\
       [paste.app_factory]
-      main=app:main
+      main=icc.cellula.app:main
       """,
       paster_plugins=['pyramid'])
 

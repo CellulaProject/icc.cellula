@@ -1,12 +1,22 @@
 """ Cornice services.
 """
 from cornice import Service
+from pyramid.response import Response
+from pyramid.view import view_config
 
+#hello = Service(name='hello', path='/', description="Simplest app")
 
-hello = Service(name='hello', path='/', description="Simplest app")
+# @hello.get()
 
-@hello.get()
+@view_config(route_name='home')
 def get_info(request):
     """Returns Helo."""
-    return "<H>Hello world</H>"
+    return Response("<html><body><H>Hello world</H></body></html>")
 
+
+
+def includeme(config):
+    #config.scan("icc.cellula.views")
+    config.scan()
+    config.add_route('home', "/")
+    
