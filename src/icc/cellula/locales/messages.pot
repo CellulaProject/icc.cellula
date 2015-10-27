@@ -1,0 +1,62 @@
+#
+# SOME DESCRIPTIVE TITLE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE 1.0\n"
+"POT-Creation-Date: 2015-10-26 14:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Generated-By: Lingua 3.12\n"
+
+#. Default: Dashboard
+#: ./src/icc/cellula/templates/index.pt:9
+#: ./src/icc/cellula/templates/index.pt:259
+msgid "title_dashboard"
+msgstr ""
+
+#. Default: Cellula
+#: ./src/icc/cellula/templates/index.pt:54
+msgid "main_cellula"
+msgstr ""
+
+#. Default: Search here...
+#: ./src/icc/cellula/templates/index.pt:58
+msgid "placeholder_search_here"
+msgstr ""
+
+#. Default: Close
+#: ./src/icc/cellula/templates/index.pt:114
+msgid "btn_close"
+msgstr ""
+
+#. Default: Save changes
+#: ./src/icc/cellula/templates/index.pt:116
+msgid "btn_save_changes"
+msgstr ""
+
+#. Default: Dashboard
+#: ./src/icc/cellula/templates/index.pt:135
+#: ./src/icc/cellula/templates/index.pt:264
+#: ./src/icc/cellula/templates/index.pt:265
+msgid "side_dashboard"
+msgstr ""
+
+#: ./src/icc/cellula/templates/index.pt:140
+msgid "Email"
+msgstr ""
+
+#: ./src/icc/cellula/templates/index.pt:145
+msgid "Document Archive"
+msgstr ""
+
+#: ./src/icc/cellula/templates/index.pt:263
+msgid "Home"
+msgstr ""
