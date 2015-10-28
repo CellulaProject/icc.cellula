@@ -68,11 +68,12 @@ class ArchiveView(View):
     def tail_script(self):
         """Add a script at the tail of page.
         """
-        return \
-"""
+        script = \
+'''
 function sendFileToServer(formData,status)
 {
-    var uploadURL ="http://hayageek.com/examples/jquery/drag-drop-file-upload/upload.php"; //Upload URL
+//    var uploadURL ="http://hayageek.com/examples/jquery/drag-drop-file-upload/upload.php"; //Upload URL
+    var uploadURL = "''' + self.request.route_url('upload') + '''"//QQQ
     var extraData ={}; //Extra Data.
     var jqXHR=$.ajax({
             xhr: function() {
@@ -211,7 +212,8 @@ $(document).on('drop', function (e)
     e.preventDefault();
 });
 });
-"""
+'''
+        return script
 
     @property
     def style(self):
@@ -295,12 +297,27 @@ def get_dashboard(*args):
     view=View(*args, title=_('Dashboard'))
     return view()
 
-@view_config(route_name='archive',renderer='templates/index.pt')
+@view_config(route_name='archive',renderer='templates/index.pt', request_method="GET")
 def get_archive(*args):
     request=args[1]
     _ = request.translate
     view=ArchiveView(*args, title=_('Document Archive'))
     return view()
+
+@view_config(route_name='upload', request_method="POST")
+def post_archive(*args):
+    request=args[1]
+    _ = request.translate
+
+    body = request.body
+    headers = request.headers
+
+    print (dict(headers))
+    print (body[:200])
+
+    #view=ArchiveView(*args, title=_('Document Archive'))
+    #return view()
+    return Response(status_code=201)
 
 @view_config(route_name='email',renderer='templates/index.pt')
 def get_email(*args):
@@ -315,3 +332,4 @@ def includeme(config):
     config.add_route('dashboard', "/")
     config.add_route('archive', "/archive")
     config.add_route('email', "/mail")
+    config.add_route('upload', "/file_upload")
