@@ -8,6 +8,7 @@ def main(global_config, **settings):
     config.add_static_view('fonts', 'icc.cellula:static/fonts', cache_max_age=3600)
     config.add_static_view('script', 'icc.cellula:static/script', cache_max_age=3600)
     config.add_static_view('styles', 'icc.cellula:static/styles', cache_max_age=3600)
+    config.add_static_view('test', 'icc.cellula:static/test', cache_max_age=3600)
     config.include("cornice")
     config.include('pyramid_chameleon')
     config.include('icc.cellula.views')
