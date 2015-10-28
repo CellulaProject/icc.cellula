@@ -47,7 +47,7 @@
     <script src="script/jquery.flot.stack.js"></script>
     <script src="script/jquery.flot.spline.js"></script>
     <script src="script/zabuto_calendar.min.js"></script>
-    <script src="script/index.js"></script>
+<!--    <script src="script/index.js"></script>-->
     <script tal:condition="view.scripts | nothing"
             tal:replace="structure view.scripts"/>
     <link type="text/css" rel="stylesheet" href="styles/font-awesome.min.css">
