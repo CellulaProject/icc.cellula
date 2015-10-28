@@ -17,14 +17,18 @@ def main(global_config, **settings):
 #    config.scan("icc.rdfservice.views")
 #    config.scan("icc.restfuldocs.views")
 #    config.scan("icc.contentstorage.views")
+    config.add_subscriber('icc.cellula.i18n.add_renderer_globals',
+                          'pyramid.events.BeforeRender')
+    config.add_subscriber('icc.cellula.i18n.add_localizer',
+                          'pyramid.events.NewRequest')
     return config.make_wsgi_app()
 
 if __name__=="__main__":
     from waitress import serve
     import logging
-    
+
     logger = logging.getLogger('waitress')
     logger.setLevel(logging.INFO)
-    
+
     wsgiapp=main(None)
     serve(wsgiapp, host='::', port=8080)

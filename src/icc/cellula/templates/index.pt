@@ -6,7 +6,7 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       i18n:domain="icc.cellula">
 <head>
-    <title i18n:translate="title_dashboard">Dashboard</title>
+    <title tal:content="view.title">Dashboard</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +17,10 @@
     <!--Loading bootstrap css-->
     <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700">
     <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,700,300">
-    <link type="text/css" rel="stylesheet" href="styles/jquery-ui-1.10.4.custom.min.css">
+    <link type="text/css" rel="stylesheet"
+          href="styles/jquery-ui-1.10.4.custom.min.css">
+    <script tal:condition="view.scripts | nothing"
+            tal:replace="structure view.scripts"/>
     <link type="text/css" rel="stylesheet" href="styles/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="styles/animate.css">
@@ -26,7 +29,11 @@
     <link type="text/css" rel="stylesheet" href="styles/style-responsive.css">
     <link type="text/css" rel="stylesheet" href="styles/zabuto_calendar.min.css">
     <link type="text/css" rel="stylesheet" href="styles/pace.css">
-    <link type="text/css" rel="stylesheet" href="styles/jquery.news-ticker.css">
+    <link type="text/css" rel="stylesheet"
+          href="styles/jquery.news-ticker.css">
+    <link tal:condition="view.links | nothing" tal.replace="structure view.links"/>
+    <style tal:condition="view.style | nothing"
+           tal:content="structure view.style"></style>
 </head>
 <body>
     <div>
@@ -57,7 +64,9 @@
                 <form id="topbar-search" action="" method="" class="hidden-sm hidden-xs">
                     <div class="input-icon right text-white"><a href="#"><i class="fa fa-search"></i></a><input type="text" placeholder="Search here..." i18n:attributes="placeholder placeholder_search_here" class="form-control text-white"/></div>
                 </form>
-                <div class="news-update-box hidden-xs"><span class="text-uppercase mrm pull-left text-white">News:</span>
+                <div class="news-update-box
+                hidden-xs" tal:condition="view.news | nothing"><span class="text-uppercase mrm pull-left
+                text-white" i18n:translate>News:</span>
                     <ul id="news-update" class="ticker list-unstyled">
                         <li>Welcome to KAdmin - Responsive Multi-Style Admin Template</li>
                         <li>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque.</li>
@@ -130,19 +139,20 @@
                 <ul id="side-menu" class="nav">
 
                      <div class="clearfix"></div>
-                    <li class="active"><a href="/"><i class="fa fa-tachometer fa-fw">
+                    <li class="active" tal:attributes="class
+                    view.active('dashboard') | nothing"><a href="/"><i class="fa fa-tachometer fa-fw">
                         <div class="icon-bg bg-orange"></div>
                     </i><span class="menu-title" i18n:translate="side_dashboard">Dashboard</span></a>
-                    
-                    </li>
-                    <li><a href="Email.html"><i class="fa fa-envelope-o">
-                        <div class="icon-bg bg-primary"></div>
-                    </i><span class="menu-title" i18n:translate>Email</span></a>
 
                     </li>
-                    <li><a href="DataGrid.html"><i class="fa fa-database fa-fw">
+                    <li tal:attributes="class view.active('archive') | nothing"><a href="/archive"><i class="fa fa-database fa-fw">
                         <div class="icon-bg bg-red"></div>
                     </i><span class="menu-title" i18n:translate>Document Archive</span></a>
+
+                    </li>
+                    <li><a href="/mail" tal:attributes="class view.active('archive') | nothing"><i class="fa fa-envelope-o">
+                        <div class="icon-bg bg-primary"></div>
+                    </i><span class="menu-title" i18n:translate>Email</span></a>
 
                     </li>
                     <li><a href="Layout.html"><i class="fa fa-desktop fa-fw">
@@ -256,20 +266,22 @@
                 <!--BEGIN TITLE & BREADCRUMB PAGE-->
                 <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
                     <div class="page-header pull-left">
-                        <div class="page-title" i18n:translate="title_dashboard">
+                        <div class="page-title" tal:content="view.title">
                             Dashboard</div>
                     </div>
                     <ol class="breadcrumb page-breadcrumb pull-right">
-                        <li><i class="fa fa-home"></i>&nbsp;<a href="dashboard.html" i18n:translate>Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                        <li class="hidden"><a href="#" i18n:translate="side_dashboard">Dashboard</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                        <li class="active" i18n:translate="side_dashboard">Dashboard</li>
+                        <li><i class="fa fa-home"></i>&nbsp;<a href="/" i18n:translate>Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li class="hidden"><a href="#"
+                        tal:attributes="href view.route_url" tal:content="view.title">Dashboard</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li class="active" tal:content="view.title">Dashboard</li>
                     </ol>
                     <div class="clearfix">
                     </div>
                 </div>
                 <!--END TITLE & BREADCRUMB PAGE-->
                 <!--BEGIN CONTENT-->
-                <div class="page-content">
+                <div class="page-content" tal:condition="view.body |
+                nothing" tal:content="structure view.body">
                     <div id="tab-general">
                         <div id="sum_box" class="row mbl">
                             <div class="col-sm-6 col-md-3">

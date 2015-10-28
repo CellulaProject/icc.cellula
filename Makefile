@@ -14,9 +14,11 @@ env:
 	[ -d $(V) ] || virtualenv  $(V)
 	$(VB)/easy_install --upgrade pip
 
-dev:	env dev-icc.rdfservice dev-icc.restfuldocs
-	$(V)/bin/pip install rdflib
+pre-dev:env dev-icc.rdfservice dev-icc.restfuldocs
+	$(VB)/easy_install rdflib pip setuptools
 	$(PYTHON) setup.py develop
+
+dev:	pre-dev upd-cat
 
 install: env comp-cat
 	$(PYTHON) setup.py install
@@ -33,27 +35,26 @@ test:
 
 dev-icc.rdfservice:
 	make -C ../icc.rdfservice dev
-	
+
 dev-icc.restfuldocs:
 	make -C ../icc.restfuldocs dev
-	
-py:	
+
+py:
 	$(PYTHON)
-	
-pot:	
+
+pot:
 	mkdir -p $(LCAT)
 	$(VB)/pot-create src -o $(LCAT)/messages.pot
-	
+
 init-ru:
 	$(PYTHON) setup.py init_catalog -l ru -i $(LCAT)/messages.pot \
                          -d $(LCAT)
-                         
+
 update-ru:
 	$(PYTHON) setup.py update_catalog -l ru -i $(LCAT)/messages.pot \
                             -d $(LCAT)
-                            
+
 comp-cat:
 	$(PYTHON) setup.py compile_catalog -d $(LCAT)
-	
-upd-cat: pot update-ru comp-cat
 
+upd-cat: pot update-ru comp-cat

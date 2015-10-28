@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2015-10-26 14:41+0000\n"
+"POT-Creation-Date: 2015-10-28 15:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,47 +16,59 @@ msgstr ""
 "Language: \n"
 "Generated-By: Lingua 3.12\n"
 
-#. Default: Dashboard
-#: ./src/icc/cellula/templates/index.pt:9
-#: ./src/icc/cellula/templates/index.pt:259
-msgid "title_dashboard"
+#: ./src/icc/cellula/views.py:50
+msgid "Drag & Drop Files Here"
+msgstr ""
+
+#: ./src/icc/cellula/views.py:21
+msgid "====TITLE====="
+msgstr ""
+
+#: ./src/icc/cellula/views.py:84
+msgid "Dashboard"
+msgstr ""
+
+#: ./src/icc/cellula/views.py:89 ./src/icc/cellula/templates/index.pt:150
+msgid "Document Archive"
+msgstr ""
+
+#: ./src/icc/cellula/views.py:94
+msgid "E-Mail"
 msgstr ""
 
 #. Default: Cellula
-#: ./src/icc/cellula/templates/index.pt:54
+#: ./src/icc/cellula/templates/index.pt:61
 msgid "main_cellula"
 msgstr ""
 
 #. Default: Search here...
-#: ./src/icc/cellula/templates/index.pt:58
+#: ./src/icc/cellula/templates/index.pt:65
 msgid "placeholder_search_here"
 msgstr ""
 
+#: ./src/icc/cellula/templates/index.pt:69
+msgid "News:"
+msgstr ""
+
 #. Default: Close
-#: ./src/icc/cellula/templates/index.pt:114
+#: ./src/icc/cellula/templates/index.pt:123
 msgid "btn_close"
 msgstr ""
 
 #. Default: Save changes
-#: ./src/icc/cellula/templates/index.pt:116
+#: ./src/icc/cellula/templates/index.pt:125
 msgid "btn_save_changes"
 msgstr ""
 
 #. Default: Dashboard
-#: ./src/icc/cellula/templates/index.pt:135
-#: ./src/icc/cellula/templates/index.pt:264
-#: ./src/icc/cellula/templates/index.pt:265
+#: ./src/icc/cellula/templates/index.pt:145
 msgid "side_dashboard"
 msgstr ""
 
-#: ./src/icc/cellula/templates/index.pt:140
+#: ./src/icc/cellula/templates/index.pt:155
 msgid "Email"
 msgstr ""
 
-#: ./src/icc/cellula/templates/index.pt:145
-msgid "Document Archive"
-msgstr ""
-
-#: ./src/icc/cellula/templates/index.pt:263
+#: ./src/icc/cellula/templates/index.pt:273
 msgid "Home"
 msgstr ""
