@@ -31,6 +31,8 @@ class View(object):
         view={'view':self}
         if self.context != None:
             view['context']=self.context
+        # template
+        # attrs
         return view
 
     def active(self, name):
@@ -169,7 +171,7 @@ function handleFileUpload(files,obj)
 }
 
 $(document).ready(function()
-alert("Here");
+{
 var obj = $("#dragandrophandler");
 obj.on('dragenter', function (e)
 {
@@ -281,7 +283,7 @@ margin-right:5px;
     cursor:pointer;
     vertical-align:top
     }
-}
+
         """
 
 

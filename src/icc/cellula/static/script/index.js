@@ -17,6 +17,7 @@ $(function () {
     //END TO-DO-LIST
 
     //BEGIN AREA CHART SPLINE
+    /*
     var d6_1 = [["Jan", 67],["Feb", 91],["Mar", 36],["Apr", 150],["May", 28],["Jun", 123],["Jul", 38]];
     var d6_2 = [["Jan", 59],["Feb", 49],["Mar", 45],["Apr", 94],["May", 76],["Jun", 22],["Jul", 31]];
     $.plot("#area-chart-spline", [{
@@ -62,6 +63,7 @@ $(function () {
         },
         shadowSize: 0
     });
+    */
     //END AREA CHART SPLINE
 
     //BEGIN INTRO JS
@@ -81,10 +83,10 @@ $(function () {
 
         var $obj = $(this);
         var $me = $obj.parents('.portlet-body').find('ul.chats');
-        
+
         if (e.which == 13) {
             var content = $obj.val();
-            
+
             if (content !== "") {
                 $me.addClass(content);
                 var d = new Date();
@@ -92,8 +94,8 @@ $(function () {
                 var m = d.getMinutes();
                 if (m < 10) m = "0" + m;
                 $obj.val(""); // CLEAR TEXT ON TEXTAREA
-                
-                var element = ""; 
+
+                var element = "";
                 element += "<li class='in'>";
                 element += "<img class='avatar' src='https://s3.amazonaws.com/uifaces/faces/twitter/kolage/48.jpg'>";
                 element += "<div class='message'>";
@@ -103,7 +105,7 @@ $(function () {
                 element += "<span class='chat-body'>" + content + "</span>";
                 element += "</div>";
                 element += "</li>";
-                
+
                 $me.append(element);
                 var height = 0;
                 $me.find('li').each(function(i, value){
@@ -132,8 +134,8 @@ $(function () {
             var m = d.getMinutes();
             if (m < 10) m = "0" + m;
             $obj.val(""); // CLEAR TEXT ON TEXTAREA
-            
-            var element = ""; 
+
+            var element = "";
             element += "<li class='in'>";
             element += "<img class='avatar' src='https://s3.amazonaws.com/uifaces/faces/twitter/kolage/48.jpg'>";
             element += "<div class='message'>";
@@ -143,7 +145,7 @@ $(function () {
             element += "<span class='chat-body'>" + content + "</span>";
             element += "</div>";
             element += "</li>";
-            
+
             $me.append(element);
             var height = 0;
             $me.find('li').each(function(i, value){
@@ -155,7 +157,7 @@ $(function () {
                 scrollTo: height
             });
         }
-        
+
     });
     //END CHAT FORM
 
@@ -178,4 +180,3 @@ $(function () {
     //END COUNTER FOR SUMMARY BOX
 
 });
-
