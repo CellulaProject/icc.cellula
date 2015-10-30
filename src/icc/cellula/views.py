@@ -304,7 +304,7 @@ def get_archive(*args):
     view=ArchiveView(*args, title=_('Document Archive'))
     return view()
 
-@view_config(route_name='upload', request_method="POST")
+@view_config(route_name='upload', request_method="POST", renderer='json')
 def post_archive(*args):
     request=args[1]
     _ = request.translate
@@ -312,12 +312,31 @@ def post_archive(*args):
     body = request.body
     headers = request.headers
 
-    print (dict(headers))
-    print (body[:200])
+    things={}
+    things.update(headers)
+
+    fs=request.POST.get('file', None)
+
+    if fs == None:
+        request.response.status_code=400
+        return { 'error':'no file', 'explanation':'check input form it it contains "file" field' }
+
+    things.update(fs.headers)
+
+    if fs.filename != None:
+        o=open(fs.filename,"wb")
+        o.write(fs.value)
+    else:
+        request.response.status_code=400
+        return { 'error':'no file', 'explanation':'check input form it it contains "file" field' }
+
 
     #view=ArchiveView(*args, title=_('Document Archive'))
     #return view()
-    return Response(status_code=201)
+    request.response.status_code=201
+    things['id']="234034792873490217349870982734"
+    print (things)
+    return things
 
 @view_config(route_name='email',renderer='templates/index.pt')
 def get_email(*args):
