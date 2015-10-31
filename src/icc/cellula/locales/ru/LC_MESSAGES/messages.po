@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2015-10-28 15:49+0800\n"
+"POT-Creation-Date: 2015-10-31 21:48+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -18,63 +18,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 
-#: ./src/icc/cellula/views.py:50
-msgid "Drag & Drop Files Here"
-msgstr "Перемещайте файлы в это окно"
-
-#: ./src/icc/cellula/views.py:21
+#: ./src/icc/cellula/views.py:19
 msgid "====TITLE====="
 msgstr "====Заголовок страницы===="
 
-#: ./src/icc/cellula/views.py:84
+#: ./src/icc/cellula/views.py:297
 msgid "Dashboard"
 msgstr "Информационная панель"
 
-#: ./src/icc/cellula/views.py:89 ./src/icc/cellula/templates/index.pt:150
+#: ./src/icc/cellula/views.py:304 ./src/icc/cellula/templates/index.pt:179
 msgid "Document Archive"
 msgstr "Архив документов"
 
-#: ./src/icc/cellula/views.py:94
+#: ./src/icc/cellula/views.py:345
 msgid "E-Mail"
 msgstr "Почта"
 
 #. Default: Cellula
-#: ./src/icc/cellula/templates/index.pt:61
+#: ./src/icc/cellula/templates/index.pt:90
 msgid "main_cellula"
 msgstr "ЭКлетка"
 
 #. Default: Search here...
-#: ./src/icc/cellula/templates/index.pt:65
+#: ./src/icc/cellula/templates/index.pt:94
 msgid "placeholder_search_here"
 msgstr "Поиск по содержимому..."
 
-#: ./src/icc/cellula/templates/index.pt:69
+#: ./src/icc/cellula/templates/index.pt:98
 msgid "News:"
 msgstr "Новости:"
 
 #. Default: Close
-#: ./src/icc/cellula/templates/index.pt:123
+#: ./src/icc/cellula/templates/index.pt:152
 msgid "btn_close"
 msgstr "Закрыть"
 
 #. Default: Save changes
-#: ./src/icc/cellula/templates/index.pt:125
+#: ./src/icc/cellula/templates/index.pt:154
 msgid "btn_save_changes"
 msgstr "Сохранить"
 
 #. Default: Dashboard
-#: ./src/icc/cellula/templates/index.pt:145
+#: ./src/icc/cellula/templates/index.pt:174
 msgid "side_dashboard"
 msgstr "Обзор"
 
-#: ./src/icc/cellula/templates/index.pt:155
+#: ./src/icc/cellula/templates/index.pt:184
 msgid "Email"
 msgstr "Почта"
 
-#: ./src/icc/cellula/templates/index.pt:273
+#: ./src/icc/cellula/templates/index.pt:302
 msgid "Home"
 msgstr "Главная"
 
 #~ msgid "title_dashboard"
 #~ msgstr "Информационная панель"
+
+#~ msgid "Drag & Drop Files Here"
+#~ msgstr "Перемещайте файлы в это окно"
 
