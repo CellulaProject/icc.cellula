@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2015-11-01 11:44+0800\n"
+"POT-Creation-Date: 2015-11-01 18:11+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -18,19 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 
-#: ./src/icc/cellula/views.py:19
+#: ./src/icc/cellula/views.py:23
 msgid "====TITLE====="
 msgstr "====Заголовок страницы===="
 
-#: ./src/icc/cellula/views.py:297
+#: ./src/icc/cellula/views.py:301
 msgid "Dashboard"
 msgstr "Информационная панель"
 
-#: ./src/icc/cellula/views.py:304 ./src/icc/cellula/templates/index.pt:179
+#: ./src/icc/cellula/views.py:308 ./src/icc/cellula/templates/index.pt:179
 msgid "Document Archive"
 msgstr "Архив документов"
 
-#: ./src/icc/cellula/views.py:345
+#: ./src/icc/cellula/views.py:396
 msgid "E-Mail"
 msgstr "Почта"
 

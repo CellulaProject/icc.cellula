@@ -38,6 +38,7 @@ setup(name='icc.cellula',
 	'Babel',
 	'lingua',
 	'Extractor',
+	'mysqlclient',
 #	'pyramid_tm',
         ],
       dependency_links = [

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2015-11-01 11:44+0800\n"
+"POT-Creation-Date: 2015-11-01 18:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,19 +16,19 @@ msgstr ""
 "Language: \n"
 "Generated-By: Lingua 3.12\n"
 
-#: ./src/icc/cellula/views.py:19
+#: ./src/icc/cellula/views.py:23
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:297
+#: ./src/icc/cellula/views.py:301
 msgid "Dashboard"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:304 ./src/icc/cellula/templates/index.pt:179
+#: ./src/icc/cellula/views.py:308 ./src/icc/cellula/templates/index.pt:179
 msgid "Document Archive"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:345
+#: ./src/icc/cellula/views.py:396
 msgid "E-Mail"
 msgstr ""
 
