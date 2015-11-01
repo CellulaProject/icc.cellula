@@ -4,6 +4,10 @@ from cornice import Service
 from pyramid.response import Response
 from pyramid.view import view_config
 from pprint import pprint
+from icc.contentstorage.interfaces import IDocumentStorage
+from zope.component import getUtility
+
+from icc.cellula.extractor.interfaces import IExtractor
 
 class View(object):
     def __init__(self, *args, **kwargs):
@@ -323,19 +327,66 @@ def post_archive(*args):
 
     things.update(fs.headers)
 
+    """
     if fs.filename != None:
         o=open(fs.filename,"wb")
         o.write(fs.value)
     else:
+    """
+    if fs.filename == None:
         request.response.status_code=400
         return { 'error':'no file', 'explanation':'check input form it it contains "file" field' }
 
+    things['FileName']=fs.filename
+
+    storage=getUtility(IDocumentStorage, name='content')
+
+    """
+    if storage.exists(fs.value): # is it an error?
+        request.response.status_code=400
+        return { 'error':'content already exists', 'explanation':'a file with the same content has been uploaded already' }
+    """
+
+    rc_id=storage.put(fs.value)
 
     #view=ArchiveView(*args, title=_('Document Archive'))
     #return view()
     request.response.status_code=201
-    things['id']="234034792873490217349870982734"
-    print (things)
+    things['id']=rc_id
+    things['result']='file stored'
+
+    # extract here
+
+    extractor=getUtility(IExtractor, name='extractor')
+
+    ext_data=extractor.extract(fs.value, things)
+
+    ext_things={}
+    ext_things.update(things)
+    ext_things.update(ext_data)
+
+    content_extractor=getUtility(IExtractor, name='content')
+
+    cont_data=content_extractor.extract(fs.value, ext_things)
+
+    if not 'text-body' in cont_data:
+        recoll_extractor=getUtility(IExtractor, name='recoll')
+        ext_things.update(cont_data)
+        cont_data=recoll_extractor.extract(fs.value, ext_things)
+
+    text_p=things['text-body-presence']='text-body' in cont_data
+
+    if text_p:
+        text_body=cont_data['text-body']
+        text_id=storage.put(text_body)
+        things['text_id']=text_id
+        # index text
+
+    things.update(cont_data)
+    if text_p:
+        del things['text-body']
+
+    print(cont_data)
     return things
 
 @view_config(route_name='email',renderer='templates/index.pt')

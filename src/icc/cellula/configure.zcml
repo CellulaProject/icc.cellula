@@ -13,7 +13,23 @@
 
   <utility
       factory="icc.contentstorage.kyotocabinet.Storage"
-      name="documents"
+      name="content"
       />
+      
+  <utility
+      factory="icc.cellula.extractor.LibExtractorExtractor"
+      name="extractor"
+      />
+      
+  <utility
+      factory="icc.cellula.extractor.TrackerExtractor"
+      name="content"
+      />
+      
+  <utility
+      factory="icc.cellula.extractor.RecollExtractor"
+      name="recoll"
+      />
+      
 
 </configure>

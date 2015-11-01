@@ -37,6 +37,7 @@ setup(name='icc.cellula',
 	'pyramid_chameleon',
 	'Babel',
 	'lingua',
+	'Extractor',
 #	'pyramid_tm',
         ],
       dependency_links = [

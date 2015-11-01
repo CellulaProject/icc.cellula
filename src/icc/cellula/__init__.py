@@ -1,27 +1,34 @@
 """Main entry point
 """
 from configparser import ConfigParser
+from zope.configuration.xmlconfig import xmlconfig
+from pkg_resources import resource_filename,resource_stream
+from zope.component import getGlobalSiteManager
+from zope.interface import Interface
+import sys,os
+
+package=__name__
+ini_file=None
+for arg in sys.argv:
+    if arg.lower().endswith('.ini'):
+        ini_file=arg
+if ini_file == None:
+    raise ValueError('.ini file not found')
+#_config=resource_filename(package, ini_file) # FIXME how to determine?
+_config=ini_file
+config_utility=ConfigParser()
+config_utility.read(_config)
+GSM=getGlobalSiteManager()
+GSM.registerUtility(config_utility, Interface, name="configuration")
+
+xmlconfig(resource_stream(package, "configure.zcml"))
 
 from pyramid.config import Configurator
-from zope.configuration.xmlconfig import xmlconfig
-from pkg_resources import resource_stream
-package=__name__
-
 from pkg_resources import resource_stream, resource_string
-from zope.component import getGlobalSiteManager
 from icc.cellula.interfaces import IApplication
 
+
 def main(global_config, **settings):
-    from zope.interface import Interface
-
-    config_file=global_config['__file__']
-    config_utility=ConfigParser()
-    config_utility.read(config_file)
-    GSM=getGlobalSiteManager()
-    GSM.registerUtility(config_utility, Interface, name="configuration")
-
-    xmlconfig(resource_stream(package, "configure.zcml"))
-
     config = Configurator(settings=settings)
     config.add_static_view('images', 'icc.cellula:static/images', cache_max_age=3600)
     config.add_static_view('fonts', 'icc.cellula:static/fonts', cache_max_age=3600)
