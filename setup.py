@@ -37,8 +37,10 @@ setup(name='icc.cellula',
 	'pyramid_chameleon',
 	'Babel',
 	'lingua',
-	'Extractor',
-	'mysqlclient',
+#	'mysqlclient',
+#	'cymysql'
+#	'oursql',
+	'PyMySQL',
 #	'pyramid_tm',
         ],
       dependency_links = [

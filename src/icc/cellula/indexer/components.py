@@ -2,8 +2,11 @@ from icc.cellula.indexer.interfaces import IIndexer
 from zope.interface import implementer, Interface
 from zope.component import getUtility
 import subprocess as sp
-import MySQLdb
-from icc.contentstorage import bindigest, hexdigest
+#import MySQLdb
+#import cymysql
+#import oursql
+import pymysql
+from icc.contentstorage import intdigest, hexdigest
 import os.path, os
 
 INDEX_TEMPLATE="""
@@ -389,7 +392,10 @@ class SphinxIndexer(object):
         # print (out)
         # print (self.pid)
         self.started=True
-        self.connection=MySQLdb.connect(host="127.0.0.1", port=9386)
+        # self.connection=MySQLdb.connect(host="127.0.0.1", port=9386)
+        # self.connection=cymysql.connect(host="127.0.0.1", port=9386)
+        # self.connection=oursql.connect(host="127.0.0.1", port=9386)
+        self.connection=pymysql.connect(host="127.0.0.1", port=9386, charset='utf8')
 
     @property
     def pid(self):
@@ -404,15 +410,25 @@ class SphinxIndexer(object):
         #os.remove(self.filename_pid)
 
     def put(self, content, fields):
-        print (fields)
-        content_id=bindigest(fields['id'])
-        text_id=bindigest(fields['text-id'])
+        print (fields.get('title', ''))
+        content_id=intdigest(fields['id'])
+        text_id=intdigest(fields['text-id'])
         title=fields.get('title', '')
         cursor=self.connection.cursor()
+        content=self.clean(content)
+        title=self.clean(title)
+
+        title="Заголовок"
+        content="Тело"
+
+        print (content_id, title, content, text_id)
         cursor.execute(
-            "INSERT INTO rt VALUES ( %s, %s, %s, %s);",
+            'INSERT INTO rt VALUES ( %s, %s, %s, %s) $end ;',
             (content_id, title, content, text_id)
         )
+
+    def clean(self, s):
+        return s.replace("'",' ').replace('"',' ').replace('\\', ' ')
 
     def search(self, query):
         cursor=self.connection.cursor()
