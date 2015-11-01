@@ -8,6 +8,7 @@ from icc.contentstorage.interfaces import IDocumentStorage
 from zope.component import getUtility
 
 from icc.cellula.extractor.interfaces import IExtractor
+from icc.cellula.indexer.interfaces import IIndexer
 
 class View(object):
     def __init__(self, *args, **kwargs):
@@ -376,13 +377,15 @@ def post_archive(*args):
 
     text_p=things['text-body-presence']='text-body' in cont_data
 
+    things.update(cont_data)
     if text_p:
         text_body=cont_data['text-body']
         text_id=storage.put(text_body)
-        things['text_id']=text_id
+        things['text-id']=text_id
+        indexer=getUtility(IIndexer, "indexer")
+        indexer.put(text_body, things)
         # index text
 
-    things.update(cont_data)
     if text_p:
         del things['text-body']
 

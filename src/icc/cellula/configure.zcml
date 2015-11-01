@@ -31,5 +31,10 @@
       name="recoll"
       />
       
+  <utility
+      factory="icc.cellula.indexer.SphinxIndexer"
+      name="indexer"
+      />
+      
 
 </configure>
