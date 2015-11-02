@@ -388,8 +388,7 @@ def post_archive(*args):
         # index text
 
     # Add user data
-    things['user-email']="eugeneai@npir.ru"
-    things['user-id']="eugeneai"
+    things['user-id']="eugeneai@npir.ru"
 
     doc_meta = getUtility(IRDFStorage, name='documents')
     doc_meta.store(things)
