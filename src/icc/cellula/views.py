@@ -9,6 +9,7 @@ from zope.component import getUtility
 
 from icc.cellula.extractor.interfaces import IExtractor
 from icc.cellula.indexer.interfaces import IIndexer
+from icc.rdfservice.interfaces import IRDFStorage
 
 class View(object):
     def __init__(self, *args, **kwargs):
@@ -382,14 +383,21 @@ def post_archive(*args):
         text_body=cont_data['text-body']
         text_id=storage.put(text_body)
         things['text-id']=text_id
-        indexer=getUtility(IIndexer, "indexer")
-        indexer.put(text_body, things)
+        #indexer=getUtility(IIndexer, "indexer")
+        #indexer.put(text_body, things)
         # index text
+
+    # Add user data
+    things['user-email']="eugeneai@npir.ru"
+    things['user-id']="eugeneai"
+
+    doc_meta = getUtility(IRDFStorage, name='documents')
+    doc_meta.store(things)
 
     if text_p:
         del things['text-body']
 
-    print(cont_data)
+    #print(cont_data)
     return things
 
 @view_config(route_name='email',renderer='templates/index.pt')
