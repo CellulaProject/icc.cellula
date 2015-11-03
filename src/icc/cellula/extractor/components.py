@@ -148,35 +148,62 @@ class TrackerExtractor(LibExtractorExtractor):
             return {}
 
         print ("\nTracker --------------------")
-        print (out)
-        print ("\nTracker --------------------")
-
-        lines=out.split("\n")
 
         answer=OrderedDict()
-        return OrderedDict()
-
+        lines=out.splitlines()
+        sparql_item=False
         for line in lines:
-            line=line.strip()
-            if line.startswith("Keywords for file"):
+            line=line.rstrip()
+            ll=line.lstrip()
+            if ll.startswith("SPARQL item:"):
+                sparql_item=True
                 continue
-            if len(line)==0:
+            elif not sparql_item:
                 continue
-            key,value=line.split(" - ")
-            key=key.strip().replace(" ","-")
-            value=value.strip()
+            elif ll.startswith("--"):
+                continue
+            elif ll.startswith("SPARQL where"):
+                break
+            comps = ll.split(maxsplit=1)
+            if len(comps)==0:
+                continue
+            if len(comps)==1:
+                print ("Tracker: 1-size comp:", comps[0][:60])
+                continue
+            p, o = comps
+            if p=='a':
+                p="rdf:type"
+            if o.startswith("?"):
+                continue
+            o=o.rstrip(";").rstrip()
+            if o.startswith("["):
+                o=o.lstrip("[").lstrip()
+            if o.endswith("]"):
+                o=o.rstrip("]").rstrip()
+            try:
+                o=int(o)
+                print(p,o)
+                answer[p]=o
+                continue
+            except ValueError:
+                pass
+            try:
+                o=float(o)
+                print(p,o)
+                answer[p]=o
+                continue
+            except ValueError:
+                pass
+            # do something with date
+            #print (p, str(o)[:60])
+            if p.startswith("nie:plainTextContent"):
+                p='text-body'
+                o=o.strip("'"+'"')
 
-            vals=answer.setdefault(key,OrderedDict())
-            vals[value]=value
+            answer[p]=o
 
-        new_a=OrderedDict()
-        for k,v in answer.items():
-            l=list(v)
-            if len(l)==1:
-                l=l[0]
-            new_a[k]=l
-
-        return new_a
+        print ("\nTracker --------------------")
+        return answer
 
 # Recoll extractor
 # /usr/share/recoll/filters/
