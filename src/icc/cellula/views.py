@@ -9,7 +9,7 @@ from zope.component import getUtility
 
 from icc.cellula.extractor.interfaces import IExtractor
 from icc.cellula.indexer.interfaces import IIndexer
-from icc.rdfservice.interfaces import IRDFStorage
+from icc.rdfservice.interfaces import IRDFStorage, IGraph
 
 class View(object):
     def __init__(self, *args, **kwargs):
@@ -294,7 +294,18 @@ margin-right:5px;
 
         """
 
+class GraphView(View):
 
+    @property
+    def body(self):
+        FORMAT='n3'
+        g=getUtility(IGraph, name=self.request.GET["name"])
+        if g == None:
+            return "<strong>No graph found.</strong>"
+        s = g.serialize(format=FORMAT).decode("utf-8")
+        h = "<strong>Graph size: "+str(len(g))+" triples</strong><br/><br/>"
+        b = "<pre>"+s+"</pre>"
+        return h+b
 
 @view_config(route_name='dashboard',renderer='templates/index.pt')
 def get_dashboard(*args):
@@ -399,6 +410,14 @@ def post_archive(*args):
     #print(cont_data)
     return things
 
+@view_config(route_name="debug_graph", renderer='templates/index.pt')
+def get_debug(*args):
+    request=args[1]
+    _ = request.translate
+    name=request.GET["name"]
+    view=GraphView(*args, title=_("Debug graph '%s'") % name)
+    return view()
+
 @view_config(route_name='email',renderer='templates/index.pt')
 def get_email(*args):
     request=args[1]
@@ -413,3 +432,4 @@ def includeme(config):
     config.add_route('archive', "/archive")
     config.add_route('email', "/mail")
     config.add_route('upload', "/file_upload")
+    config.add_route('debug_graph', "/archive_debug")

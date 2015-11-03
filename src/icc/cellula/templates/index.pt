@@ -309,8 +309,11 @@
                 </div>
                 <!--END TITLE & BREADCRUMB PAGE-->
                 <!--BEGIN CONTENT-->
+                <!--
                 <div class="page-content" tal:condition="view.body |
                 nothing" tal:content="structure view.body">
+                  -->
+                <div class="page-content" tal:condition="view.body" tal:content="structure view.body">
                     <div id="tab-general">
                         <div id="sum_box" class="row mbl">
                             <div class="col-sm-6 col-md-3">

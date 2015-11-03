@@ -46,7 +46,7 @@ def main(global_config, **settings):
 
 
     config.include('icc.cellula.views')
-#    config.include('pyramid_debugtoolbar')
+    config.include('pyramid_debugtoolbar')
 #    config.scan("icc.rdfservice.views")
     config.scan("icc.restfuldocs.views")
 

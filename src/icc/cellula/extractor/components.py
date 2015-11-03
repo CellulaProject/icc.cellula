@@ -147,8 +147,6 @@ class TrackerExtractor(LibExtractorExtractor):
         except RuntimeError:
             return {}
 
-        print ("\nTracker --------------------")
-
         answer=OrderedDict()
         lines=out.splitlines()
         sparql_item=False
@@ -182,14 +180,12 @@ class TrackerExtractor(LibExtractorExtractor):
                 o=o.rstrip("]").rstrip()
             try:
                 o=int(o)
-                print(p,o)
                 answer[p]=o
                 continue
             except ValueError:
                 pass
             try:
                 o=float(o)
-                print(p,o)
                 answer[p]=o
                 continue
             except ValueError:
@@ -202,7 +198,6 @@ class TrackerExtractor(LibExtractorExtractor):
 
             answer[p]=o
 
-        print ("\nTracker --------------------")
         return answer
 
 # Recoll extractor
