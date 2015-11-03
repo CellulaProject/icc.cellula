@@ -340,7 +340,7 @@ class DocsView(View):
            ?ann a oa:Annotation .
            ?ann oa:annotatedAt ?date .
            ?ann oa:hasTarget ?target .
-           ?target nie:title ?title .
+           OPTIONAL { ?target nie:title ?title } .
            ?target nao:identifier ?id .
            ?target nfo:fileName ?file .
            ?target nmo:mimeType ?mimetype .
