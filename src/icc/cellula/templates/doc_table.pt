@@ -1,0 +1,23 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="icc.cellula">
+  <table width="70%" cellspacing="1" cellpadding="1" border="5">
+    <tr>
+      <td i18n:translate>Date</td>
+      <td i18n:translate>Title</td>
+      <td i18n:translate>File</td>
+      <td i18n:translate>Incoming #</td>
+    </tr>
+    <tr tal:repeat="r view.docs">
+      <td tal:content="r[0]"></td>
+      <td tal:content="r[1]"></td>
+      <td>
+        <a href="#"
+           tal:attributes="href string:/docs?id=${r[2]}" tal:content="r[3]"></a>
+      </td>
+      <td><input type="string" name="number" value="" /></td>
+    </tr>
+  </table>
+</div>

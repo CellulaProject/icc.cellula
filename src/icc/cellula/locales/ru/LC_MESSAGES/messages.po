@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2015-11-02 21:18+0800\n"
+"POT-Creation-Date: 2015-11-03 16:20+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -18,21 +18,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 
-#: ./src/icc/cellula/views.py:25
+#: ./src/icc/cellula/views.py:27
 msgid "====TITLE====="
 msgstr "====Заголовок страницы===="
 
-#: ./src/icc/cellula/views.py:303
+#: ./src/icc/cellula/views.py:345
 msgid "Dashboard"
 msgstr "Информационная панель"
 
-#: ./src/icc/cellula/views.py:310 ./src/icc/cellula/templates/index.pt:179
+#: ./src/icc/cellula/views.py:352 ./src/icc/cellula/templates/index.pt:179
 msgid "Document Archive"
 msgstr "Архив документов"
 
-#: ./src/icc/cellula/views.py:407
+#: ./src/icc/cellula/views.py:463
 msgid "E-Mail"
 msgstr "Почта"
+
+#: ./src/icc/cellula/views.py:456
+#, c-format, python-format
+msgid "Debug graph '%s'"
+msgstr "Отладка графа '%s'"
 
 #. Default: Cellula
 #: ./src/icc/cellula/templates/index.pt:90
@@ -70,6 +75,22 @@ msgstr "Почта"
 #: ./src/icc/cellula/templates/index.pt:302
 msgid "Home"
 msgstr "Главная"
+
+#: ./src/icc/cellula/templates/doc_table.pt:8
+msgid "Date"
+msgstr "Дата"
+
+#: ./src/icc/cellula/templates/doc_table.pt:9
+msgid "Title"
+msgstr "Название"
+
+#: ./src/icc/cellula/templates/doc_table.pt:10
+msgid "File"
+msgstr "Файл"
+
+#: ./src/icc/cellula/templates/doc_table.pt:11
+msgid "Incoming #"
+msgstr "Входящий №"
 
 #~ msgid "title_dashboard"
 #~ msgstr "Информационная панель"

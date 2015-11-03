@@ -5,11 +5,13 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pprint import pprint
 from icc.contentstorage.interfaces import IDocumentStorage
-from zope.component import getUtility
+from zope.component import getUtility, queryUtility
 
 from icc.cellula.extractor.interfaces import IExtractor
 from icc.cellula.indexer.interfaces import IIndexer
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
+
+import cgi
 
 class View(object):
     def __init__(self, *args, **kwargs):
@@ -24,6 +26,10 @@ class View(object):
         kw=kwargs
         self.title=kw.get('title', _('====TITLE====='))
         self.context=kw.get('context', kw.get('ob',None))
+
+    @property
+    def body(self):
+        return " "
 
     @property
     def route_name(self):
@@ -56,8 +62,11 @@ class ArchiveView(View):
         ts=self._("Drag & Drop Files Here")
         return \
 """<div id="dragandrophandler">%s</div>
-<br><br>
-<div id="status1"></div>""" % ts
+<br/><br/>
+<div id="status1"></div>
+<br/><br/>
+<div id="doc_table"></div>
+""" % ts
 
     @property
     def links(self):
@@ -76,6 +85,16 @@ class ArchiveView(View):
         """
         script = \
 '''
+function renew_doc_list() {
+    $.get(
+        "/docs",
+        function (data) {
+            $("#doc_table").html(data); //replaceWith(data);
+        }
+    );
+}
+
+
 function sendFileToServer(formData,status)
 {
 //    var uploadURL ="http://hayageek.com/examples/jquery/drag-drop-file-upload/upload.php"; //Upload URL
@@ -107,7 +126,8 @@ function sendFileToServer(formData,status)
         success: function(data){
             status.setProgress(100);
 
-            $("#status1").append("File upload Done<br>");
+            // $("#status1").append("File upload Done<br>");
+            renew_doc_list();
         }
     });
 
@@ -179,6 +199,7 @@ function handleFileUpload(files,obj)
 
 $(document).ready(function()
 {
+renew_doc_list();
 var obj = $("#dragandrophandler");
 obj.on('dragenter', function (e)
 {
@@ -299,13 +320,42 @@ class GraphView(View):
     @property
     def body(self):
         FORMAT='n3'
-        g=getUtility(IGraph, name=self.request.GET["name"])
+        g=queryUtility(IGraph, name=self.request.GET.get("name","doc"))
         if g == None:
-            return "<strong>No graph found.</strong>"
+            return "<strong>No such graph found.</strong>"
         s = g.serialize(format=FORMAT).decode("utf-8")
-        h = "<strong>Graph size: "+str(len(g))+" triples</strong><br/><br/>"
-        b = "<pre>"+s+"</pre>"
+        h = "Graph size: "+str(len(g))+" triples<br/>" + \
+            "Graph storage: "+cgi.escape(str(g.store))+" <br/>"
+        b = "<pre>"+cgi.escape(s)+"</pre>"
         return h+b
+
+class DocsView(View):
+
+    @property
+    def docs(self):
+        g=getUtility(IGraph, "doc")
+        Q="""
+        SELECT DISTINCT ?date ?title ?id ?file ?mimetype
+        WHERE {
+           ?ann a oa:Annotation .
+           ?ann oa:annotatedAt ?date .
+           ?ann oa:hasTarget ?target .
+           ?target nie:title ?title .
+           ?target nao:identifier ?id .
+           ?target nfo:fileName ?file .
+           ?target nmo:mimeType ?mimetype .
+        }
+        """
+        qres=g.query(Q)
+        """
+        print ("Result:")
+        for r in qres:
+            print (r)
+        """
+        return g.query(Q)
+
+
+# ---------------- Actual routes ------------------------------------------
 
 @view_config(route_name='dashboard',renderer='templates/index.pt')
 def get_dashboard(*args):
@@ -350,7 +400,7 @@ def post_archive(*args):
         request.response.status_code=400
         return { 'error':'no file', 'explanation':'check input form it it contains "file" field' }
 
-    things['FileName']=fs.filename
+    things['File-Name']=fs.filename
 
     storage=getUtility(IDocumentStorage, name='content')
 
@@ -410,11 +460,18 @@ def post_archive(*args):
     #print(cont_data)
     return things
 
+@view_config(route_name="get_docs", renderer='templates/doc_table.pt')
+def docs(*args, **kwargs):
+    request=args[1]
+    _ = request.translate
+    view=DocsView(*args)
+    return view()
+
 @view_config(route_name="debug_graph", renderer='templates/index.pt')
 def get_debug(*args):
     request=args[1]
     _ = request.translate
-    name=request.GET["name"]
+    name=request.GET.get("name", "doc")
     view=GraphView(*args, title=_("Debug graph '%s'") % name)
     return view()
 
@@ -433,3 +490,5 @@ def includeme(config):
     config.add_route('email', "/mail")
     config.add_route('upload', "/file_upload")
     config.add_route('debug_graph', "/archive_debug")
+    config.add_route('get_docs', "/docs")
+    #config.scan()

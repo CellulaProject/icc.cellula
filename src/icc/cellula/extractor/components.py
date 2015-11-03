@@ -274,6 +274,7 @@ class RecollExtractor(object):
         try:
             way, cmd = script.split()
         except ValueError:
+            way=None
             cmd=script
 
         if cmd=='internal':
