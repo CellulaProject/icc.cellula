@@ -3,8 +3,8 @@
 from cornice import Service
 from pyramid.response import Response
 from pyramid.view import view_config
-from pprint import pprint
-from icc.contentstorage.interfaces import IDocumentStorage
+from pprint import pprint, pformat
+from icc.contentstorage.interfaces import IContentStorage
 from zope.component import getUtility, queryUtility
 
 from icc.cellula.extractor.interfaces import IExtractor
@@ -329,6 +329,22 @@ class GraphView(View):
         b = "<pre>"+cgi.escape(s)+"</pre>"
         return h+b
 
+class SearchView(View):
+
+    @property
+    def body(self):
+        FORMAT='n3'
+        indexer=getUtility(IIndexer, name="indexer")
+        query=self.request.GET.get("q", None)
+
+        if query == None:
+            return "<strong>No Query supplied.</strong>"
+
+        q="Query:" + query + "<br/> resulted to:<br/>"
+        answer=indexer.search(query)
+        a="<pre>" + pformat(answer, indent=4).replace("\n","<br/>\n") + "</pre>"
+        return q+a
+
 class DocsView(View):
 
     @property
@@ -405,7 +421,8 @@ def post_archive(*args):
 
     things['File-Name']=fs.filename
 
-    storage=getUtility(IDocumentStorage, name='content')
+    storage=getUtility(IContentStorage, name='content')
+    storage.commit()
 
     """
     if storage.exists(fs.value): # is it an error?
@@ -445,9 +462,10 @@ def post_archive(*args):
     things.update(cont_data)
     if text_p:
         text_body=cont_data['text-body']
-        text_id=storage.put(text_body.encode('utf-8'))
+        text_id=storage.put(text_body.encode('utf-8'))    # As compression library requires bytes.
         things['text-id']=text_id
-        #indexer=getUtility(IIndexer, "indexer")
+        indexer=getUtility(IIndexer, "indexer")
+        indexer.reindex()
         #indexer.put(text_body, things)
         # index text
 
@@ -478,6 +496,13 @@ def get_debug(*args):
     view=GraphView(*args, title=_("Debug graph '%s'") % name)
     return view()
 
+@view_config(route_name="debug_search", renderer='templates/index.pt')
+def get_search(*args):
+    request=args[1]
+    _ = request.translate
+    view=SearchView(*args, title=_("Debug search"))
+    return view()
+
 @view_config(route_name='email',renderer='templates/index.pt')
 def get_email(*args):
     request=args[1]
@@ -492,6 +517,9 @@ def includeme(config):
     config.add_route('archive', "/archive")
     config.add_route('email', "/mail")
     config.add_route('upload', "/file_upload")
-    config.add_route('debug_graph', "/archive_debug")
     config.add_route('get_docs', "/docs")
+
+    config.add_route('debug_graph', "/archive_debug")
+    config.add_route('debug_search', "/search")
+
     #config.scan()

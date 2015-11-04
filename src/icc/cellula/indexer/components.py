@@ -2,29 +2,46 @@ from icc.cellula.indexer.interfaces import IIndexer
 from zope.interface import implementer, Interface
 from zope.component import getUtility
 import subprocess as sp
-#import MySQLdb
-#import cymysql
-#import oursql
-import pymysql
 from icc.contentstorage import intdigest, hexdigest
 import os.path, os
+from icc.cellula.indexer.sphinxapi import *
+from pkg_resources import resource_filename
+
+HOST='127.0.0.1'
+PORT=9312
+INDEX_NAME='annotations'
 
 INDEX_TEMPLATE="""
-index rt
+source %(index_name)s_source
 {
-    type = rt
-    path = %(dir)s
-    rt_field = title
-    rt_field = content
-    rt_attr_uint = text_id
+	type = tsvpipe
+	tsvpipe_command = %(pipe_prog)s
+	tsvpipe_attr_bigint = lid
+	tsvpipe_attr_bigint = bid
+    tsvpipe_field = body
+    %(indexer_fields)s
+}
+
+index %(index_name)s
+{
+    source = %(index_name)s_source
+    path=%(dir)s
+    morphology=stem_enru
+    min_word_len = 3
+}
+
+indexer
+{
+        # Максимальный лимит используемой памяти RAM
+        mem_limit = 32M
 }
 
 searchd
 {
-	#listen			= 127.0.0.1:9312
+	listen			= %(host)s:%(port)s
 	#listen			= %(dir)s/searchd.sock
 	#listen			= 9312
-	listen			= 127.0.0.1:9386:mysql41
+	#listen			= 127.0.0.1:9386:mysql41
 
 	# log file, searchd run info is logged here
 	# optional, default is 'searchd.log'
@@ -331,6 +348,7 @@ common
 @implementer(IIndexer)
 class SphinxIndexer(object):
     executable="sphinx-searchd"
+    indexer="sphinx-indexer"
     def __init__(self):
         """Creates index service.
         1. Generates a config in conf_dir;
@@ -343,20 +361,26 @@ class SphinxIndexer(object):
         self.data_dir=ic['data_dir']
         self.pid_file=ic['pid_file']
         self.conf_file=ic['conf_file']
-        self.batch_amount=int(ic['batch_amount'])
+        self.batch_amount=int(ic.get('batch_amount', 200))
+        self.host=ic.get('host',HOST)
+        self.port=int(ic.get('port',PORT))
+        self.index_name=ic.get('index_name',INDEX_NAME)
         self.execpathname=self.run(self.executable, executable='which').strip()
-        self.connection=None
+        self.indexerpathname=self.run(self.indexer, executable='which').strip()
+        self.filepath_conf=None
         self.started=False
+        self.index_proc=None
         self.test()
         self.create_config()
         self.start_daemon()
+        self.reindex()
 
     def test(self):
         out=self.run('--help', executable=self.execpathname)
         if not out.startswith("Sphinx"):
             raise RuntimeError("cannot start Sphinx index server")
 
-    def run(self, *params, ignore_err=False, executable=None):
+    def run(self, *params, ignore_err=False, executable=None, par=False):
         """Run extract binary and capture its stdout.
         If there is some stderr output, raise exception if
         it is not igored (ignore_err).
@@ -367,17 +391,30 @@ class SphinxIndexer(object):
 
         exec_bundle=[executable]+list(params)
         # print ("------------>", exec_bundle)
-        cp=sp.run(exec_bundle, stdout=sp.PIPE, stderr=sp.PIPE)
+        if par:
+            cp=sp.Popen(exec_bundle, stdout=sp.PIPE, stderr=sp.PIPE)
+            return cp
+        else:
+            cp=sp.run(exec_bundle, stdout=sp.PIPE, stderr=sp.PIPE)
         if cp.stderr and not ignore_err:
             raise RuntimeError(cp.stderr.decode('utf-8').strip())
         return cp.stdout.decode('utf-8')
 
-
     def create_config(self):
         """Creates config file, controlling indexer.
         """
+        script_name=resource_filename("icc.cellula","indexer/scripts/indexfeeder.py")
+        me_python = os.path.join(sys.exec_prefix,"bin","python3")
+        feeder=me_python+" "+script_name
 
-        config=INDEX_TEMPLATE % {"dir":self.data_dir}
+        config=INDEX_TEMPLATE % {
+            "dir":self.data_dir,
+            "pipe_prog":feeder,
+            "indexer_fields":'',
+            'host':self.host,
+            'port':self.port,
+            'index_name':self.index_name,
+        }
         self.filepath_conf=os.path.join(self.data_dir, self.conf_file)
         of=open(self.filepath_conf, "w")
         of.write(config)
@@ -392,56 +429,52 @@ class SphinxIndexer(object):
         # print (out)
         # print (self.pid)
         self.started=True
-        # self.connection=MySQLdb.connect(host="127.0.0.1", port=9386)
-        # self.connection=cymysql.connect(host="127.0.0.1", port=9386)
-        # self.connection=oursql.connect(host="127.0.0.1", port=9386)
-        self.connection=pymysql.connect(host="127.0.0.1", port=9386, charset='utf8')
+
+    def connect(self):
+        cl=SphinxClient()
+        cl.SetServer(self.host, self.port)
+        cl.SetLimits(0, self.batch_amount, max(self.batch_amount, 1000))
+        return cl
 
     @property
     def pid(self):
         return int(open(self.filepath_pid).read().strip())
 
     def __del__(self):
-        if self.connection != None:
-            self.connection.close()
-        os.remove(self.filepath_conf)
+        if self.filepath_conf != None:
+            os.remove(self.filepath_conf)
         #pid=self.pid()
         self.run('--stopwait')
         #os.remove(self.filename_pid)
 
-    def put(self, content, fields):
-        print (fields.get('title', ''))
-        content_id=intdigest(fields['id'])
-        text_id=intdigest(fields['text-id'])
-        title=fields.get('title', '')
-        cursor=self.connection.cursor()
-        content=self.clean(content)
-        title=self.clean(title)
+    def reindex(self):
+        # remove mark
+        self.index_delta()
 
-        title="Заголовок"
-        content="Тело"
-
-        print (content_id, title, content, text_id)
-        cursor.execute(
-            'INSERT INTO rt VALUES ( %s, %s, %s, %s) $end ;',
-            (content_id, title, content, text_id)
+    def index_delta(self):
+        p=self.index_proc
+        if p != None:
+            if not p.poll():
+                return false
+            else:
+                stderr=p.stderr.read().strip()
+                if len(stderr)>0:
+                    print ("ERROR from indexer:", stderr)
+        p=self.index_proc=self.run(
+            "--rotate",
+            "--quiet",
+            '--config', self.filepath_conf,
+            self.index_name,
+            executable=self.indexerpathname,
+            par=True
         )
-
-    def clean(self, s):
-        return s.replace("'",' ').replace('"',' ').replace('\\', ' ')
 
     def search(self, query):
-        cursor=self.connection.cursor()
-        cursor.execute(
-            "SELECT * FROM rt WHERE MATCH(%s);",
-            (query,)
-        )
-        rc = cursor.fetchmay(self.batch_amount)
-        rc = [[hexdigest(r[0])] + r[1:] for r in rc]
+        cl=self.connect()
+        rc=cl.Query(query.encode('utf-8'), self.index_name)
+        if not rc:
+            raise RuntimeError('sphinx query failed:'+ self.client.GetLastError())
+        warn=cl.GetLastWarning()
+        if warn:
+            print ("SPHINX WARNING:", warn)
         return rc
-
-    def remove(self, content_id):
-        cursor.execute(
-            "DELETE FROM rt WHERE id=%s;",
-            (bindigest(content_id),)
-        )

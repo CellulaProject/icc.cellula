@@ -46,7 +46,7 @@ py:
 
 pot:
 	mkdir -p $(LCAT)
-	$(VB)/pot-create src -o $(LCAT)/messages.pot
+	$(VB)/pot-create src -o $(LCAT)/messages.pot || echo "Someting unusual with pot."
 
 init-ru:
 	$(PYTHON) setup.py init_catalog -l ru -i $(LCAT)/messages.pot \

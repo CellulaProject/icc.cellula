@@ -55,7 +55,7 @@ setup(name='icc.cellula',
       package_dir = {'': 'src'},
       entry_points = """\
       [paste.app_factory]
-      main=icc.cellula:main
+      main=icc.cellula.app:main
       """,
 #    message_extractors = {
 #        'src/icc/cellula': [

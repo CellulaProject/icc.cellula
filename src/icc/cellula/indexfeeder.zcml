@@ -1,0 +1,24 @@
+
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    >
+  <include package="zope.component" file="meta.zcml" />
+  <!--  <i18n:registerTranslations directory="locales" /> -->
+
+<!--  <include package="icc.restfuldocs" /> -->
+<!--  <include package="icc.contentstorage" /> -->
+  <include package="icc.rdfservice" />
+<!--  <include package="icc.restfuldocs" /> -->
+
+  <utility
+      factory="icc.contentstorage.kyotocabinet.Storage"
+      name="content"
+      />
+
+  <utility
+      factory="icc.rdfservice.RDFService"
+      name="rdf_service"
+      />
+
+</configure>
