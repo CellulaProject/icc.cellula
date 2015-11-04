@@ -26,10 +26,12 @@ install: env comp-cat
 edit:
 	cd src && emacs
 
-test:
-	ip a | grep 2001
-	ip a | grep 172.
-	#. $(V)/bin/activate
+test: adjust-ini
+	@ip a | grep 2001 || true
+	@ip a | grep 172. || true
+	@echo "================================================================"
+	@echo "Point Your browser to http://[::1]:8080 or http://127.0.0.1:8080"
+	@echo "================================================================"
 	$(VB)/pserve $(INI).ini --reload
 	#cd src && $(PYTHON) app.py
 
@@ -58,3 +60,6 @@ comp-cat:
 	$(PYTHON) setup.py compile_catalog -d $(LCAT)
 
 upd-cat: pot update-ru comp-cat
+
+adjust-ini:
+	sed 's/HOME/\/home\/$(USER)/' icc.cellula.ini.in > icc.cellula.ini

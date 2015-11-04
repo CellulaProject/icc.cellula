@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2015-11-03 16:20+0800\n"
+"POT-Creation-Date: 2015-11-04 08:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,21 +20,37 @@ msgstr ""
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:345
+#: ./src/icc/cellula/views.py:364
 msgid "Dashboard"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:352 ./src/icc/cellula/templates/index.pt:179
+#: ./src/icc/cellula/views.py:371 ./src/icc/cellula/templates/index.pt:179
 msgid "Document Archive"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:463
+#: ./src/icc/cellula/views.py:482
 msgid "E-Mail"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:456
+#: ./src/icc/cellula/views.py:475
 #, c-format
 msgid "Debug graph '%s'"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:8
+msgid "Date"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:9
+msgid "Title"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:10
+msgid "File"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:11
+msgid "Incoming #"
 msgstr ""
 
 #. Default: Cellula
@@ -72,20 +88,4 @@ msgstr ""
 
 #: ./src/icc/cellula/templates/index.pt:302
 msgid "Home"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:8
-msgid "Date"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:9
-msgid "Title"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:10
-msgid "File"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:11
-msgid "Incoming #"
 msgstr ""

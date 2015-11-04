@@ -14,24 +14,24 @@ debugtoolbar.hosts = 192.168.0.0/16 2001:470:dfda::/48 2001:470:18fb::/48 127.0.
 
 [content_storage]
 # Lookout! configurator sets 'file' as "<string>", i.e. with "'s!!!!
-file="/home/eugeneai/tmp/cellula-data/content.kch"
+file="HOME/tmp/cellula-data/content.kch"
 name=content	# Not used
 
 [extractor]
 #Do not use "'s here in string values, please!
-tmp_path=/home/eugeneai/tmp/cellula-data/tmp
+tmp_path=HOME/tmp/cellula-data/tmp
 
 [tracker]
-tmp_path=/home/eugeneai/tmp/cellula-data/tmp
+tmp_path=HOME/tmp/cellula-data/tmp
 exec_path=/usr/lib/tracker
 
 [recoll]
-tmp_path=/home/eugeneai/tmp/cellula-data/tmp
+tmp_path=HOME/tmp/cellula-data/tmp
 mimeconf=/usr/share/recoll/examples/mimeconf
 filter_dir=/usr/share/recoll/filters
 
 [indexer]
-data_dir=/home/eugeneai/tmp/cellula-data/indexes
+data_dir=HOME/tmp/cellula-data/indexes
 pid_file=index.pid
 conf_file=index.conf
 batch_amount=200
@@ -40,7 +40,7 @@ batch_amount=200
 all=persistent, temporal
 
 [rdf_storage_persistent]
-data_dir=/home/eugeneai/tmp/cellula-data/rdf
+data_dir=HOME/tmp/cellula-data/rdf
 data_file=world.kch
 driver=KyotoCabinet
 
