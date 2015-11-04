@@ -56,7 +56,10 @@ class LibExtractorExtractor(object):
 
         cp=sp.run([executable]+list(params), stdout=sp.PIPE, stderr=sp.PIPE)
         if cp.stderr and not ignore_err:
-            raise RuntimeError(cp.stderr.decode('utf-8').strip())
+            if len(cp.stderr)>0:
+                raise RuntimeError(cp.stderr.decode('utf-8').strip())
+            else:
+                raise RuntimeError("NO DESCRIPTION")
         return cp.stdout.decode('utf-8')
 
     def extract(self, content, headers=None):
@@ -108,12 +111,12 @@ class LibExtractorExtractor(object):
                 continue
             if len(line)==0:
                 continue
-            key,value=line.split(" - ")
+            key,value=line.split(" -", maxsplit=1)
             key=key.strip().replace(" ","-")
             value=value.strip()
-
-            vals=answer.setdefault(key,OrderedDict())
-            vals[value]=value
+            if value:
+                vals=answer.setdefault(key,OrderedDict())
+                vals[value]=value
 
         new_a=OrderedDict()
         for k,v in answer.items():

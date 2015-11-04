@@ -86,3 +86,4 @@ docs/_build/
 
 # PyBuilder
 target/
+icc.cellula.ini

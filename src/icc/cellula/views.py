@@ -384,6 +384,9 @@ def post_archive(*args):
 
     fs=request.POST.get('file', None)
 
+    #print ("FS:", fs)
+    #print (help(fs.__class__))
+
     if fs == None:
         request.response.status_code=400
         return { 'error':'no file', 'explanation':'check input form it it contains "file" field' }
@@ -410,7 +413,7 @@ def post_archive(*args):
         return { 'error':'content already exists', 'explanation':'a file with the same content has been uploaded already' }
     """
 
-    rc_id=storage.put(fs.value)
+    rc_id=storage.put(fs.value, things)
 
     #view=ArchiveView(*args, title=_('Document Archive'))
     #return view()
@@ -442,7 +445,7 @@ def post_archive(*args):
     things.update(cont_data)
     if text_p:
         text_body=cont_data['text-body']
-        text_id=storage.put(text_body)
+        text_id=storage.put(text_body.encode('utf-8'))
         things['text-id']=text_id
         #indexer=getUtility(IIndexer, "indexer")
         #indexer.put(text_body, things)
