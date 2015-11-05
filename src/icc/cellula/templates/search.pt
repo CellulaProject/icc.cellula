@@ -9,14 +9,12 @@
         <pre tal:content="src"/>
         <table width="100%" cellspacing="" cellpadding="" border="">
           <tr tal:repeat="m src['matches']">
-            <!--
             <a href="#"
-               tal:define="id string:${m['lid']}${m['bid']}"
+               tal:define="id string:1234"
                tal:attributes="href
                                string:${request.route_url('archive')}/${id}"
                tal:content="id">
             </a>
-            -->
           </tr>
         </table>
       </div>

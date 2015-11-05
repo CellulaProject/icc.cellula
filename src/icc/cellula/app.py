@@ -47,7 +47,7 @@ def main(global_config, **settings):
 
     config.include('icc.cellula.views')
     config.include('pyramid_debugtoolbar')
-#    config.scan("icc.rdfservice.views")
+    config.include("icc.rdfservice.views")
     config.scan("icc.restfuldocs.views")
 
     app=config.make_wsgi_app()

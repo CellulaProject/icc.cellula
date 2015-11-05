@@ -783,7 +783,7 @@ class SphinxClient:
                 nfields -= 1
                 length = unpack('>L', response[p:p+4])[0]
                 p += 4
-                fields.append(response[p:p+length])
+                fields.append(response[p:p+length].decode('utf-8'))
                 p += length
 
             result['fields'] = fields
