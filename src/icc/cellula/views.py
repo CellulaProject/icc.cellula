@@ -333,17 +333,21 @@ class SearchView(View):
 
     @property
     def body(self):
+        answer=None
         FORMAT='n3'
-        indexer=getUtility(IIndexer, name="indexer")
+        #indexer=getUtility(IIndexer, name="indexer")
+        indexer=None
         query=self.request.GET.get("q", None)
 
         if query == None:
             return "<strong>No Query supplied.</strong>"
 
         q="Query:" + query + "<br/> resulted to:<br/>"
-        answer=indexer.search(query)
-        a="<pre>" + pformat(answer, indent=4).replace("\n","<br/>\n") + "</pre>"
-        return q+a
+        if indexer == None:
+            return q+"<strong>No SEARCH engine present!</strong>"
+        self.answer=indexer.search(query)
+        #a="<pre>" + pformat(answer, indent=4).replace("\n","<br/>\n") + "</pre>"
+        #return q+a
 
 class DocsView(View):
 
@@ -496,7 +500,7 @@ def get_debug(*args):
     view=GraphView(*args, title=_("Debug graph '%s'") % name)
     return view()
 
-@view_config(route_name="debug_search", renderer='templates/index.pt')
+@view_config(route_name="debug_search", renderer='templates/search.pt')
 def get_search(*args):
     request=args[1]
     _ = request.translate
