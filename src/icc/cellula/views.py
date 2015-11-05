@@ -510,6 +510,13 @@ def get_email(*args):
     view=View(*args, title=_("E-Mail"))
     return view()
 
+@view_config(route_name='metal_test',renderer='templates/test.pt')
+def get_metal(*args):
+    request=args[1]
+    _ = request.translate
+    view=View(*args, "Test View")
+    return view()
+
 def includeme(config):
     #config.scan("icc.cellula.views")
     config.scan()
@@ -521,5 +528,10 @@ def includeme(config):
 
     config.add_route('debug_graph', "/archive_debug")
     config.add_route('debug_search', "/search")
+    config.add_route('metal_test', "/metal")
+
+
+    config.add_subscriber('icc.cellula.subscribers.add_base_template',
+                      'pyramid.events.BeforeRender')
 
     #config.scan()

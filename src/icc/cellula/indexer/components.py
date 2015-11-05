@@ -373,7 +373,7 @@ class SphinxIndexer(object):
         self.test()
         self.create_config()
         self.start_daemon()
-        self.reindex()
+        # self.reindex()
 
     def test(self):
         out=self.run('--help', executable=self.execpathname)
