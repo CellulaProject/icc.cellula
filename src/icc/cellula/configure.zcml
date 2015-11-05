@@ -30,12 +30,12 @@
       factory="icc.cellula.extractor.RecollExtractor"
       name="recoll"
       />
-      <!--
+
   <utility
       factory="icc.cellula.indexer.SphinxIndexer"
       name="indexer"
       />
-      -->
+
   <utility
       factory="icc.rdfservice.RDFService"
       name="rdf_service"

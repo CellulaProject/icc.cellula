@@ -3,7 +3,7 @@ from zope.interface import implementer, Interface
 from zope.component import getUtility
 import subprocess as sp
 from icc.contentstorage import intdigest, hexdigest
-import os.path, os
+import os.path, os, signal
 from icc.cellula.indexer.sphinxapi import *
 from pkg_resources import resource_filename
 
@@ -359,7 +359,7 @@ class SphinxIndexer(object):
         config=getUtility(Interface, "configuration")
         ic=config['indexer']
         self.data_dir=ic['data_dir']
-        self.pid_file=ic['pid_file']
+        self.pid_file=os.path.join(self.data_dir, "searchd.pid")
         self.conf_file=ic['conf_file']
         self.batch_amount=int(ic.get('batch_amount', 200))
         self.host=ic.get('host',HOST)
@@ -421,13 +421,28 @@ class SphinxIndexer(object):
         of.close()
 
     def start_daemon(self):
-        if self.started:
-            return
-        self.filepath_pid=os.path.join(self.data_dir, self.pid_file)
-        # out=self.run('--pidfile', self.filepath_pid, '--config', self.filepath_conf)
-        out=self.run('--config', self.filepath_conf)
-        # print (out)
-        # print (self.pid)
+        self.started=False
+        start=False
+
+        try:
+            pid=open(self.pid_file).read()
+            pid=int(pid)
+        except IOError:
+            start=True
+        except ValueError:
+            start=True
+
+        if not start:
+            try:
+                rc=os.kill(pid, signal.SIGHUP)
+            except ProcessLookupError:
+                start=True
+
+        if start:
+            out=self.run('--config', self.filepath_conf)
+
+        self.filepath_pid=self.pid_file
+
         self.started=True
 
     def connect(self):

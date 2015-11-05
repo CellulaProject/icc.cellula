@@ -2,10 +2,27 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       metal:use-macro="main.macros['page']">
-    <tal:block metal:fill-slot="content">
-        <div tal:replace="structure view.body"></div>
-        <pre>
-        Hehe.
-        </pre>
-    </tal:block>
+  <tal:block metal:fill-slot="content">
+    <div tal:replace="structure view.body"></div>
+    <span tal:define="src view.answer">
+      <div tal:condition="src['total_found']">
+        <pre tal:content="src"/>
+        <table width="100%" cellspacing="" cellpadding="" border="">
+          <tr tal:repeat="m src['matches']">
+            <!--
+            <a href="#"
+               tal:define="id string:${m['lid']}${m['bid']}"
+               tal:attributes="href
+                               string:${request.route_url('archive')}/${id}"
+               tal:content="id">
+            </a>
+            -->
+          </tr>
+        </table>
+      </div>
+      <div tal:condition="not: src['total_found']">
+        The query produced no results.
+      </div>
+    </span>
+  </tal:block>
 </html>

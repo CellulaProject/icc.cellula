@@ -335,8 +335,8 @@ class SearchView(View):
     def body(self):
         answer=None
         FORMAT='n3'
-        #indexer=getUtility(IIndexer, name="indexer")
-        indexer=None
+        indexer=queryUtility(IIndexer, name="indexer")
+
         query=self.request.GET.get("q", None)
 
         if query == None:
