@@ -25,7 +25,7 @@ source %(index_name)s_source
 index %(index_name)s
 {
     source = %(index_name)s_source
-    path=%(dir)s
+    path=%(dir)s/%(index_name)s
     morphology=stem_enru
     min_word_len = 3
 }
@@ -390,7 +390,7 @@ class SphinxIndexer(object):
             executable = self.execpathname
 
         exec_bundle=[executable]+list(params)
-        # print ("------------>", exec_bundle)
+        print ("EXEC:", " ".join(exec_bundle))
         if par:
             cp=sp.Popen(exec_bundle, stdout=sp.PIPE, stderr=sp.PIPE)
             return cp
@@ -454,8 +454,9 @@ class SphinxIndexer(object):
     def index_delta(self):
         p=self.index_proc
         if p != None:
+            print ("Poll:",p.poll())
             if not p.poll():
-                return false
+                return False
             else:
                 stderr=p.stderr.read().strip()
                 if len(stderr)>0:
@@ -473,7 +474,7 @@ class SphinxIndexer(object):
         cl=self.connect()
         rc=cl.Query(query.encode('utf-8'), self.index_name)
         if not rc:
-            raise RuntimeError('sphinx query failed:'+ self.client.GetLastError())
+            raise RuntimeError('sphinx query failed:'+ cl.GetLastError())
         warn=cl.GetLastWarning()
         if warn:
             print ("SPHINX WARNING:", warn)

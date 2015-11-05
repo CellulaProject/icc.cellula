@@ -12,12 +12,12 @@
 <!--  <include package="icc.restfuldocs" /> -->
 
   <utility
-      factory="icc.contentstorage.kyotocabinet.Storage"
+      factory="icc.contentstorage.kyotocabinet.ReadOnlyStorage"
       name="content"
       />
 
   <utility
-      factory="icc.rdfservice.RDFService"
+      factory="icc.rdfservice.ReadOnlyRDFService"
       name="rdf_service"
       />
 

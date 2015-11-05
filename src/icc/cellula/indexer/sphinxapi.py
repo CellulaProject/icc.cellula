@@ -364,7 +364,7 @@ class SphinxClient:
         """
         Set matching mode.
         """
-        print >> sys.stderr, 'DEPRECATED: Do not call this method or, even better, use SphinxQL instead of an API'
+        print ('DEPRECATED: Do not call this method or, even better, use SphinxQL instead of an API', file=sys.stderr)
         assert(mode in [SPH_MATCH_ALL, SPH_MATCH_ANY, SPH_MATCH_PHRASE, SPH_MATCH_BOOLEAN, SPH_MATCH_EXTENDED, SPH_MATCH_FULLSCAN, SPH_MATCH_EXTENDED2])
         self._mode = mode
 
@@ -444,7 +444,7 @@ class SphinxClient:
         assert(isinstance(attribute, str))
         assert(isinstance(value, str))
 
-        print ( "attr='%s' val='%s' " % ( attribute, value ) )
+        # print ( "attr='%s' val='%s' " % ( attribute, value ) )
         self._filters.append ( { 'type':SPH_FILTER_STRING, 'attr':attribute, 'exclude':exclude, 'value':value } )
 
 
@@ -480,7 +480,7 @@ class SphinxClient:
         self._anchor['long'] = longitude
 
 
-    def SetGroupBy ( self, attribute, func, groupsort=b'@group desc' ):
+    def SetGroupBy ( self, attribute, func, groupsort='@group desc' ):
         """
         Set grouping attribute and function.
         """
@@ -601,7 +601,7 @@ class SphinxClient:
         return results[0]
 
 
-    def AddQuery (self, query, index='*', comment=b''):
+    def AddQuery (self, query, index='*', comment=''):
         """
         Add query to batch.
         """
@@ -615,7 +615,8 @@ class SphinxClient:
         req.append(pack('>L', len(self._sortby)))
         req.append(self._sortby)
 
-        assert(isinstance(query,bytes))
+        if isinstance(query,str):
+            query=query.encode('utf-8')
 
         req.append(pack('>L', len(query)))
         req.append(query)
@@ -763,7 +764,7 @@ class SphinxClient:
             if status != SEARCHD_OK:
                 length = unpack('>L', response[p:p+4])[0]
                 p += 4
-                message = response[p:p+length]
+                message = response[p:p+length].decode('utf-8')
                 p += length
 
                 if status == SEARCHD_WARNING:
@@ -793,7 +794,7 @@ class SphinxClient:
                 nattrs -= 1
                 length = unpack('>L', response[p:p+4])[0]
                 p += 4
-                attr = response[p:p+length]
+                attr = response[p:p+length].decode('utf-8')
                 p += length
                 type_ = unpack('>L', response[p:p+4])[0]
                 p += 4
@@ -830,14 +831,14 @@ class SphinxClient:
                         p += 4
                         match['attrs'][attrs[i][0]] = ''
                         if slen>0:
-                            match['attrs'][attrs[i][0]] = response[p:p+slen]
+                            match['attrs'][attrs[i][0]] = response[p:p+slen].decode('utf-8')
                         p += slen-4
                     elif attrs[i][1] == SPH_ATTR_FACTORS:
                         slen = unpack('>L', response[p:p+4])[0]
                         p += 4
                         match['attrs'][attrs[i][0]] = ''
                         if slen>0:
-                            match['attrs'][attrs[i][0]] = response[p:p+slen-4]
+                            match['attrs'][attrs[i][0]] = response[p:p+slen-4].decode('utf-8')
                             p += slen-4
                         p -= 4
                     elif attrs[i][1] == SPH_ATTR_MULTI:
@@ -873,7 +874,7 @@ class SphinxClient:
                 words -= 1
                 length = unpack('>L', response[p:p+4])[0]
                 p += 4
-                word = response[p:p+length]
+                word = response[p:p+length].decode('utf-8')
                 p += length
                 docs, hits = unpack('>2L', response[p:p+8])
                 p += 8

@@ -44,7 +44,10 @@ def bodies():
     i=1
     for key in annotations():
         lid, bid = splitdigest(key)
-        content=storage.get(key).decode('utf8')
+        content=storage.get(key)
+        if content == None: # Due to a bug
+            continue
+        content=content.decode('utf8')
         content=content.replace("\t"," ").replace('"','""').replace("\n","\\n")
         yield (i, lid, bid, content)
         i+=1
