@@ -89,6 +89,11 @@ storage=temporal
 [sphinx]
 mode=rt
 
+[indexfeeder]
+port=8080
+host=[::1]
+api=/api-fields
+
 [server:main]
 use = egg:waitress#main
 host = ::

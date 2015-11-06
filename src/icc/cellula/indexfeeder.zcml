@@ -8,7 +8,7 @@
 
 <!--  <include package="icc.restfuldocs" /> -->
 <!--  <include package="icc.contentstorage" /> -->
-  <include package="icc.rdfservice" />
+<!--  <include package="icc.rdfservice" /> -->
 <!--  <include package="icc.restfuldocs" /> -->
 
   <utility
@@ -16,9 +16,10 @@
       name="content"
       />
 
+  <!--
   <utility
       factory="icc.rdfservice.ReadOnlyRDFService"
       name="rdf_service"
-      />
+      />  -->
 
 </configure>

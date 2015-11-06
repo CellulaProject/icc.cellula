@@ -372,7 +372,6 @@ class SphinxIndexer(object):
         self.index_proc=None
         self.test()
         self.create_config()
-        self.start_daemon()
         # self.reindex()
 
     def test(self):
@@ -420,9 +419,12 @@ class SphinxIndexer(object):
         of.write(config)
         of.close()
 
-    def start_daemon(self):
+    def start_daemon(self, times=3):
         self.started=False
         start=False
+        if times<=0:
+            print ("Could not start sphinx search daemon.")
+            return False
 
         try:
             pid=open(self.pid_file).read()
@@ -435,15 +437,15 @@ class SphinxIndexer(object):
         if not start:
             try:
                 rc=os.kill(pid, signal.SIGHUP)
+                self.started=True
+                self.filepath_pid=self.pid_file
+                return True
             except ProcessLookupError:
-                start=True
+                pass
 
-        if start:
-            out=self.run('--config', self.filepath_conf)
-
-        self.filepath_pid=self.pid_file
-
-        self.started=True
+        self.reindex(par=False)
+        out=self.run('--config', self.filepath_conf)
+        self.start_daemon(times-1)
 
     def connect(self):
         cl=SphinxClient()
@@ -462,13 +464,13 @@ class SphinxIndexer(object):
         self.run('--stopwait')
         #os.remove(self.filename_pid)
 
-    def reindex(self):
+    def reindex(self, par=True):
         # remove mark
-        self.index_delta()
+        self.index_delta(par=par)
 
-    def index_delta(self):
+    def index_delta(self, par=True):
         p=self.index_proc
-        if p != None:
+        if p != None and par:
             print ("Poll:",p.poll())
             if not p.poll():
                 return False
@@ -482,10 +484,14 @@ class SphinxIndexer(object):
             '--config', self.filepath_conf,
             self.index_name,
             executable=self.indexerpathname,
-            par=True
+            par=par
         )
 
     def search(self, query):
+        if not self.started:
+            self.start_daemon()
+        if not self.started:
+            raise RuntimeError("cannot start daemon")
         cl=self.connect()
         rc=cl.Query(query.encode('utf-8'), self.index_name)
         if not rc:

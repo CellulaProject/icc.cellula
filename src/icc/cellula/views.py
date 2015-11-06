@@ -426,7 +426,6 @@ def post_archive(*args):
     things['File-Name']=fs.filename
 
     storage=getUtility(IContentStorage, name='content')
-    storage.commit()
 
     """
     if storage.exists(fs.value): # is it an error?
@@ -435,6 +434,7 @@ def post_archive(*args):
     """
 
     rc_id=storage.put(fs.value, things)
+    storage.commit()
 
     #view=ArchiveView(*args, title=_('Document Archive'))
     #return view()
@@ -467,9 +467,10 @@ def post_archive(*args):
     if text_p:
         text_body=cont_data['text-body']
         text_id=storage.put(text_body.encode('utf-8'))    # As compression library requires bytes.
+        storage.commit()
         things['text-id']=text_id
         indexer=getUtility(IIndexer, "indexer")
-        indexer.reindex()
+        indexer.reindex(par=False)
         #indexer.put(text_body, things)
         # index text
 
