@@ -5,11 +5,14 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pprint import pprint, pformat
 from icc.contentstorage.interfaces import IContentStorage
+from icc.contentstorage import hexdigest
 from zope.component import getUtility, queryUtility
 
 from icc.cellula.extractor.interfaces import IExtractor
 from icc.cellula.indexer.interfaces import IIndexer
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
+
+from rdflib import Literal
 
 import cgi
 
@@ -52,6 +55,14 @@ class View(object):
         if name==mname:
             return "active"
         raise ValueError('wrong route')
+
+    def sparql(self, query, graph):
+        """Query a graph, convert all
+        answer attributes to python values.
+        """
+        rset=graph.query(query)
+        for r in rset:
+            yield [c.toPython() for c in r]
 
 class ArchiveView(View):
     """View for archive
@@ -334,8 +345,10 @@ class SearchView(View):
     @property
     def body(self):
         answer=None
+        matches=[]
         FORMAT='n3'
         indexer=queryUtility(IIndexer, name="indexer")
+        self.doc=queryUtility(IGraph, name="doc")
 
         query=self.request.GET.get("q", None)
 
@@ -346,8 +359,40 @@ class SearchView(View):
         if indexer == None:
             return q+"<strong>No SEARCH engine present!</strong>"
         self.answer=indexer.search(query)
-        #a="<pre>" + pformat(answer, indent=4).replace("\n","<br/>\n") + "</pre>"
-        #return q+a
+
+        ms=[]
+        for m in self.answer['matches']:
+            for r in self.proc_match(m):
+                ms.add[r]
+
+        self.matches=ms
+
+        return q
+
+    def proc_match(self, match):
+        for row in self.proc_attrs(match['attrs']):
+            yield row+[match['id'], match['weight']/1000.]
+
+    def proc_attrs(self, attrs):
+        lid,bid=attrs['lid'],attrs['bid']
+        key=hexdigest((lid,bid))
+        #l=Literal(key)
+        print (lid, bid, key)
+        Q='''
+        SELECT DISTINCT ?date ?title ?id ?file ?mimetype
+        WHERE {
+           ?ann nao:identifier "''' + key + '''" .
+           ?ann a oa:Annotation .
+           ?ann oa:annotatedAt ?date .
+           ?ann oa:hasTarget ?target .
+        OPTIONAL { ?target nie:title ?title } .
+           ?target nao:identifier ?id .
+           ?target nfo:fileName ?file .
+           ?target nmo:mimeType ?mimetype .
+        }
+        '''
+        print (Q)
+        yield from self.sparql(Q, self.doc)
 
 class DocsView(View):
 
@@ -367,12 +412,7 @@ class DocsView(View):
         }
         """
         qres=g.query(Q)
-        """
-        print ("Result:")
-        for r in qres:
-            print (r)
-        """
-        return g.query(Q)
+        return qres
 
 
 # ---------------- Actual routes ------------------------------------------

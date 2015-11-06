@@ -5,16 +5,19 @@
   <tal:block metal:fill-slot="content">
     <div tal:replace="structure view.body"></div>
     <span tal:define="src view.answer">
-      <div tal:condition="src['total_found']">
+      <div tal:condition="src['total_found']>0">
         <pre tal:content="src"/>
         <table width="100%" cellspacing="" cellpadding="" border="">
-          <tr tal:repeat="m src['matches']">
-            <a href="#"
-               tal:define="id string:1234"
-               tal:attributes="href
-                               string:${request.route_url('archive')}/${id}"
-               tal:content="id">
-            </a>
+          <tr tal:repeat="r view.matches">
+            <td tal:content="m[0]">Date</td>
+            <td tal:content="m[1]">Title</td>
+            <td>
+              <a href="#"
+                 tal:attributes="href
+                                 string:${request.route_url('archive')}/${m[2]}"
+                 tal:content="m[3]">
+              </a>
+            <td>
           </tr>
         </table>
       </div>
