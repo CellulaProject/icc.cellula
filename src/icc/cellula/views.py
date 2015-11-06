@@ -473,17 +473,6 @@ def post_archive(*args):
         return { 'error':'content already exists', 'explanation':'a file with the same content has been uploaded already' }
     """
 
-    #storage.begin()
-    print ("Begin:",storage.begin(), storage.db.error())
-    rc_id=storage.put(fs.value, things)
-
-    #view=ArchiveView(*args, title=_('Document Archive'))
-    #return view()
-    request.response.status_code=201
-    things['id']=rc_id
-    things['result']='file stored'
-
-    # extract here
 
     extractor=getUtility(IExtractor, name='extractor')
 
@@ -505,22 +494,27 @@ def post_archive(*args):
     text_p=things['text-body-presence']='text-body' in cont_data
 
     things.update(cont_data)
+    print ("Begin:",storage.begin(), storage.db.error())
+    rc_id=storage.put(fs.value, things)
     if text_p:
         text_body=cont_data['text-body']
         text_id=storage.put(text_body.encode('utf-8'))    # As compression library requires bytes.
         things['text-id']=text_id
         indexer=getUtility(IIndexer, "indexer")
-        indexer.reindex(par=False)
+        #indexer.reindex(par=False)
         #indexer.put(text_body, things)
         # index text
-    print ("Commit:",storage.commit(), storage.db.error())
 
+    print ("Commit:",storage.commit(), storage.db.error())
     # Add user data
     things['user-id']="eugeneai@npir.ru"
 
     doc_meta = getUtility(IRDFStorage, name='documents')
     doc_meta.store(things)
 
+    request.response.status_code=201
+    things['id']=rc_id
+    things['result']='file stored'
     if text_p:
         del things['text-body']
 

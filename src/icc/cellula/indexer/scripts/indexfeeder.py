@@ -6,7 +6,7 @@ from zope.component import getGlobalSiteManager, getUtility
 from zope.interface import Interface
 from icc.contentstorage.interfaces import IContentStorage
 #from icc.rdfservice.interfaces import IGraph
-from icc.contentstorage import splitdigest
+from icc.contentstorage import splitdigest, hexdigest
 import urllib.request
 import sys,os
 
@@ -45,7 +45,7 @@ def bodies():
         key=key.decode('utf-8')  # !!! NOTE Sent as hexdigest, but received as bytes, must be decoded.
         lid, bid = splitdigest(key)
         content=storage.get(key)
-        print (key, type(content))
+        # print (key, hexdigest((lid,bid)))
         if content == None: # Due to a bug, e.g.
             continue
         content=content.decode('utf8')
