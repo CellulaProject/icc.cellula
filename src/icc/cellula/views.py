@@ -8,13 +8,12 @@ from icc.contentstorage.interfaces import IContentStorage
 from icc.contentstorage import hexdigest
 from zope.component import getUtility, queryUtility
 
-from icc.cellula.extractor.interfaces import IExtractor
-from icc.cellula.indexer.interfaces import IIndexer
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
 
 from rdflib import Literal
 
 import cgi
+from icc.cellula.tasks import DocumentAcceptingTask, GetQueue
 
 class View(object):
     def __init__(self, *args, **kwargs):
@@ -395,7 +394,6 @@ class SearchView(View):
         yield from self.sparql(Q, self.doc)
 
 class DocsView(View):
-
     @property
     def docs(self):
         g=getUtility(IGraph, "doc")
@@ -413,7 +411,6 @@ class DocsView(View):
         """
         qres=g.query(Q)
         return qres
-
 
 # ---------------- Actual routes ------------------------------------------
 
@@ -453,17 +450,12 @@ def post_archive(*args):
 
     things.update(fs.headers)
 
-    """
-    if fs.filename != None:
-        o=open(fs.filename,"wb")
-        o.write(fs.value)
-    else:
-    """
     if fs.filename == None:
         request.response.status_code=400
         return { 'error':'no file', 'explanation':'check input form it it contains "file" field' }
 
     things['File-Name']=fs.filename
+
 
     storage=getUtility(IContentStorage, name='content')
 
@@ -472,51 +464,24 @@ def post_archive(*args):
         request.response.status_code=400
         return { 'error':'content already exists', 'explanation':'a file with the same content has been uploaded already' }
     """
+    content=fs.value #file
+    doc_id=things['id']=storage.hash(content)
+    rc=storage.resolve(doc_id)
+    print (rc, doc_id, storage.db.error())
+    if rc:
+        request.response.status_code=400
+        return { 'error':'already exists', 'explanation':'the file is already stored' }
 
+    headers=things
+    tasks=GetQueue('tasks')
 
-    extractor=getUtility(IExtractor, name='extractor')
-
-    ext_data=extractor.extract(fs.value, things)
-
-    ext_things={}
-    ext_things.update(things)
-    ext_things.update(ext_data)
-
-    content_extractor=getUtility(IExtractor, name='content')
-
-    cont_data=content_extractor.extract(fs.value, ext_things)
-
-    if not 'text-body' in cont_data:
-        recoll_extractor=getUtility(IExtractor, name='recoll')
-        ext_things.update(cont_data)
-        cont_data=recoll_extractor.extract(fs.value, ext_things)
-
-    text_p=things['text-body-presence']='text-body' in cont_data
-
-    things.update(cont_data)
-    print ("Begin:",storage.begin(), storage.db.error())
-    rc_id=storage.put(fs.value, things)
-    if text_p:
-        text_body=cont_data['text-body']
-        text_id=storage.put(text_body.encode('utf-8'))    # As compression library requires bytes.
-        things['text-id']=text_id
-        indexer=getUtility(IIndexer, "indexer")
-        #indexer.reindex(par=False)
-        #indexer.put(text_body, things)
-        # index text
-
-    print ("Commit:",storage.commit(), storage.db.error())
-    # Add user data
-    things['user-id']="eugeneai@npir.ru"
-
-    doc_meta = getUtility(IRDFStorage, name='documents')
-    doc_meta.store(things)
+    tasks.put(DocumentAcceptingTask(content, headers), block=False)
 
     request.response.status_code=201
-    things['id']=rc_id
+
     things['result']='file stored'
-    if text_p:
-        del things['text-body']
+
+    things['user-id']="eugeneai@npir.ru"
 
     #print(cont_data)
     return things

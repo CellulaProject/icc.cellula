@@ -94,6 +94,10 @@ port=8080
 host=[::1]
 api=/api-fields
 
+[workers]
+threads=4
+processes=4
+
 [server:main]
 use = egg:waitress#main
 host = ::

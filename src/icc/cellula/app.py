@@ -3,8 +3,9 @@
 from configparser import ConfigParser
 from zope.configuration.xmlconfig import xmlconfig
 from pkg_resources import resource_filename,resource_stream
-from zope.component import getGlobalSiteManager
+from zope.component import getGlobalSiteManager, getUtility
 from zope.interface import Interface
+from icc.cellula.interfaces import IWorker
 import sys,os
 
 package=__name__
@@ -53,6 +54,8 @@ def main(global_config, **settings):
     app=config.make_wsgi_app()
     GSM.registerUtility(app, IApplication, name='application')
 
+    qeue=getUtility(IWorker, name="queue")
+    qeue.start()
     return app
 
 if __name__=="__main__":

@@ -51,5 +51,30 @@
       name="org"
       />
 
-
+  <utility
+      factory="icc.cellula.workers.PriorityQueue"
+      provides="icc.cellula.interfaces.IQueue"
+      name="tasks"
+      />
+  <utility
+      factory="threading.Lock"
+      provides="icc.cellula.interfaces.ILock"
+      name="content_lock"
+      />
+  <utility
+      factory="threading.Lock"
+      provides="icc.cellula.interfaces.ILock"
+      name="documents_lock"
+      />
+<!--
+  <utility
+      factory="queue.Queue"
+      provides="icc.cellula.interfaces.IQueue"
+      name="results"
+      />
+  -->
+  <utility
+      factory="icc.cellula.workers.QueueThread"
+      name="queue"
+      />
 </configure>

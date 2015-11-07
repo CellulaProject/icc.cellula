@@ -464,11 +464,11 @@ class SphinxIndexer(object):
         self.run('--stopwait')
         #os.remove(self.filename_pid)
 
-    def reindex(self, par=True):
+    def reindex(self, par=True, index=None):
         # remove mark
-        self.index_delta(par=par)
+        self.index_delta(par=par, index=index)
 
-    def index_delta(self, par=True):
+    def index_delta(self, par=True, index=None):
         p=self.index_proc
         if p != None and par:
             print ("Poll:",p.poll())
