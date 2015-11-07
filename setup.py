@@ -40,7 +40,7 @@ setup(name='icc.cellula',
 #	'mysqlclient',
 #	'cymysql'
 #	'oursql',
-	'PyMySQL',
+#	'PyMySQL',
 #	'pyramid_tm',
         ],
       dependency_links = [
