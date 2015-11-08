@@ -106,7 +106,7 @@ port = 8080
 # Begin logging configuration
 
 [loggers]
-keys = root, icc.cellula, waitress
+keys = root, icc.cellula, waitress, sphinxapi
 
 [handlers]
 keys = console
@@ -121,13 +121,20 @@ handlers = console
 
 [logger_icc.cellula]
 level = DEBUG
-handlers =
+handlers = console
+qualname = icc.cellula
+
+[logger_sphinxapi]
+level = WARNING
+handlers = console
 qualname = icc.cellula
 
 [handler_console]
 class = StreamHandler
-args = (sys.stderr,)
-level = NOTSET
+#args = (sys.stderr,)
+args = (sys.stdout,)
+#level = NOTSET
+level = DEBUG
 formatter = generic
 
 [logger_waitress]
@@ -136,6 +143,7 @@ handlers = console
 qualname = waitress
 
 [formatter_generic]
-format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s
+#format = %(asctime)s[%(levelname)-5.5s] %(name)s:%(threadName)s: %(message)s
+format = %(asctime)s<%(levelname)s>%(name)s:%(threadName)s: %(message)s
 
 # End logging configuration

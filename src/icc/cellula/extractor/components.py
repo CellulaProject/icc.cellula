@@ -7,6 +7,8 @@ import tempfile
 import os, os.path
 from collections import OrderedDict
 from configparser import ConfigParser
+import logging
+logger=logging.getLogger('icc.cellula')
 
 @implementer(IExtractor)
 class LibExtractorExtractor(object):
@@ -150,6 +152,10 @@ class TrackerExtractor(LibExtractorExtractor):
         except RuntimeError:
             return {}
 
+        #print("Output from filter: "+out)
+        # FIXME user rdflib translator to process output
+        # add [] before "a xxx:<Class> , ... ;
+
         answer=OrderedDict()
         lines=out.splitlines()
         sparql_item=False
@@ -169,7 +175,7 @@ class TrackerExtractor(LibExtractorExtractor):
             if len(comps)==0:
                 continue
             if len(comps)==1:
-                print ("Tracker: 1-size comp:", comps[0][:60])
+                logger.warining("Tracker: found a 1-part semantic component:", comps[0][:60])
                 continue
             p, o = comps
             if p=='a':
@@ -177,6 +183,7 @@ class TrackerExtractor(LibExtractorExtractor):
             if o.startswith("?"):
                 continue
             o=o.rstrip(";").rstrip()
+            o=o.rstrip(".").rstrip()
             if o.startswith("["):
                 o=o.lstrip("[").lstrip()
             if o.endswith("]"):
@@ -193,8 +200,7 @@ class TrackerExtractor(LibExtractorExtractor):
                 continue
             except ValueError:
                 pass
-            # do something with date
-            #print (p, str(o)[:60])
+
             if p.startswith("nie:plainTextContent"):
                 p='text-body'
                 o=o.strip("'"+'"')
@@ -273,7 +279,7 @@ class RecollExtractor(object):
         except KeyError as e:
             return ''
 
-        print ("Filter:", script)
+        logger.debug("Filter: "+ script)
         try:
             way, cmd = script.split()
         except ValueError:
@@ -292,7 +298,7 @@ class RecollExtractor(object):
             except RuntimeError:
                 out=""
         else:
-            print ('WARNING:Non-implemented filer class %s for script %s' % (way, script))
+            logger.warning('Non-implemented filer class %s for script %s' % (way, script))
 
         return out
 

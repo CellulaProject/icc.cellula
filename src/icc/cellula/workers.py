@@ -3,6 +3,8 @@ from zope.interface import implementer, Interface
 from zope.component import getUtility, queryUtility
 import queue
 import threading
+import logging
+logger=logging.getLogger('icc.cellula')
 
 def GetQueue(name, query=False):
     """Find a queue utility. A helper procedure."""
@@ -17,13 +19,13 @@ class ThreadWorker(object):
     """
 
     def run(self):
-        print ("Started thread worker.")
+        logger.debug("Started thread worker.")
         tasks=GetQueue('tasks')
         results=GetQueue('results', query=True)
         while True:
-            print ("a thread worker is waiting for a task")
+            logger.debug("a thread worker is waiting for a task")
             task=tasks.get()
-            print ("a thread worker got a task")
+            logger.debug("a thread worker got a task")
             if ITerminationTask.providedBy(task):
                 q.task_done()
                 return
@@ -41,6 +43,9 @@ class ThreadWorker(object):
 
     def __call__(self):
         return self.run()
+
+class ProcessWorker(ThreadWorker):
+    pass # FIXME stub
 
 @implementer(ITask)
 class Task(object):
@@ -123,18 +128,22 @@ class QueueThread(threading.Thread):
     def run(self):
         for i in range(self.threads):
             w=ThreadWorker()
-            t=threading.Thread(target=w)
+            t=threading.Thread(target=w, name=w.__class__.__name__+"-%d" % i)
             self.thread_pool.append(t)
             t.start()
-        # Create process pool
-        # join process pool
+        for i in range(self.processes):
+            w=ProcessWorker()
+            p=threading.Thread(target=w, name=w.__class__.__name__+"-%d" % i)
+            self.process_pool.append(t)
+            p.start()
         while True:
             if not self.join_worker():
                 break
 
     def join_worker(self):
         if self.process_pool:
-            # join a process
+            p=self.process_pool.pop()
+            p.join()
             return True
         if self.thread_pool:
             t=self.thread_pool.pop()
@@ -152,10 +161,10 @@ class QueueThread(threading.Thread):
 class PriorityQueue(queue.PriorityQueue):
 
     def put(self, task, *args, **kwargs):
-        print ("Q. Put:", task)
+        logger.info("Q. Put:", task)
         return queue.PriorityQueue.put(self, (task.priority, task), *args, **kwargs)
 
     def get(self, *args, **kwargs):
         priority,task=queue.PriorityQueue.get(self,*args,**kwargs)
-        print ("Q. Get:", task)
+        logger.info("Q. Get:", task)
         return task

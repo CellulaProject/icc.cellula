@@ -14,6 +14,8 @@ from rdflib import Literal
 
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue
+import logging
+logger=logging.getLogger('icc.cellula')
 
 class View(object):
     def __init__(self, *args, **kwargs):
@@ -376,7 +378,7 @@ class SearchView(View):
         lid,bid=attrs['lid'],attrs['bid']
         key=hexdigest((lid,bid))
         #l=Literal(key)
-        print (lid, bid, key)
+        logger.debug((lid, bid, key))
         Q='''
         SELECT DISTINCT ?date ?title ?id ?file ?mimetype
         WHERE {
@@ -390,7 +392,7 @@ class SearchView(View):
            ?target nmo:mimeType ?mimetype .
         }
         '''
-        print (Q)
+        logger.debug(Q)
         yield from self.sparql(Q, self.doc)
 
 class DocsView(View):
@@ -441,9 +443,6 @@ def post_archive(*args):
 
     fs=request.POST.get('file', None)
 
-    #print ("FS:", fs)
-    #print (help(fs.__class__))
-
     if fs == None:
         request.response.status_code=400
         return { 'error':'no file', 'explanation':'check input form it it contains "file" field' }
@@ -467,7 +466,7 @@ def post_archive(*args):
     content=fs.value #file
     doc_id=things['id']=storage.hash(content)
     rc=storage.resolve(doc_id)
-    print (rc, doc_id, storage.db.error())
+    logger.debug((rc, doc_id, storage.db.error()))
     if rc:
         request.response.status_code=400
         return { 'error':'already exists', 'explanation':'the file is already stored' }
@@ -483,7 +482,6 @@ def post_archive(*args):
 
     things['user-id']="eugeneai@npir.ru"
 
-    #print(cont_data)
     return things
 
 @view_config(route_name="get_docs", renderer='templates/doc_table.pt')

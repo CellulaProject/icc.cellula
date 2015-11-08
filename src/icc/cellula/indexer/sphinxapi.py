@@ -32,7 +32,8 @@ import select
 import socket
 import re
 from struct import *
-
+import logging
+logger=logging.getLogger('sphinxapi')
 
 # known searchd commands
 SEARCHD_COMMAND_SEARCH      = 0
@@ -364,7 +365,7 @@ class SphinxClient:
         """
         Set matching mode.
         """
-        print ('DEPRECATED: Do not call this method or, even better, use SphinxQL instead of an API', file=sys.stderr)
+        logger.warning('DEPRECATED: Do not call this method or, even better, use SphinxQL instead of an API', file=sys.stderr)
         assert(mode in [SPH_MATCH_ALL, SPH_MATCH_ANY, SPH_MATCH_PHRASE, SPH_MATCH_BOOLEAN, SPH_MATCH_EXTENDED, SPH_MATCH_FULLSCAN, SPH_MATCH_EXTENDED2])
         self._mode = mode
 
@@ -444,7 +445,7 @@ class SphinxClient:
         assert(isinstance(attribute, str))
         assert(isinstance(value, str))
 
-        # print ( "attr='%s' val='%s' " % ( attribute, value ) )
+        logger.debug( "attr='%s' val='%s' " % ( attribute, value ) )
         self._filters.append ( { 'type':SPH_FILTER_STRING, 'attr':attribute, 'exclude':exclude, 'value':value } )
 
 
@@ -506,7 +507,7 @@ class SphinxClient:
 
 
     def SetOverride (self, name, type, values):
-        print ('DEPRECATED: Do not call this method. Use SphinxQL REMAP() function instead.', file=sys.stderr)
+        logger.warning('DEPRECATED: Do not call this method. Use SphinxQL REMAP() function instead.', file=sys.stderr)
         assert(isinstance(name, str))
         assert(type in SPH_ATTR_TYPES)
         assert(isinstance(values, dict))

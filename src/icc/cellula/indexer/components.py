@@ -6,6 +6,8 @@ from icc.contentstorage import intdigest, hexdigest
 import os.path, os, signal
 from icc.cellula.indexer.sphinxapi import *
 from pkg_resources import resource_filename
+import logging
+logger=logging.getLogger('icc.cellula')
 
 HOST='127.0.0.1'
 PORT=9312
@@ -389,7 +391,7 @@ class SphinxIndexer(object):
             executable = self.execpathname
 
         exec_bundle=[executable]+list(params)
-        print ("EXEC:", " ".join(exec_bundle))
+        logger.debug("EXEC: "+" ".join(exec_bundle))
         if par:
             cp=sp.Popen(exec_bundle, stdout=sp.PIPE, stderr=sp.PIPE)
             return cp
@@ -423,7 +425,7 @@ class SphinxIndexer(object):
         self.started=False
         start=False
         if times<=0:
-            print ("Could not start sphinx search daemon.")
+            logger.error("Could not start sphinx search daemon.")
             return False
 
         try:
@@ -471,13 +473,13 @@ class SphinxIndexer(object):
     def index_delta(self, par=True, index=None):
         p=self.index_proc
         if p != None and par:
-            print ("Poll:",p.poll())
+            logger.debug("Poll:" + str(p.poll()))
             if not p.poll():
                 return False
             else:
                 stderr=p.stderr.read().strip()
                 if len(stderr)>0:
-                    print ("ERROR from indexer:", stderr)
+                    logger.error("Indexer:" + stderr)
         p=self.index_proc=self.run(
             "--rotate",
             "--quiet",
@@ -498,5 +500,5 @@ class SphinxIndexer(object):
             raise RuntimeError('sphinx query failed:'+ cl.GetLastError())
         warn=cl.GetLastWarning()
         if warn:
-            print ("SPHINX WARNING:", warn)
+            logger.warning("Sphinx:" + warn)
         return rc
