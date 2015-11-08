@@ -49,6 +49,11 @@ class ITask (Interface):
         """Do sonethinf after processing. E.g. join results
         obtained in a foreign process."""
 
+class ISingletonTask(ITask):
+    """Marker interface to define task that
+    may occur in the task queue only onece for
+    its class."""
+
 class ITerminationTask(Interface):
     """A marker interface to mark lowest priority task
     terminating workers"""

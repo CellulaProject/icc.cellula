@@ -1,4 +1,4 @@
-from icc.cellula.interfaces import IWorker, ITask, ITerminationTask, IQueue
+from icc.cellula.interfaces import IWorker, ITask, ITerminationTask, IQueue, ISingletonTask
 from zope.interface import implementer, Interface
 from zope.component import getUtility, queryUtility
 import queue
@@ -25,10 +25,13 @@ class ThreadWorker(object):
         logger.debug("Started thread worker.")
         tasks=GetQueue('tasks')
         results=GetQueue('results', query=True)
+        self.waiting=False
         while True:
             logger.debug("waiting for a task.")
             logger.debug("Queue %s has %d tasks." % (tasks, tasks.qsize()))
+            self.waiting=True
             task=tasks.get()
+            self.waiting=False
             logger.info("got a task %s" % task)
             if ITerminationTask.providedBy(task):
                 task_done()
@@ -150,6 +153,7 @@ class QueueThread(threading.Thread):
         threading.Thread.__init__(self)
         self.thread_pool=[]
         self.process_pool=[]
+        self.workers=[]
         config = getUtility(Interface, "configuration")["workers"]
         self.threads=int(config.get("threads",2))
         self.processes=int(config.get("processes",2))
@@ -169,12 +173,14 @@ class QueueThread(threading.Thread):
             t=threading.Thread(target=w, name=w.__class__.__name__+"-%d" % i)
             #t=threading.Thread(target=w)
             self.thread_pool.append(t)
+            self.workers.append(w)
             t.start()
         logger.info("List of ThreadWorkers:" + str(self.thread_pool))
         for i in range(self.processes):
             w=ProcessWorker()
             p=threading.Thread(target=w, name=w.__class__.__name__+"-%d" % i)
             self.process_pool.append(t)
+            self.workers.append(w)
             p.start()
         if not self.thread_pool:
             #we are the only thread
@@ -185,6 +191,20 @@ class QueueThread(threading.Thread):
         while True:
             if not self.join_worker():
                 break
+
+    def waiting(self):
+        n=0
+        for w in self.workers:
+            if w.waiting:
+                n+=1
+        return n
+
+    def processing(self):
+        n=0
+        for w in self.workers:
+            if not w.waiting:
+                n+=1
+        return n
 
     def join_worker(self):
         if self.process_pool:
@@ -206,11 +226,21 @@ class QueueThread(threading.Thread):
 
 class PriorityQueue(queue.PriorityQueue):
 
+    def __init__(self, maxsize=0):
+        queue.PriorityQueue.__init__(self, maxsize=maxsize)
+        self.singletons={}
+
     def put(self, task, *args, **kwargs):
         logger.debug("Q. Put: " + str(task))
+        if ISingletonTask.providedBy(task):
+            if task.__class__ in self.singletons:
+                return True
+            self.singletons[task.__class__]=task
         return queue.PriorityQueue.put(self, task, *args, **kwargs)
 
     def get(self, *args, **kwargs):
         task=queue.PriorityQueue.get(self,*args,**kwargs)
         logger.debug("Q. Get:" + str(task))
+        if ISingletonTask.providedBy(task):
+            del self.singletons[task.__class__]
         return task

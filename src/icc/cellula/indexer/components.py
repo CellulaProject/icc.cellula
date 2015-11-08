@@ -482,12 +482,14 @@ class SphinxIndexer(object):
                     logger.error("Indexer:" + stderr)
         p=self.index_proc=self.run(
             "--rotate",
-            "--quiet",
+            # "--quiet",
             '--config', self.filepath_conf,
             self.index_name,
             executable=self.indexerpathname,
             par=par
         )
+        if p.strip():
+            logger.error(p)
 
     def search(self, query):
         if not self.started:

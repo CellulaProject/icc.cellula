@@ -4,10 +4,12 @@ from icc.cellula.extractor.interfaces import IExtractor
 from icc.cellula.indexer.interfaces import IIndexer
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
 from icc.contentstorage.interfaces import IContentStorage
-from icc.cellula.interfaces import ILock
+from icc.cellula.interfaces import ILock, ISingletonTask, IQueue, IWorker
 from zope.component import getUtility
 from zope.interface import implementer
-
+import time
+import logging
+logger=logging.getLogger('icc.cellula')
 
 class DocumentTask(Task):
     def __init__(self, content, headers):
@@ -84,8 +86,9 @@ class DocumentProcessingTask(DocumentTask):
     def finalize(self):
         if self.text_content:
             self.enqueue(DocumentStoreTask(self.text_content, self.new_headers))
-            #self.enqueue(IndexTask())
+            self.enqueue(ContentIndexTask())
         self.enqueue(DocumentMetaStoreTask(self.new_headers))
+        # self.enqueue(MetaIndexTask())
 
 class DocumentAcceptingTask(DocumentTask):
     def run(self):
@@ -95,15 +98,32 @@ class DocumentAcceptingTask(DocumentTask):
         self.enqueue(DocumentStoreTask(self.content, self.headers))
         self.enqueue(DocumentProcessingTask(self.content, self.headers))
 
-class IndexTask(Task):
+
+@implementer(ISingletonTask)
+class ContentIndexTask(Task):
     """Task devoting to index content data
     """
-    priority = 9
+    priority = 9 # lowest priority
+    delay = 10   # sec
     processing = "thread"
 
     def __init__(self, index_name='annotation'):
         self.index_name=index_name
 
     def run(self):
+        tasks=GetQueue("tasks")
+        pool=getUtility(IWorker, name="queue")
+        logger.debug ("Waiting")
+        time.sleep(self.delay)
+        logger.debug ("Checking conditions")
+        if tasks.full():
+            logger.debug ("Queue full")
+            return
+        nproc=pool.processing()
+        if nproc>=2:
+            logger.debug ("Busy %d" % nproc)
+            return
+
+        logger.debug ("Run indexing")
         indexer=getUtility(IIndexer, "indexer")
         indexer.reindex(par=False, index=self.index_name)
