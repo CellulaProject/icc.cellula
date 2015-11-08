@@ -28,7 +28,7 @@ class DocumentStoreTask(DocumentTask):
         id_=self.headers.get('id',nid_)
         if id_!=nid_:
             storage.abort()
-            raise RuntimeError("ids differ")
+            raise RuntimeError("ids differ %s:%s" % (id_,nid_))
         storage.commit()
         lock.release()
         return id_

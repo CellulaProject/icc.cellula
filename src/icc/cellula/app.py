@@ -7,6 +7,8 @@ from zope.component import getGlobalSiteManager, getUtility
 from zope.interface import Interface
 from icc.cellula.interfaces import IWorker
 import sys,os
+import logging
+logger=logging.getLogger("icc.cellula")
 
 package=__name__
 ini_file=None
