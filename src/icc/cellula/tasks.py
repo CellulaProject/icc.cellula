@@ -77,13 +77,14 @@ class DocumentProcessingTask(DocumentTask):
             self.text_content=cont_data['text-body'].encode('utf-8')
             storage=getUtility(IContentStorage, name="content")
             ext_things['text-id']=storage.hash(self.text_content)
+            ext_things['id']=ext_things['text-id']
 
         self.new_headers=ext_things
 
     def finalize(self):
         if self.text_content:
             self.enqueue(DocumentStoreTask(self.text_content, self.new_headers))
-            self.enqueue(IndexTask())
+            #self.enqueue(IndexTask())
         self.enqueue(DocumentMetaStoreTask(self.new_headers))
 
 class DocumentAcceptingTask(DocumentTask):

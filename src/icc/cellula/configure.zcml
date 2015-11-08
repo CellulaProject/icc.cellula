@@ -6,6 +6,11 @@
   <include package="zope.component" file="meta.zcml" />
   <!--  <i18n:registerTranslations directory="locales" /> -->
 
+  <utility
+      factory="icc.cellula.workers.QueueThread"
+      name="queue"
+      />
+
   <include package="icc.restfuldocs" />
   <include package="icc.contentstorage" />
   <include package="icc.rdfservice" />
@@ -73,8 +78,5 @@
       name="results"
       />
   -->
-  <utility
-      factory="icc.cellula.workers.QueueThread"
-      name="queue"
-      />
+
 </configure>

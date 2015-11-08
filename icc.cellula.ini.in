@@ -96,7 +96,7 @@ api=/api-fields
 
 [workers]
 threads=4
-processes=4
+processes=0
 
 [server:main]
 use = egg:waitress#main
@@ -106,7 +106,8 @@ port = 8080
 # Begin logging configuration
 
 [loggers]
-keys = root, icc, waitress, sphinxapi
+#keys = root, icc, icc.cellula, waitress, sphinxapi
+keys = root, icc.cellula, waitress, sphinxapi
 
 [handlers]
 keys = console
@@ -115,19 +116,24 @@ keys = console
 keys = generic
 
 [logger_root]
-#level = INFO
-level = DEBUG
+level = NOTSET
+#level = DEBUG
 handlers = console
 
 [logger_icc]
-level = DEBUG
+level = NOTSET
 handlers = console
 qualname = icc
+
+[logger_icc.cellula]
+level = ERROR
+handlers = console
+qualname = icc.cellula
 
 [logger_sphinxapi]
 level = WARNING
 handlers = console
-qualname = icc.cellula
+qualname = sphinxapi
 
 [handler_console]
 class = StreamHandler
@@ -144,6 +150,6 @@ qualname = waitress
 
 [formatter_generic]
 #format = %(asctime)s[%(levelname)-5.5s] %(name)s:%(threadName)s: %(message)s
-format = %(asctime)s<%(levelname)s>%(name)s:%(threadName)s: %(message)s
+format = %(asctime)s_%(levelname)s_%(name)s:%(threadName)s: %(message)s
 
 # End logging configuration

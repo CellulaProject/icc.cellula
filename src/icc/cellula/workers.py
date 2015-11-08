@@ -4,6 +4,9 @@ from zope.component import getUtility, queryUtility
 import queue
 import threading
 import logging
+import os, io, traceback
+import time
+
 logger=logging.getLogger('icc.cellula')
 
 def GetQueue(name, query=False):
@@ -23,21 +26,44 @@ class ThreadWorker(object):
         tasks=GetQueue('tasks')
         results=GetQueue('results', query=True)
         while True:
-            logger.debug("a thread worker is waiting for a task")
+            logger.debug("waiting for a task.")
+            logger.debug("Queue %s has %d tasks." % (tasks, tasks.qsize()))
             task=tasks.get()
-            logger.debug("a thread worker got a task")
+            logger.info("got a task %s" % task)
             if ITerminationTask.providedBy(task):
-                q.task_done()
+                task_done()
                 return
             task.phase="prepare"
-            task.prepare()
+            try:
+                task.prepare()
+            except BaseException as e:
+                #traceback.print_exception(type, value, err.__traceback__)
+                f=io.StringIO()
+                traceback.print_exc(file=f)
+                logger.error(f.getvalue())
+                logger.error('{!r}; cancelling main task run.'.format(e))
+                task.task_done()
+                continue
             task.phase="run"
-            rc=task.run()
+            try:
+                rc=task.run()
+            except BaseException as e:
+                f=io.StringIO()
+                traceback.print_exc(file=f)
+                logger.error(f.getvalue())
+                logger.error('{!r}; some code did not run correctly, proceed with finalization.'.format(e))
+                rc=None
             if rc!=None and results != None:
                 task.result=rc
                 results.put(task)
             task.phase="finalize"
-            task.finalize()
+            try:
+                task.finalize()
+            except BaseException as e:
+                f=io.StringIO()
+                traceback.print_exc(file=f)
+                logger.error(f.getvalue())
+                logger.error('{!r}; finalization failde try next task.'.format(e))
             task.phase=None
             tasks.task_done()
 
@@ -101,6 +127,9 @@ class Task(object):
     def __cmp__(self, other):
         return cmp(self.priority, other.priority)
 
+    def __lt__(self, other):
+        return self.priority < other.priority
+
 @implementer(ITerminationTask)
 class TerminationTask(object):
     """Task, whose process preduces worker
@@ -124,18 +153,35 @@ class QueueThread(threading.Thread):
         config = getUtility(Interface, "configuration")["workers"]
         self.threads=int(config.get("threads",2))
         self.processes=int(config.get("processes",2))
+        logger.debug("Configured: %d threads and %d processes, Queue: %s. PID=%d. %s" %
+                     (
+                         self.threads,
+                         self.processes,
+                         self,
+                         os.getpid(),
+                         time.time()
+                     )
+        )
 
     def run(self):
         for i in range(self.threads):
             w=ThreadWorker()
             t=threading.Thread(target=w, name=w.__class__.__name__+"-%d" % i)
+            #t=threading.Thread(target=w)
             self.thread_pool.append(t)
             t.start()
+        logger.info("List of ThreadWorkers:" + str(self.thread_pool))
         for i in range(self.processes):
             w=ProcessWorker()
             p=threading.Thread(target=w, name=w.__class__.__name__+"-%d" % i)
             self.process_pool.append(t)
             p.start()
+        if not self.thread_pool:
+            #we are the only thread
+            logger.info("Scrifice myself for processing.")
+            w=ThreadWorker()
+            w()
+            # Must not reach, by idea.
         while True:
             if not self.join_worker():
                 break
@@ -161,10 +207,10 @@ class QueueThread(threading.Thread):
 class PriorityQueue(queue.PriorityQueue):
 
     def put(self, task, *args, **kwargs):
-        logger.info("Q. Put:", task)
-        return queue.PriorityQueue.put(self, (task.priority, task), *args, **kwargs)
+        logger.debug("Q. Put: " + str(task))
+        return queue.PriorityQueue.put(self, task, *args, **kwargs)
 
     def get(self, *args, **kwargs):
-        priority,task=queue.PriorityQueue.get(self,*args,**kwargs)
-        logger.info("Q. Get:", task)
+        task=queue.PriorityQueue.get(self,*args,**kwargs)
+        logger.debug("Q. Get:" + str(task))
         return task

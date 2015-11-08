@@ -9,6 +9,7 @@ from icc.contentstorage import hexdigest
 from zope.component import getUtility, queryUtility
 
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
+from icc.cellula.indexer.interfaces import IIndexer
 
 from rdflib import Literal
 
@@ -405,7 +406,7 @@ class DocsView(View):
            ?ann a oa:Annotation .
            ?ann oa:annotatedAt ?date .
            ?ann oa:hasTarget ?target .
-           OPTIONAL { ?target nie:title ?title } .
+        OPTIONAL { ?target nie:title ?title } .
            ?target nao:identifier ?id .
            ?target nfo:fileName ?file .
            ?target nmo:mimeType ?mimetype .
@@ -445,24 +446,19 @@ def post_archive(*args):
 
     if fs == None:
         request.response.status_code=400
-        return { 'error':'no file', 'explanation':'check input form it it contains "file" field' }
+        return { 'error':'no file', 'explanation':'check input form if it contains "file" field' }
 
     things.update(fs.headers)
 
     if fs.filename == None:
         request.response.status_code=400
-        return { 'error':'no file', 'explanation':'check input form it it contains "file" field' }
+        return { 'error':'no file', 'explanation':'check input form if it contains "file" field of type file' }
 
     things['File-Name']=fs.filename
 
 
     storage=getUtility(IContentStorage, name='content')
 
-    """
-    if storage.exists(fs.value): # is it an error?
-        request.response.status_code=400
-        return { 'error':'content already exists', 'explanation':'a file with the same content has been uploaded already' }
-    """
     content=fs.value #file
     doc_id=things['id']=storage.hash(content)
     rc=storage.resolve(doc_id)
@@ -475,12 +471,16 @@ def post_archive(*args):
     tasks=GetQueue('tasks')
 
     tasks.put(DocumentAcceptingTask(content, headers), block=False)
+    logger.info("Task Queue has %d tasks undone" % tasks.qsize())
 
     request.response.status_code=201
 
     things['result']='file stored'
 
     things['user-id']="eugeneai@npir.ru"
+
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(things)
 
     return things
 

@@ -175,7 +175,7 @@ class TrackerExtractor(LibExtractorExtractor):
             if len(comps)==0:
                 continue
             if len(comps)==1:
-                logger.warining("Tracker: found a 1-part semantic component:", comps[0][:60])
+                logger.warning("Tracker: found a 1-part semantic component: " + comps[0][:60])
                 continue
             p, o = comps
             if p=='a':
@@ -262,22 +262,29 @@ class RecollExtractor(object):
 
 
         text=''
+        meta_kw={}
         for mimetype in mimes:
-            new_text=self.extract_mime(content, headers, mimetype, filepath)
+            new_kw = self.extract_mime(content, headers, mimetype, filepath)
+            new_text=new_kw.get('text-body','')
             if len(new_text)>len(text):
                 text=new_text
+            if new_kw:
+                meta_kw.update(new_kw)
         del inf
         if text:
-            return {'text-body':text}
+            meta_kw['text-body']=text
         else:
-            return {}
+            if 'text-body' in meta_kw:
+                del meta_kw['text-body']
+        return meta_kw
 
     def extract_mime(self, content, headers, mimetype, tmpfile):
+        meta={}
         index=self.config['index']
         try:
             script=index[mimetype]
         except KeyError as e:
-            return ''
+            return meta
 
         logger.debug("Filter: "+ script)
         try:
@@ -286,23 +293,37 @@ class RecollExtractor(object):
             way=None
             cmd=script
 
+        _=cmd.split(";")
+        if len(_)>1:
+            cmd=_[0]
+            _=_[1:]
+            for _1 in _:
+                _k,_v=_1.split("=")
+                meta["text|"+_k.strip()]=_v.strip()
+
+        meta.setdefault("text|mimetype", "text/html")
+
         if cmd=='internal':
-            return content.decode('utf8')
+            meta['text-body']=content.decode('utf8')
+            return meta
 
         executable = os.path.join(self.filterdir, cmd)
 
         out = ''
         if way == 'exec':
             try:
-                out=self.run(tmpfile,executable=executable)
+                try:
+                    out=self.run(tmpfile,executable=executable)
+                except FileNotFoundError:
+                    out=self.run(tmpfile,executable=cmd, encoding=meta.get("text|charset",'utf-8'))
             except RuntimeError:
                 out=""
         else:
             logger.warning('Non-implemented filer class %s for script %s' % (way, script))
+        meta['text-body']=out
+        return meta
 
-        return out
-
-    def run(self, *params, ignore_err=False, executable=None):
+    def run(self, *params, ignore_err=False, executable=None, encoding='utf-8'):
         """Run extract binary and capture its stdout.
         If there is some stderr output, raise exception if
         it is not igored (ignore_err).
@@ -313,6 +334,6 @@ class RecollExtractor(object):
 
         cp=sp.run([executable]+list(params), stdout=sp.PIPE, stderr=sp.PIPE)
         if cp.stderr and not ignore_err:
-            err=cp.stderr.decode('utf-8').strip()
+            err=cp.stderr.decode(encoding).strip()
             raise RuntimeError(err)
-        return cp.stdout.decode('utf-8')
+        return cp.stdout.decode(encoding)
