@@ -43,23 +43,21 @@ def bodies():
     i=1
     for key in annotations():
         key=key.decode('utf-8')  # !!! NOTE Sent as hexdigest, but received as bytes, must be decoded.
-        lid, bid = splitdigest(key)
         content=storage.get(key)
-        # print (key, hexdigest((lid,bid)))
         if content == None: # Due to a bug, e.g.
             continue
         content=content.decode('utf8')
         content=content.replace("\t"," ").replace('"','""').replace("\n","\\n")
-        yield (i, lid, bid, content)
+        yield (i, key, content)
         i+=1
 
 
 def main():
     for row in bodies():
-        i, lid, bid, body=row
-        sys.stdout.write('%s\t%s\t%s\t"' % (i,lid,bid))
+        i, hid, body=row
+        sys.stdout.write('%s\t%s\t' % (i,hid))
         sys.stdout.write(body)
-        sys.stdout.write('"\n')
+        sys.stdout.write('\n')
 
 if __name__=="__main__":
     main()

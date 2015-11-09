@@ -18,8 +18,7 @@ source %(index_name)s_source
 {
 	type = tsvpipe
 	tsvpipe_command = %(pipe_prog)s
-	tsvpipe_attr_bigint = lid
-	tsvpipe_attr_bigint = bid
+	tsvpipe_attr_string = hid
     tsvpipe_field = body
     %(indexer_fields)s
 }
@@ -482,7 +481,7 @@ class SphinxIndexer(object):
                     logger.error("Indexer:" + stderr)
         p=self.index_proc=self.run(
             "--rotate",
-            # "--quiet",
+            "--quiet",
             '--config', self.filepath_conf,
             self.index_name,
             executable=self.indexerpathname,

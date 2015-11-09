@@ -12,6 +12,7 @@ from icc.rdfservice.interfaces import IRDFStorage, IGraph
 from icc.cellula.indexer.interfaces import IIndexer
 
 from rdflib import Literal
+from pyparsing import ParseException
 
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue
@@ -31,6 +32,7 @@ class View(object):
         kw=kwargs
         self.title=kw.get('title', _('====TITLE====='))
         self.context=kw.get('context', kw.get('ob',None))
+        self.exception=None
 
     @property
     def body(self):
@@ -62,9 +64,29 @@ class View(object):
         """Query a graph, convert all
         answer attributes to python values.
         """
-        rset=graph.query(query)
+        def _(o):
+            if o == None:
+                return o
+            else:
+                return o.toPython()
+        try:
+            rset=graph.query(query)
+        except ParseException as e:
+            logger.error("Exception {!r}.".format(e) + "\nSPARQL Query:\n"+self._sparql_err(query, e))
+            self.exception=e
+            return
         for r in rset:
-            yield [c.toPython() for c in r]
+            yield list(map(_, r))
+
+    def _sparql_err(self, query, exc):
+        lineno=exc.lineno
+        col=exc.col
+        s=''
+        for i, l in enumerate(query.splitlines()):
+            s+=l+"\n"
+            if i+1==lineno:
+                s+=' '*(col-1)+"^\n"
+        return s
 
 class ArchiveView(View):
     """View for archive
@@ -363,9 +385,10 @@ class SearchView(View):
         self.answer=indexer.search(query)
 
         ms=[]
+
         for m in self.answer['matches']:
             for r in self.proc_match(m):
-                ms.add[r]
+                ms.append(r)
 
         self.matches=ms
 
@@ -373,22 +396,21 @@ class SearchView(View):
 
     def proc_match(self, match):
         for row in self.proc_attrs(match['attrs']):
-            yield row+[match['id'], match['weight']/1000.]
+            yield row+[match['attrs']['hid'], match['id'], match['weight']/1000.]
 
     def proc_attrs(self, attrs):
-        lid,bid=attrs['lid'],attrs['bid']
-        key=hexdigest((lid,bid))
+        hid=attrs['hid']
+        key=hexdigest(hid)
         #l=Literal(key)
-        logger.debug((lid, bid, key))
+        logger.debug((hid, key))
         Q='''
-        SELECT DISTINCT ?date ?title ?id ?file ?mimetype
+        SELECT DISTINCT ?date ?title ?file ?mimetype
         WHERE {
-           ?ann nao:identifier "''' + key + '''" .
            ?ann a oa:Annotation .
            ?ann oa:annotatedAt ?date .
            ?ann oa:hasTarget ?target .
         OPTIONAL { ?target nie:title ?title } .
-           ?target nao:identifier ?id .
+           ?target nao:identifier "''' + key + '''" .
            ?target nfo:fileName ?file .
            ?target nmo:mimeType ?mimetype .
         }
