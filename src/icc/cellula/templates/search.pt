@@ -5,7 +5,7 @@
   <tal:block metal:fill-slot="content">
     <div tal:replace="structure view.body"></div>
     <span tal:define="src view.answer">
-      <div tal:condition="src['total_found']>0">
+      <div tal:condition="src['total_found']>0 | nothing">
         <pre tal:content="src"/>
         <table width="100%" cellspacing="" cellpadding="" border="">
           <tr tal:repeat="r view.matches">
@@ -14,7 +14,7 @@
             <td>
               <a href="#"
                  tal:attributes="href
-                                 string:${request.route_url('archive')}?doc_id=${r[4]}"
+                                 string:${request.route_url('get_doc')}?doc_id=${r[4]}"
                  tal:content="r[2]">
               </a>
               <!-- <span tal:content="r"></span> -->
@@ -22,7 +22,7 @@
           </tr>
         </table>
       </div>
-      <div tal:condition="not: src['total_found']">
+      <div tal:condition="not: src['total_found'] | True">
         The query produced no results.
       </div>
     </span>

@@ -126,7 +126,7 @@ handlers = console
 qualname = icc
 
 [logger_icc.cellula]
-level = ERROR
+level = DEBUG
 handlers = console
 qualname = icc.cellula
 

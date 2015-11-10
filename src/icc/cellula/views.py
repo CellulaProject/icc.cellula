@@ -1,7 +1,7 @@
 """ Cornice services.
 """
 from cornice import Service
-from pyramid.response import Response
+from pyramid.response import Response, FileResponse
 from pyramid.view import view_config
 from pprint import pprint, pformat
 from icc.contentstorage.interfaces import IContentStorage
@@ -13,6 +13,7 @@ from icc.cellula.indexer.interfaces import IIndexer
 
 from rdflib import Literal
 from pyparsing import ParseException
+import tempfile
 
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue
@@ -376,6 +377,8 @@ class SearchView(View):
 
         query=self.request.GET.get("q", None)
 
+        self.answer=None
+
         if query == None:
             return "<strong>No Query supplied.</strong>"
 
@@ -436,6 +439,68 @@ class DocsView(View):
         """
         qres=g.query(Q)
         return qres
+
+class SendDocView(View):
+    """Send a document
+    """
+    Q_doc="""
+    SELECT DISTINCT ?file ?mimetype
+    WHERE {{
+      ?ann a oa:Annotation .
+      ?ann oa:hasTarget ?target .
+      ?target nao:identifier "{}" .
+      ?target nfo:fileName ?file .
+    OPTIONAL {{ ?target nmo:mimeType ?mimetype }} .
+    }}
+    """
+
+    Q_ann="""
+    SELECT DISTINCT ?mimetype
+    WHERE {{
+      ?ann a oa:Annotation .
+      ?ann oa:hasBody ?body .
+      ?body nao:identifier "{}" .
+    OPTIONAL {{ ?body nmo:mimeType ?mimetype }} .
+    }}
+    """
+
+    def __call__(self):
+        req=self.request
+        doc_id=req.GET.get('doc_id',None)
+        ann_id=req.GET.get('ann_id',None)
+        doc=getUtility(IGraph, name='doc')
+        if doc_id:
+            Q=self.Q_doc.format(doc_id)
+            for fileName, mimeType in self.sparql(Q, doc):
+                return self.serve(doc_id, content_type=mimeType, file_name=fileName, content=True)
+        if ann_id:
+            for mimeType in self.sparql(self.Q_ann.format(ann_id), doc):
+                return self.serve(ann_id, content_type=mimeType, file_name="annotation", content=False)
+        req.response.status_code=404
+        return Response("<h>Document not found.</h>", content_type='text/html')
+
+    def serve(self, key, content_type=None, file_name=None, content=True):
+        storage=getUtility(IContentStorage, name='content')
+        body=storage.get(key)
+        f = tempfile.NamedTemporaryFile()
+        f.write(body)
+        f.seek(0,0)
+        mimeType=content_type
+        if mimeType == None and content:
+            mimeType == "application/octet-stream"
+        elif mimeType == None and not content:
+            if content.upper().find("</BODY"):
+                mimeType="text/html"
+                file_name+='.html'
+            else:
+                mimeType='text/plain'
+                file_name+=".txt"
+        response=FileResponse(f.name, request=self.request, content_type=mimeType)
+        # FIXME check file if it has been closed
+        if content:
+            response.headers['Content-Disposition'] = ("attachment; filename={}".format(file_name))
+            response.headers['Content-Description'] = 'File Transfer'
+        return response
 
 # ---------------- Actual routes ------------------------------------------
 
@@ -513,6 +578,13 @@ def docs(*args, **kwargs):
     view=DocsView(*args)
     return view()
 
+@view_config(route_name="get_doc")
+def get_doc(*args, **kwargs):
+    request=args[1]
+    _ = request.translate
+    view=SendDocView(*args)
+    return view()
+
 @view_config(route_name="debug_graph", renderer='templates/index.pt')
 def get_debug(*args):
     request=args[1]
@@ -550,6 +622,7 @@ def includeme(config):
     config.add_route('email', "/mail")
     config.add_route('upload', "/file_upload")
     config.add_route('get_docs', "/docs")
+    config.add_route('get_doc', "/doc")
 
     config.add_route('debug_graph', "/archive_debug")
     config.add_route('debug_search', "/search")
