@@ -50,11 +50,12 @@
       factory="icc.rdfservice.DocMetadataStorage"
       name="documents"
       />
-
+<!--
   <utility
       factory="icc.rdfservice.OrgStorage"
-      name="org"
+      name="norg"
       />
+-->
 
   <utility
       factory="icc.cellula.workers.PriorityQueue"

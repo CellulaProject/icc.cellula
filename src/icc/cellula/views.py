@@ -482,6 +482,7 @@ class SendDocView(View):
     def serve(self, key, content_type=None, file_name=None, content=True):
         storage=getUtility(IContentStorage, name='content')
         body=storage.get(key)
+
         f = tempfile.NamedTemporaryFile()
         f.write(body)
         f.seek(0,0)

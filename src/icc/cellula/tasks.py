@@ -53,6 +53,8 @@ class DocumentProcessingTask(DocumentTask):
     processing="process"
 
     def run(self):
+        self.text_content=None
+        self.new_headers={}
         things=self.headers
 
         extractor=getUtility(IExtractor, name='extractor')
@@ -74,7 +76,6 @@ class DocumentProcessingTask(DocumentTask):
 
         ext_things.update(cont_data)
 
-        self.text_content=None
         if text_p:
             self.text_content=cont_data['text-body'].encode('utf-8')
             storage=getUtility(IContentStorage, name="content")
