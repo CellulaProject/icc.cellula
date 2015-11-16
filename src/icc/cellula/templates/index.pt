@@ -191,6 +191,7 @@
                     </i><span class="menu-title" i18n:translate>Document Archive</span></a>
 
                     </li>
+                    <!--
                     <li><a href="/mail" tal:attributes="class view.active('archive') | nothing"><i class="fa fa-envelope-o">
                         <div class="icon-bg bg-primary"></div>
                     </i><span class="menu-title" i18n:translate>Email</span></a>
@@ -236,9 +237,21 @@
                     </i><span class="menu-title">Charts</span></a>
 
                     </li>
-                    <li><a href="Animation.html"><i class="fa fa-slack fa-fw">
-                        <div class="icon-bg bg-green"></div>
-                    </i><span class="menu-title">Animations</span></a></li>
+                    -->
+                     <li><a href="Animation.html"
+                            tal:attributes="href string:http://127.0.0.1:3020/browse/list_triples?graph=document">
+                         <i class="fa fa-medkit fa-fw">
+                           <div class="icon-bg bg-green"></div>
+                         </i><span class="menu-title"
+                                   i18n:translate=''>Metadata Storage</span></a>
+                     </li>
+                     <li><a href="Animation.html"
+                            tal:attributes="href string:http://127.0.0.1:3020/browse/list_triples?graph=agent">
+                         <i class="fa fa-user fa-fw">
+                           <div class="icon-bg bg-dark"></div>
+                         </i><span class="menu-title"
+                                   i18n:translate=''>Principals</span></a>
+                     </li>
                 </ul>
             </div>
         </nav>

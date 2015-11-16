@@ -503,6 +503,29 @@ class SendDocView(View):
             response.headers['Content-Description'] = 'File Transfer'
         return response
 
+class RegisterView(View):
+
+    @property
+    def register(self):
+        return self.request.GET.get('register',None)!=None
+
+    @property
+    def prompt(self):
+        _=self._
+        if self.register:
+            return _("Register new user")
+        else:
+            return _("Enter Your account data")
+
+    @property
+    def sys_info(self):
+        _=self._
+        return _("Cellula")
+
+    def action(self):
+        print (self.request.GET)
+        return True
+
 # ---------------- Actual routes ------------------------------------------
 
 @view_config(route_name='dashboard',renderer='templates/index.pt')
@@ -608,6 +631,13 @@ def get_email(*args):
     view=View(*args, title=_("E-Mail"))
     return view()
 
+@view_config(route_name="login",renderer="templates/login.pt")
+def get_login(*args):
+    request=args[1]
+    _ = request.translate
+    view=RegisterView(*args, title=_("Login"))
+    return view()
+
 @view_config(route_name='metal_test',renderer='templates/test.pt')
 def get_metal(*args):
     request=args[1]
@@ -624,6 +654,8 @@ def includeme(config):
     config.add_route('upload', "/file_upload")
     config.add_route('get_docs', "/docs")
     config.add_route('get_doc', "/doc")
+
+    config.add_route('login', "/login")
 
     config.add_route('debug_graph', "/archive_debug")
     config.add_route('debug_search', "/search")
