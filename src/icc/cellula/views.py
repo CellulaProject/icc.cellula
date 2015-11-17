@@ -502,6 +502,26 @@ class SendDocView(View):
             response.headers['Content-Description'] = 'File Transfer'
         return response
 
+class ShowDocView(SendDocView):
+    """Show a document
+    """
+
+    def serve(self, key, content_type=None, file_name=None, content=True):
+        storage=getUtility(IContentStorage, name='content')
+        body=storage.get(key)
+        mimeType=content_type
+        if mimeType == None and content:
+            mimeType == "application/octet-stream"
+        elif mimeType == None and not content:
+            if content.upper().find("</BODY"):
+                mimeType="text/html"
+                file_name+='.html'
+            else:
+                mimeType='text/plain'
+                file_name+=".txt"
+        response = Response(body=body, content_type=mimeType)
+        return response
+
 # ---------------- Actual routes ------------------------------------------
 
 @view_config(route_name='dashboard',renderer='templates/index.pt')
@@ -582,7 +602,7 @@ def docs(*args, **kwargs):
 def get_doc(*args, **kwargs):
     request=args[1]
     _ = request.translate
-    view=SendDocView(*args)
+    view=ShowDocView(*args) #Send
     return view()
 
 @view_config(route_name="debug_graph", renderer='templates/index.pt')
