@@ -21,13 +21,24 @@ class DocumentStoreTask(DocumentTask):
     """
     priority=3
 
+    def __init__(self, content, headers, key='id'):
+        """Store content under ['key'] id in the document storage.
+
+        Arguments:
+        - `content`:Content to store.
+        - `headers`:a Dictionary containing [key] id.
+        - `key`:name of Id.
+        """
+        DocumentTask.__init__(self, content, headers)
+        self.key=key
+
     def run(self):
         storage=getUtility(IContentStorage, name="content")
         lock=getUtility(ILock, name="content_lock")
         lock.acquire()
         storage.begin()
         nid_=storage.put(self.content)
-        id_=self.headers.get('id',nid_)
+        id_=self.headers.get(self.key,nid_)
         if id_!=nid_:
             storage.abort()
             raise RuntimeError("ids differ %s:%s" % (id_,nid_))
@@ -53,6 +64,8 @@ class DocumentProcessingTask(DocumentTask):
     processing="process"
 
     def run(self):
+        self.text_content=None
+        self.new_headers={}
         things=self.headers
 
         extractor=getUtility(IExtractor, name='extractor')
@@ -74,18 +87,16 @@ class DocumentProcessingTask(DocumentTask):
 
         ext_things.update(cont_data)
 
-        self.text_content=None
         if text_p:
             self.text_content=cont_data['text-body'].encode('utf-8')
             storage=getUtility(IContentStorage, name="content")
             ext_things['text-id']=storage.hash(self.text_content)
-            ext_things['id']=ext_things['text-id']
 
         self.new_headers=ext_things
 
     def finalize(self):
         if self.text_content:
-            self.enqueue(DocumentStoreTask(self.text_content, self.new_headers))
+            self.enqueue(DocumentStoreTask(self.text_content, self.new_headers, key='text-id'))
             self.enqueue(ContentIndexTask())
         self.enqueue(DocumentMetaStoreTask(self.new_headers))
         # self.enqueue(MetaIndexTask())

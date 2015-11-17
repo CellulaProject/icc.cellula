@@ -482,6 +482,7 @@ class SendDocView(View):
     def serve(self, key, content_type=None, file_name=None, content=True):
         storage=getUtility(IContentStorage, name='content')
         body=storage.get(key)
+
         f = tempfile.NamedTemporaryFile()
         f.write(body)
         f.seek(0,0)
@@ -502,6 +503,7 @@ class SendDocView(View):
             response.headers['Content-Description'] = 'File Transfer'
         return response
 
+
 class ShowDocView(SendDocView):
     """Show a document
     """
@@ -521,6 +523,29 @@ class ShowDocView(SendDocView):
                 file_name+=".txt"
         response = Response(body=body, content_type=mimeType)
         return response
+
+class RegisterView(View):
+
+    @property
+    def register(self):
+        return self.request.GET.get('register',None)!=None
+
+    @property
+    def prompt(self):
+        _=self._
+        if self.register:
+            return _("Register new user")
+        else:
+            return _("Enter Your account data")
+
+    @property
+    def sys_info(self):
+        _=self._
+        return _("Cellula")
+
+    def action(self):
+        print (self.request.GET)
+        return True
 
 # ---------------- Actual routes ------------------------------------------
 
@@ -627,6 +652,13 @@ def get_email(*args):
     view=View(*args, title=_("E-Mail"))
     return view()
 
+@view_config(route_name="login",renderer="templates/login.pt")
+def get_login(*args):
+    request=args[1]
+    _ = request.translate
+    view=RegisterView(*args, title=_("Login"))
+    return view()
+
 @view_config(route_name='metal_test',renderer='templates/test.pt')
 def get_metal(*args):
     request=args[1]
@@ -643,6 +675,8 @@ def includeme(config):
     config.add_route('upload', "/file_upload")
     config.add_route('get_docs', "/docs")
     config.add_route('get_doc', "/doc")
+
+    config.add_route('login', "/login")
 
     config.add_route('debug_graph', "/archive_debug")
     config.add_route('debug_search', "/search")

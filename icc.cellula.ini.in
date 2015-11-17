@@ -98,6 +98,9 @@ api=/api-fields
 threads=4
 processes=0
 
+[pengines]
+URL=http://127.0.0.1:3020
+
 [server:main]
 use = egg:waitress#main
 host = ::
@@ -126,7 +129,7 @@ handlers = console
 qualname = icc
 
 [logger_icc.cellula]
-level = DEBUG
+level = WARNING
 handlers = console
 qualname = icc.cellula
 
