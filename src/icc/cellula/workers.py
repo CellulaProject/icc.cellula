@@ -25,16 +25,19 @@ class ThreadWorker(object):
         logger.debug("Started thread worker.")
         tasks=GetQueue('tasks')
         results=GetQueue('results', query=True)
-        self.waiting=False
         while True:
-            logger.debug("waiting for a task.")
-            logger.debug("Queue %s has %d tasks." % (tasks, tasks.qsize()))
             self.waiting=True
+            #logger.debug("waiting for a task.")
+            wrk=getUtility(IWorker, name="queue")
+            logger.debug("Queue %s has %d tasks. Workers occupied: %d; free:%d" % (tasks,
+                            tasks.qsize(), wrk.processing(), wrk.waiting()))
+            del wrk
             task=tasks.get()
             self.waiting=False
             logger.info("got a task %s" % task)
             if ITerminationTask.providedBy(task):
                 task_done()
+                logger.info("finished task %s" % task)
                 return
             task.phase="prepare"
             try:
@@ -46,6 +49,7 @@ class ThreadWorker(object):
                 logger.error(f.getvalue())
                 logger.error('{!r}; cancelling main task run.'.format(e))
                 task.task_done()
+                logger.info("finished task %s (exception)" % task)
                 continue
             task.phase="run"
             try:
@@ -69,6 +73,7 @@ class ThreadWorker(object):
                 logger.error('{!r}; finalization failde try next task.'.format(e))
             task.phase=None
             tasks.task_done()
+            logger.info("finished task %s (complete)" % task)
 
     def __call__(self):
         return self.run()
@@ -192,17 +197,22 @@ class QueueThread(threading.Thread):
             if not self.join_worker():
                 break
 
+    def is_waiting(self, worker):
+        if hasattr(worker, 'waiting'):
+            return worker.waiting
+        return True    # Initialization is not complete now
+
     def waiting(self):
         n=0
         for w in self.workers:
-            if w.waiting:
+            if self.is_waiting(w):
                 n+=1
         return n
 
     def processing(self):
         n=0
         for w in self.workers:
-            if not w.waiting:
+            if not self.is_waiting(w):
                 n+=1
         return n
 

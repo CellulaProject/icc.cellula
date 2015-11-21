@@ -122,6 +122,7 @@ class ContentIndexTask(Task):
         self.index_name=index_name
 
     def run(self):
+        self.index_run=False
         tasks=GetQueue("tasks")
         pool=getUtility(IWorker, name="queue")
         logger.debug ("Waiting")
@@ -134,7 +135,13 @@ class ContentIndexTask(Task):
         if nproc>=2:
             logger.debug ("Busy %d" % nproc)
             return
-
+        self.index_run=True
         logger.debug ("Run indexing")
         indexer=getUtility(IIndexer, "indexer")
         indexer.reindex(par=False, index=self.index_name)
+
+    def finalize(self):
+        #Restart if indexing failed due to buzyness.
+        if not self.index_run:
+            logger.debug ("Restart Indexing")
+            self.enqueue(ContentIndexTask())
