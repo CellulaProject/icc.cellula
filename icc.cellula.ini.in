@@ -50,8 +50,8 @@ driver=default
 [graphs]
 #Graphs are created and registered as utilities
 #in the folloving very order
-#all=ns, meta, org, doc, tmp, fiber, persistent, temporal, world
-all=doc
+#all=ns, meta, org, document, tmp, fiber, persistent, temporal, world
+all=document
 
 [graph_ns]
 #special graph, storing namespaces.
@@ -69,7 +69,7 @@ storage=temporal
 [graph_org]
 storage=persistent
 
-[graph_doc]
+[graph_document]
 storage=persistent
 
 [graph_tmp]
@@ -79,7 +79,7 @@ storage=temporal
 storage=persistent
 
 [graph_persistent]
-contains=org, doc, fiber
+contains=org, document, fiber
 storage=persistent
 
 [graph_temporal]
@@ -129,7 +129,7 @@ handlers = console
 qualname = icc
 
 [logger_icc.cellula]
-level = WARNING
+level = DEBUG
 handlers = console
 qualname = icc.cellula
 

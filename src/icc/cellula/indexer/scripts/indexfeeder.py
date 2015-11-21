@@ -35,7 +35,7 @@ def annotations(): # generator
     host=cf.get('host', '127.0.0.1')
     port=int(cf.get('port', '8080'))
     api=cf.get('api', '/api-fields')
-    with urllib.request.urlopen('http://%s:%s%s/doc' % (host,port,api)) as f:
+    with urllib.request.urlopen('http://%s:%s%s/documents' % (host,port,api)) as f:
         for l in f:
             yield l.strip()
 
@@ -43,7 +43,10 @@ def bodies():
     i=1
     for key in annotations():
         key=key.decode('utf-8')  # !!! NOTE Sent as hexdigest, but received as bytes, must be decoded.
-        content=storage.get(key)
+        try:
+            content=storage.get(key)
+        except ValueError:
+            continue
         if content == None: # Due to a bug, e.g.
             continue
         content=content.decode('utf8')

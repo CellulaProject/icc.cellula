@@ -37,7 +37,7 @@ class DocumentStoreTask(DocumentTask):
         lock=getUtility(ILock, name="content_lock")
         lock.acquire()
         storage.begin()
-        nid_=storage.put(self.content)
+        nid_=storage.put(self.content, self.headers)
         id_=self.headers.get(self.key,nid_)
         if id_!=nid_:
             storage.abort()

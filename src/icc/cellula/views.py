@@ -69,9 +69,9 @@ class View(object):
             if o == None:
                 return o
             else:
-                return o.toPython()
+                return o #o.toPython()
         try:
-            rset=graph.query(query)
+            rset=graph.sparql(query)
         except ParseException as e:
             logger.error("Exception {!r}.".format(e) + "\nSPARQL Query:\n"+self._sparql_err(query, e))
             self.exception=e
@@ -356,7 +356,7 @@ class GraphView(View):
     @property
     def body(self):
         FORMAT='n3'
-        g=queryUtility(IGraph, name=self.request.GET.get("name","doc"))
+        g=queryUtility(IRDFStorage, name=self.request.GET.get("name","doc"))
         if g == None:
             return "<strong>No such graph found.</strong>"
         s = g.serialize(format=FORMAT).decode("utf-8")
@@ -373,7 +373,7 @@ class SearchView(View):
         matches=[]
         FORMAT='n3'
         indexer=queryUtility(IIndexer, name="indexer")
-        self.doc=queryUtility(IGraph, name="doc")
+        self.doc=queryUtility(IRDFStorage, name="documents")
 
         query=self.request.GET.get("q", None)
 
@@ -424,7 +424,7 @@ class SearchView(View):
 class DocsView(View):
     @property
     def docs(self):
-        g=getUtility(IGraph, "doc")
+        g=getUtility(IRDFStorage, "documents")
         Q="""
         SELECT DISTINCT ?date ?title ?id ?file ?mimetype
         WHERE {
@@ -437,7 +437,7 @@ class DocsView(View):
            ?target nmo:mimeType ?mimetype .
         }
         """
-        qres=g.query(Q)
+        qres=g.sparql(Q)
         return qres
 
 class SendDocView(View):
@@ -468,7 +468,7 @@ class SendDocView(View):
         req=self.request
         doc_id=req.GET.get('doc_id',None)
         ann_id=req.GET.get('ann_id',None)
-        doc=getUtility(IGraph, name='doc')
+        doc=getUtility(IRDFStorage, name='documents')
         if doc_id:
             Q=self.Q_doc.format(doc_id)
             for fileName, mimeType in self.sparql(Q, doc):
@@ -510,7 +510,10 @@ class ShowDocView(SendDocView):
 
     def serve(self, key, content_type=None, file_name=None, content=True):
         storage=getUtility(IContentStorage, name='content')
-        body=storage.get(key)
+        try:
+            body=storage.get(key)
+        except ValueError:
+            return Response("<h>Cannot find document with ID={}</h>".format(key))
         mimeType=content_type
         if mimeType == None and content:
             mimeType == "application/octet-stream"
