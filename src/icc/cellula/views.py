@@ -101,7 +101,7 @@ class ArchiveView(View):
 <br/><br/>
 <div id="status1"></div>
 <br/><br/>
-<div id="doc_table"></div>
+<div id="doc_table" class="panel panel-default" ></div>
 """ % ts
 
     @property
@@ -418,6 +418,7 @@ class SearchView(View):
            ?target nmo:mimeType ?mimetype .
         }
         '''
+
         logger.debug(Q)
         yield from self.sparql(Q, self.doc)
 
