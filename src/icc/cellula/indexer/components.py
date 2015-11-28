@@ -496,6 +496,7 @@ class SphinxIndexer(object):
         if not self.started:
             raise RuntimeError("cannot start daemon")
         cl=self.connect()
+
         rc=cl.Query(query.encode('utf-8'), self.index_name)
         if not rc:
             raise RuntimeError('sphinx query failed:'+ cl.GetLastError())

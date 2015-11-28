@@ -3,18 +3,22 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       metal:use-macro="main.macros['page']">
   <tal:block metal:fill-slot="content">
-    <div tal:replace="structure view.body"></div>
-    <span tal:define="src view.answer">
-      <div tal:condition="src['total_found']>0 | nothing">
-        <pre tal:content="src"/>
-        <table width="100%" cellspacing="" cellpadding="" border="">
+    <div tal:define="_dummy view.body" tal:omit-tag="" ></div>
+    <div class="panel panel-default" tal:define="src view.answer">
+      <div class="panel-heading">Search result</div>
+      <div class="panel-body">
+        <p>Found results: <span tal:replace="src.total_found"></span></p>
+      </div>
+      <div tal:condition="src['total_found']>0 | nothing" tal:omit-tag="">
+        <!-- <pre tal:content="src"/> -->
+        <table class="table">
           <tr tal:repeat="r view.matches">
             <td tal:content="r[0]">Date</td>
             <td tal:content="r[1] | default" i18n:translate=''>No Title</td>
             <td>
               <a href="#"
                  tal:attributes="href
-                                 string:${request.route_url('get_doc')}?doc_id=${r[4]}"
+                                 string:${request.route_url('get_doc')}?doc_id=${r[3]}"
                  tal:content="r[2]">
               </a>
               <!-- <span tal:content="r"></span> -->
@@ -25,6 +29,6 @@
       <div tal:condition="not: src['total_found'] | True">
         The query produced no results.
       </div>
-    </span>
+    </div>
   </tal:block>
 </html>

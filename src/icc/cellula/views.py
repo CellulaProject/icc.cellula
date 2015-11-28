@@ -407,15 +407,17 @@ class SearchView(View):
         #l=Literal(key)
         logger.debug((hid, key))
         Q='''
-        SELECT DISTINCT ?date ?title ?file ?mimetype
+        SELECT DISTINCT ?date ?title ?file ?id ?mimetype
         WHERE {
            ?ann a oa:Annotation .
            ?ann oa:annotatedAt ?date .
            ?ann oa:hasTarget ?target .
+           ?ann oa:hasBody ?body .
         OPTIONAL { ?target nie:title ?title } .
-           ?target nao:identifier "''' + key + '''" .
+           ?body nao:identifier "''' + key + '''" .
            ?target nfo:fileName ?file .
            ?target nmo:mimeType ?mimetype .
+           ?target nao:identifier ?id .
         }
         '''
 
