@@ -34,8 +34,9 @@ class DocumentStoreTask(DocumentTask):
 
     def run(self):
         storage=getUtility(IContentStorage, name="content")
-        lock=getUtility(ILock, name="content_lock")
+        lock=getUtility(ILock, name="content")
         lock.acquire()
+        self.locks.append(lock)
         storage.begin()
         nid_=storage.put(self.content, self.headers)
         id_=self.headers.get(self.key,nid_)
@@ -43,6 +44,7 @@ class DocumentStoreTask(DocumentTask):
             storage.abort()
             raise RuntimeError("ids differ %s:%s" % (id_,nid_))
         storage.commit()
+        self.locks.pop()
         lock.release()
         return id_
 
@@ -53,9 +55,11 @@ class DocumentMetaStoreTask(DocumentTask):
         self.headers=headers
     def run(self):
         doc_meta = getUtility(IRDFStorage, name='documents')
-        lock=getUtility(ILock, name="documents_lock")
+        lock=getUtility(ILock, name="documents")
         lock.acquire()
+        self.locks.append(lock)
         rc=doc_meta.store(self.headers)
+        self.locks.pop()
         lock.release()
         return rc
 
@@ -120,28 +124,32 @@ class ContentIndexTask(Task):
 
     def __init__(self, index_name='annotation'):
         self.index_name=index_name
+        self.lock=getUtility(ILock,'indexing')
 
     def run(self):
         self.index_run=False
         tasks=GetQueue("tasks")
         pool=getUtility(IWorker, name="queue")
-        logger.debug ("Waiting")
-        time.sleep(self.delay)
+        #logger.debug ("Waiting")
+        #time.sleep(self.delay)
         logger.debug ("Checking conditions")
-        if tasks.full():
-            logger.debug ("Queue full")
-            return
         nproc=pool.processing()
-        if nproc>=2:
-            logger.debug ("Busy %d" % nproc)
-            return
+        # if nproc>=2:
+        #     logger.debug ("Busy %d" % nproc)
+        #     return
         self.index_run=True
+        if not self.lock.acquire(False):
+            return
+        self.locks.append(self.lock)
         logger.debug ("Run indexing")
         indexer=getUtility(IIndexer, "indexer")
         indexer.reindex(par=False, index=self.index_name)
+        self.locks.pop()
+        self.lock.release()
 
     def finalize(self):
         #Restart if indexing failed due to buzyness.
         if not self.index_run:
             logger.debug ("Restart Indexing")
+            time.sleep(self.delay)
             self.enqueue(ContentIndexTask())

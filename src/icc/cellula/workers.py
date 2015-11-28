@@ -1,4 +1,4 @@
-from icc.cellula.interfaces import IWorker, ITask, ITerminationTask, IQueue, ISingletonTask
+from icc.cellula.interfaces import IWorker, ITask, ITerminationTask, IQueue, ISingletonTask, ILock
 from zope.interface import implementer, Interface
 from zope.component import getUtility, queryUtility
 import queue
@@ -8,6 +8,7 @@ import os, io, traceback
 import time
 
 logger=logging.getLogger('icc.cellula')
+
 
 def GetQueue(name, query=False):
     """Find a queue utility. A helper procedure."""
@@ -27,12 +28,17 @@ class ThreadWorker(object):
         results=GetQueue('results', query=True)
         while True:
             self.waiting=True
+            self.task=None
             #logger.debug("waiting for a task.")
             wrk=getUtility(IWorker, name="queue")
-            logger.debug("Queue %s has %d tasks. Workers occupied: %d; free:%d" % (tasks,
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug("Queue %s has %d tasks. Workers occupied: %d; free:%d" % (tasks,
                             tasks.qsize(), wrk.processing(), wrk.waiting()))
+                logger.debug("Singleton tasks: {}".format(tasks.singletons))
+                logger.debug("Active Tasks:{}".format(wrk.tasks()))
             del wrk
-            task=tasks.get()
+            self.task=task=tasks.get()
+            task.locks=[]
             self.waiting=False
             logger.info("got a task %s" % task)
             if ITerminationTask.providedBy(task):
@@ -50,6 +56,7 @@ class ThreadWorker(object):
                 logger.error('{!r}; cancelling main task run.'.format(e))
                 task.task_done()
                 logger.info("finished task %s (exception)" % task)
+                self.release_locks(task)
                 continue
             task.phase="run"
             try:
@@ -60,6 +67,7 @@ class ThreadWorker(object):
                 logger.error(f.getvalue())
                 logger.error('{!r}; some code did not run correctly, proceed with finalization.'.format(e))
                 rc=None
+                self.release_locks(task)
             if rc!=None and results != None:
                 task.result=rc
                 results.put(task)
@@ -71,9 +79,15 @@ class ThreadWorker(object):
                 traceback.print_exc(file=f)
                 logger.error(f.getvalue())
                 logger.error('{!r}; finalization failde try next task.'.format(e))
+                self.release_locks(task)
             task.phase=None
             tasks.task_done()
             logger.info("finished task %s (complete)" % task)
+
+    def release_locks(self, task):
+        while task.locks:
+            lock=task.locks.pop()
+            lock.release()
 
     def __call__(self):
         return self.run()
@@ -216,6 +230,13 @@ class QueueThread(threading.Thread):
                 n+=1
         return n
 
+    def tasks(self):
+        l=[]
+        for w in self.workers:
+            if not self.is_waiting(w):
+                l.append(w.task)
+        return l
+
     def join_worker(self):
         if self.process_pool:
             p=self.process_pool.pop()
@@ -239,18 +260,28 @@ class PriorityQueue(queue.PriorityQueue):
     def __init__(self, maxsize=0):
         queue.PriorityQueue.__init__(self, maxsize=maxsize)
         self.singletons={}
+        self.singleton_lock=getUtility(ILock, name='singleton')
 
     def put(self, task, *args, **kwargs):
         logger.debug("Q. Put: " + str(task))
         if ISingletonTask.providedBy(task):
-            if task.__class__ in self.singletons:
+            self.singleton_lock.acquire()
+            task_existed=task.__class__ in self.singletons
+            if not task_existed:
+                self.singletons[task.__class__]=task
+            self.singleton_lock.release()
+            if task_existed:
                 return True
-            self.singletons[task.__class__]=task
         return queue.PriorityQueue.put(self, task, *args, **kwargs)
 
     def get(self, *args, **kwargs):
         task=queue.PriorityQueue.get(self,*args,**kwargs)
         logger.debug("Q. Get:" + str(task))
         if ISingletonTask.providedBy(task):
-            del self.singletons[task.__class__]
+            self.singleton_lock.acquire()
+            try:
+                del self.singletons[task.__class__]
+            except KeyError:
+                pass
+            self.singleton_lock.release()
         return task

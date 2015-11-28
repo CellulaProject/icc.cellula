@@ -49,8 +49,8 @@ def bodies():
             continue
         if content == None: # Due to a bug, e.g.
             continue
+        content=content.replace(b"\t",b" ").replace(b'"',b'""').replace(b"\n",b"\\n").replace(b"\000",b" ").replace(b"\x0d",b" ")
         content=content.decode('utf8')
-        content=content.replace("\t"," ").replace('"','""').replace("\n","\\n")
         yield (i, key, content)
         i+=1
 
@@ -58,9 +58,19 @@ def bodies():
 def main():
     for row in bodies():
         i, hid, body=row
-        sys.stdout.write('%s\t%s\t' % (i,hid))
-        sys.stdout.write(body)
-        sys.stdout.write('\n')
+        if True:
+            sys.stdout.write('%s\t%s\t' % (i,hid))
+            sys.stdout.write('"')
+            sys.stdout.write(body)
+            sys.stdout.write('"')
+            sys.stdout.write('\n')
+        # else:
+        #     sys.stdout.write('%s\t%s\t' % (i,hid))
+        #     sys.stdout.write('"')
+        #     # sys.stdout.write(body[:118160])
+        #     sys.stdout.write(body[:118176])
+        #     sys.stdout.write('"')
+        #     sys.stdout.write('\n')
 
 if __name__=="__main__":
     main()

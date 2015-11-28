@@ -6,6 +6,12 @@
   <include package="zope.component" file="meta.zcml" />
   <!--  <i18n:registerTranslations directory="locales" /> -->
 
+  <!-- Must be before queue utility as it uses this lock -->
+  <utility
+      factory="threading.Lock"
+      provides="icc.cellula.interfaces.ILock"
+      name="singleton"
+      />
   <utility
       factory="icc.cellula.workers.QueueThread"
       name="queue"
@@ -65,12 +71,17 @@
   <utility
       factory="threading.Lock"
       provides="icc.cellula.interfaces.ILock"
-      name="content_lock"
+      name="content"
       />
   <utility
       factory="threading.Lock"
       provides="icc.cellula.interfaces.ILock"
-      name="documents_lock"
+      name="documents"
+      />
+  <utility
+      factory="threading.Lock"
+      provides="icc.cellula.interfaces.ILock"
+      name="indexing"
       />
 <!--
   <utility
