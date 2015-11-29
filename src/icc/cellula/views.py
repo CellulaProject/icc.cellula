@@ -414,10 +414,10 @@ class SearchView(View):
            ?ann oa:hasTarget ?target .
            ?ann oa:hasBody ?body .
         OPTIONAL { ?target nie:title ?title } .
-           ?body nao:identifier "''' + key + '''" .
+           ?body nie:identifier "''' + key + '''" .
            ?target nfo:fileName ?file .
            ?target nmo:mimeType ?mimetype .
-           ?target nao:identifier ?id .
+           ?target nie:identifier ?id .
         }
         '''
 
@@ -435,7 +435,7 @@ class DocsView(View):
            ?ann oa:annotatedAt ?date .
            ?ann oa:hasTarget ?target .
         OPTIONAL { ?target nie:title ?title } .
-           ?target nao:identifier ?id .
+           ?target nie:identifier ?id .
            ?target nfo:fileName ?file .
            ?target nmo:mimeType ?mimetype .
         }
@@ -451,7 +451,7 @@ class SendDocView(View):
     WHERE {{
       ?ann a oa:Annotation .
       ?ann oa:hasTarget ?target .
-      ?target nao:identifier "{}" .
+      ?target nie:identifier "{}" .
       ?target nfo:fileName ?file .
     OPTIONAL {{ ?target nmo:mimeType ?mimetype }} .
     }}
@@ -462,7 +462,7 @@ class SendDocView(View):
     WHERE {{
       ?ann a oa:Annotation .
       ?ann oa:hasBody ?body .
-      ?body nao:identifier "{}" .
+      ?body nie:identifier "{}" .
     OPTIONAL {{ ?body nmo:mimeType ?mimetype }} .
     }}
     """
