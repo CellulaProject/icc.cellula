@@ -33,6 +33,7 @@ class DocumentStoreTask(DocumentTask):
         self.key=key
 
     def run(self):
+
         storage=getUtility(IContentStorage, name="content")
         lock=getUtility(ILock, name="content")
         lock.acquire()
@@ -42,6 +43,8 @@ class DocumentStoreTask(DocumentTask):
         id_=self.headers.get(self.key,nid_)
         if id_!=nid_:
             storage.abort()
+            self.locks.pop()
+            lock.release()
             raise RuntimeError("ids differ %s:%s" % (id_,nid_))
         storage.commit()
         self.locks.pop()
