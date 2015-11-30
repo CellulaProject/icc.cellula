@@ -528,6 +528,7 @@ class ShowDocView(SendDocView):
             else:
                 mimeType='text/plain'
                 file_name+=".txt"
+        body=body.replace(br"\n",b"\n").replace(br'\r',b'')
         response = Response(body=body, content_type=mimeType)
         return response
 
