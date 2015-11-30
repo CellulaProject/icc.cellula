@@ -65,7 +65,7 @@ class View(object):
         """Query a graph, convert all
         answer attributes to python values.
         """
-        def _(o):
+        def tp_(o):
             if o == None:
                 return o
             else:
@@ -77,7 +77,7 @@ class View(object):
             self.exception=e
             return
         for r in rset:
-            yield list(map(_, r))
+            yield list(map(tp_, r))
 
     def _sparql_err(self, query, exc):
         lineno=exc.lineno
@@ -474,10 +474,11 @@ class SendDocView(View):
         doc=getUtility(IRDFStorage, name='documents')
         if doc_id:
             Q=self.Q_doc.format(doc_id)
-            for fileName, mimeType in self.sparql(Q, doc):
+            for (fileName, mimeType) in self.sparql(Q, doc):
                 return self.serve(doc_id, content_type=mimeType, file_name=fileName, content=True)
         if ann_id:
-            for mimeType in self.sparql(self.Q_ann.format(ann_id), doc):
+            for (mimeType,) in self.sparql(self.Q_ann.format(ann_id), doc):
+                logger.debug("Serving hasBody of mimeType:"+str(mimeType))
                 return self.serve(ann_id, content_type=mimeType, file_name="annotation", content=False)
         req.response.status_code=404
         return Response("<h>Document not found.</h>", content_type='text/html')
