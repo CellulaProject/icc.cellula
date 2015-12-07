@@ -3,10 +3,20 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       metal:define-macro="page">
+  <tal:block metal:define-slot="handlebars-templates">
+  </tal:block>
   <body>
     <h1 tal:content="view.title">Some Smart Title</h1>
     <tal:block metal:define-slot="content">
-        My awesome content.
+      My awesome content.
+
+    </tal:block>
+    <span tal:omit-tag="" tal:repeat="script view.include_scripts | []">
+      <script type="text/javascript" src=""
+              tal:attributes="type string:text/${script[0]};
+                              src string:script/${script[1]}"></script>
+    </span>
+    <tal:block metal:define-slot="script-src">
     </tal:block>
   </body>
 </html>

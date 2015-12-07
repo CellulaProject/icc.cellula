@@ -7,5 +7,5 @@ def add_base_template(event):
     """
 
     main = get_renderer('templates/index.pt').implementation()
-
-    event.update({'main': main})
+    test = get_renderer('templates/main.pt').implementation()
+    event.update({'main': main, 'test':test})

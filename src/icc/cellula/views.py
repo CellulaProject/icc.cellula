@@ -21,6 +21,12 @@ import logging
 logger=logging.getLogger('icc.cellula')
 
 class View(object):
+    scripts=[
+        ('javascript', 'jquery-1.9.0.js'),
+        ('javascript', 'jquery-migrate-1.0.0.js'),
+        ('javascript', 'handlebars.js'),
+        ('javascript', 'handlebars-pengines.js')
+    ]
     def __init__(self, *args, **kwargs):
         if args:
             self.request=args[1]
@@ -88,6 +94,10 @@ class View(object):
             if i+1==lineno:
                 s+=' '*(col-1)+"^\n"
         return s
+
+    @property
+    def include_scripts(self):
+        return self.__class__.scripts
 
 class ArchiveView(View):
     """View for archive
