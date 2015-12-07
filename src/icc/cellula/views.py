@@ -60,6 +60,7 @@ class View(object):
             view['context']=self.context
         # template
         # attrs
+        self.request.response.headers['Access-Control-Allow-Origin']='*'
         return view
 
     def active(self, name):

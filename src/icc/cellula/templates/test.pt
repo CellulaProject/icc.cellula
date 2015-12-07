@@ -8,6 +8,7 @@
     </div>
     <div id="out"></div>
     <button id="next" onclick="pengine.next()">Next</button>
+    <div id="oa-out"></div>
   </tal:block>
   <tal:block metal:fill-slot="handlebars-templates">
     <script id="entry-template" type="text/x-handlebars-template">
@@ -17,6 +18,19 @@
           {{{body}}}
         </div>
       </div>
+    </script>
+    <script type="text/x-handlebars-template" id="oa-row">
+      {{#subj subj}}
+      <tr>
+        <td>{{rel 'nie:contentCreated'}}</td>
+        <td>
+          <a
+             tal:attributes="href
+             string:${request.route_url('get_doc')}?doc_id={{rel nie:identifier}}"
+             >{{rel 'nie:fileName'}}</a>
+        </td> <!-- FIXE Try to deduce rdfs:label -->
+      </tr>
+      {{/subj}}
     </script>
   </tal:block>
 
@@ -29,27 +43,20 @@
       var html=hb_pengines.template(td);
       jQuery(document).ready(function(){
       $('#main_content').html(html);
+      //var
       });
-    </script>
-    <script type="text/x-prolog">
-
-	        q(X) :- p(X).
-
-		    p(a). p(b). p(c). p(d). p(e). p(f). p(g).
-
     </script>
     <script>
-      var pengine = new Pengine({
-      server:'http://127.0.0.1:3020/pengine',
-      ask: 'q(X)',
-      onsuccess: handleSuccess
+      jQuery(document).ready(function(){
+      hb_renderer({
+       template:"#oa-row",
+       target:"#oa-out",
+       query:"icc:triple(Subject,rdf:type,oa:'Annotation',document)",
+       vars:{subj:'Subject'},
+       server:'http://127.0.0.1:3020/pengine',
+       limit:100
       });
-      function handleSuccess() {
-      $('#out').html(this.data[0].X);
-      if (!this.more) {
-      $('#next').prop("disabled", true);
-      }
-      }
+      });
     </script>
   </tal:block>
 </html>
