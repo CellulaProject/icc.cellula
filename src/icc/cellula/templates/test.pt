@@ -6,8 +6,9 @@
     My awesome content changed.
     <div id="main_content">
     </div>
+    <div id="out"></div>
+    <button id="next" onclick="pengine.next()">Next</button>
   </tal:block>
-
   <tal:block metal:fill-slot="handlebars-templates">
     <script id="entry-template" type="text/x-handlebars-template">
       <div class="entry">
@@ -29,6 +30,26 @@
       jQuery(document).ready(function(){
       $('#main_content').html(html);
       });
+    </script>
+    <script type="text/x-prolog">
+
+	        q(X) :- p(X).
+
+		    p(a). p(b). p(c). p(d). p(e). p(f). p(g).
+
+    </script>
+    <script>
+      var pengine = new Pengine({
+      server:'http://127.0.0.1:3020/pengine',
+      ask: 'q(X)',
+      onsuccess: handleSuccess
+      });
+      function handleSuccess() {
+      $('#out').html(this.data[0].X);
+      if (!this.more) {
+      $('#next').prop("disabled", true);
+      }
+      }
     </script>
   </tal:block>
 </html>
