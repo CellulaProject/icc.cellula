@@ -19,10 +19,9 @@ var hb_renderer = function(setup) {
         console.error("Prolog query did not supported.");
         return;
     };
-    if (setup.vars===undefined) {
-        //console.error("Var mapping did not supported.");
-        //return;
-        //setup.vars={subj:}
+    if (setup.subject===undefined) {
+        console.error("Subject mapping did not supplied.");
+        return;
     };
     if (setup.limit===undefined) {
         setup.limit=100;
@@ -43,34 +42,38 @@ var hb_renderer = function(setup) {
     setup.template_compiled=Handlebars.compile(src_template.html());
     var data={
     };
-    target_node.html("<h2>Here</h2>");
+    target_node.html("<h2>Something wrong</h2>");
 
-    var pengine = new Pengine({
+    var pengine_main_setup={
         ask: setup.query, // "icc:triple(Subject,rdf:type,oa:'Annotation',document)",
         //        template:'[Subject]',
         chunk:setup.limit,
         server:setup.server,
         onsuccess: handleSuccess,
         onfailure: handleFailure,
-        onerror: handleError
-    });
+        onerror: handleError,
+        usedata: function(data){console.error('Forgot to use data.');}
+    };
+
+    var pengine_setup = {
+        __proto__: pengine_main_setup,
+        usedata: function(data) {
+            var html_result=setup.template_compiled(data.answer);
+            target_node.html(html_result);
+        }
+    };
+
     function handleSuccess() {
         data.source=this.data;
         var ans=new Array(this.data.length);
         this.data.forEach(function(answer, i, arr) {
             var val,key;
-            var o={};
-            for (key in setup.vars) {
-                val=setup.vars[key];
-                val=answer[val]; // Get the value from query answer as a variable
-                o[key]=val;
-            };
+            var o={subject:answer[setup.subject]};
             ans[i]=o;
         });
-        data.answer=ans;
-        var html_result=setup.template_compiled(data.answer);
-        target_node.html(html_result);
         pengine.stop(); // FIXME Loosing other results.
+        data.answer=ans;
+        pengine_setup.usedata(data);
     };
     function handleFailure() {
         console.info(this.data);
@@ -78,28 +81,29 @@ var hb_renderer = function(setup) {
     function handleError() {
         console.error(this.data);
     };
-};
 
-Handlebars.registerHelper('subj', function(items, options) {
-    var out='';
-    var objs=options.data.root;
-    for(var i=0, l=objs.length; i<l; i++) {
-      out = out + options.fn(objs[i][options.name]);
+    function genQuery(item, relation) {
+        var query="icc:triple('"+item.subject+"',"+relation+",Object,document)";
     };
-    return out;
-});
 
-Handlebars.registerHelper('erel', function(items, options) {
-    var out='';
-    /*
-     for(var i=0, l=items.length; i<l; i++) {
-     out = out + options.fn(items[i].subj);
-     };
-     return out;
-     */
-    return options.fn(items);
-});
+    Handlebars.registerHelper('rel', function(relation, options) {
 
-Handlebars.registerHelper('rel', function(item, options) {
-  return item;
-});
+        var psetup={
+            __proto__:pengine_main_setup,
+            usedata:function (data) {}
+        };
+
+        if (options.fn==undefined) {
+            return this.subject;
+        };
+        var out='';
+        var ob={subject:''};
+        for(var i=0, l=this.length; i<l; i++) {
+            ob.subject=this[i].subject;
+            out = out + options.fn(ob);
+        };
+        return out;
+    });
+
+    var pengine = new Pengine(pengine_setup);
+};

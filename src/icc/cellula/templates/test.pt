@@ -20,17 +20,17 @@
       </div>
     </script>
     <script type="text/x-handlebars-template" id="oa-row">
-      {{#subj subj}}
+      {{#rel 'oa:hasTarget'}}
       <tr>
         <td>{{rel 'nie:contentCreated'}}</td>
         <td>
           <a
              tal:attributes="href
-             string:${request.route_url('get_doc')}?doc_id={{rel nie:identifier}}"
+             string:${request.route_url('get_doc')}?doc_id={{rel 'nie:identifier'}}"
              >{{rel 'nie:fileName'}}</a>
         </td> <!-- FIXE Try to deduce rdfs:label -->
       </tr>
-      {{/subj}}
+      {{/rel}}
     </script>
   </tal:block>
 
@@ -52,7 +52,7 @@
        template:"#oa-row",
        target:"#oa-out",
        query:"icc:triple(Subject,rdf:type,oa:'Annotation',document)",
-       vars:{subj:'Subject'},
+       subject:'Subject',
        server:'http://127.0.0.1:3020/pengine',
        limit:100
       });
