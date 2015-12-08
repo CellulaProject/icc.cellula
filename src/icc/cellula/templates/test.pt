@@ -12,17 +12,17 @@
   </tal:block>
   <tal:block metal:fill-slot="app-templates">
     <script type="text/x-dust-template" id="oa-row">
-      {#rel 'oa:hasTarget'}
-      <tr>
-        <td>{rel 'nie:contentCreated'}</td>
-        <td>
-          <a
-             tal:attributes="href
-             string:${request.route_url('get_doc')}?doc_id={{rel 'nie:identifier'}}"
-             >{rel 'nie:fileName'}</a>
-        </td> <!-- FIXE Try to deduce rdfs:label -->
-      </tr>
-      {/rel}
+     {#rdf rel="oa:hasTarget"}
+     <tr>
+     <td>{rdf rel="nie:contentCreated"}</td>
+     <td>
+     <a
+     tal:attributes="href
+         string:${request.route_url('get_doc')}?doc_id={rdf rel='nie:identifier'}"
+     > {rdf rel="nie:fileName"} </a>
+     </td> <!-- FIXE Try to deduce rdfs:label -->
+     </tr>
+     {/rdf}
     </script>
     <script type="text/x-dust-template" id="atest">
         <h1>{hello} 1223</h1>
@@ -34,8 +34,8 @@
       <script type="text/javascript">
        jQuery(document).ready(function(){
            async_renderer({
-               //             template:"#oa-row",
-               template:"#atest",
+               template:"#oa-row",
+               //template:"#atest",
                target:"#oa-out",
                query:"icc:triple(Subject,rdf:type,oa:'Annotation',document)",
                subject:'Subject',

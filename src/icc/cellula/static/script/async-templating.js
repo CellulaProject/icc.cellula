@@ -32,44 +32,44 @@ var async_renderer = function(setup) {
         return;
     };
     target_node.html("<h2>Something wrong</h2>");  // FIXME remove on going production.
-    setup.template_compiled=dust.compileFn(src_template.html(), setup.template);
+    try {
+        setup.template_compiled=dust.compileFn(src_template.html(), setup.template);
+    } catch (e){
+        var lines=src_template.html().split("\n");
+        var out='';
+        lines.forEach(function(line, i, _) {
+            out = out + (i+1) +"\t"+line+'\n';
+        });
+        console.log(out);
+        lines=null;
+        out=null;
+        console.error(e.name+" "+e.lineNumber+": "+e.message);
+    };
+
     var base = dust.makeBase({
-        hello: function() {
-            return "Hello!";
+        subj: function(chunk, context, bodies) {
+            return chunk.write("Hello "+context.get('subject')+"!!");
         },
-        rel:function(relation, options) {
+        rdf:function(chunk, context, bodies) {
+            /*
             var psetup={
                 __proto__:pengine_main_setup,
                 usedata:function (data) {}
             };
-
-            if (options.fn==undefined) {
-                return this.subject;
+             */
+            subj=context.get('subject');
+            if (bodies.block==undefined) {
+                return chunk.write(subj);
             };
-            var out='';
-            var ob={subject:''};
-            for(var i=0, l=this.length; i<l; i++) {
-                ob.subject=this[i].subject;
-                out = out + options.fn(ob);
+            var ctx;
+            for(var i=0, l=subj.length; i<l; i++) {
+                // chunk.render(bodies.block, base.push(subj[i]));
+                chunk.render(bodies.block, context);
             };
-            return out;
+            return '';
         }
     });
 
-    var context=base.push({
-        foo:"bar"
-    });
-
-    dust.render(setup.template, context,
-                function(err, out) {
-                    if (err !== null) {
-                        console.error(err);
-                    };
-                    if (out !== null) {
-                        target_node.html(out);
-                    };
-                }
-               );
 
     var data={};
 
@@ -87,8 +87,20 @@ var async_renderer = function(setup) {
     var pengine_setup = {
         __proto__: pengine_main_setup,
         usedata: function(data) {
-            var html_result=setup.template_compiled(data.answer);
-            target_node.html(html_result);
+            var context=base.push({
+                subject:"bar"
+            });
+            var html_result=setup.template_compiled(data);
+            var ctx=base.push(data);
+            dust.render(setup.template, ctx, function(err, out) {
+                if (err !== null) {
+                    console.error(err);
+                    target_node.html("<strong>Template '"+setup.template+"' rendering failed. See error on console </strong>"); // FIXME suggest some more interesting
+                };
+                if (out !== null) {
+                    target_node.html(out);
+                };
+            });
         }
     };
 
@@ -101,7 +113,7 @@ var async_renderer = function(setup) {
             ans[i]=o;
         });
         pengine.stop(); // FIXME Loosing other results.
-        data.answer=ans;
+        data.subject=ans;
         pengine_setup.usedata(data);
     };
     function handleFailure() {
@@ -140,5 +152,5 @@ var async_renderer = function(setup) {
         return query;
     };
 
-    // var pengine = new Pengine(pengine_setup);
+    var pengine = new Pengine(pengine_setup);
 };
