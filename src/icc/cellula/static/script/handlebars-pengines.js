@@ -82,12 +82,36 @@ var hb_renderer = function(setup) {
         console.error(this.data);
     };
 
-    function genQuery(item, relation) {
-        var query="icc:triple('"+item.subject+"',"+relation+",Object,document)";
+    function pEscape(term, divider) {
+        if (term.length===0) {
+            return "";
+        };
+        if (term[0]===term[0].toUpperCase()) {
+            term="'"+term+"'";
+        };
+        return term+":";
+    };
+
+    function pTerm(term) {
+        var ns,t;
+        if (rel.indexOf(":")===-1) {
+            ns='';
+            t=term;
+        } else {
+            var a=term.split(":");
+            ns=a[0];
+            t=a[1];
+            a=null;
+        };
+        return pEscape(ns,":")+pEscape(term,'');
+    };
+
+    function genQuery(item, relation, graph_name) {
+        var query="icc:triple("+pTerm(item.subject)+","+pTerm(relation)+",Object,"+graph_name+")";
+        return query;
     };
 
     Handlebars.registerHelper('rel', function(relation, options) {
-
         var psetup={
             __proto__:pengine_main_setup,
             usedata:function (data) {}
