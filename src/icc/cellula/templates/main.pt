@@ -3,7 +3,7 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       metal:define-macro="page">
-  <tal:block metal:define-slot="handlebars-templates">
+  <tal:block metal:define-slot="app-templates">
   </tal:block>
   <body>
     <h1 tal:content="view.title">Some Smart Title</h1>

@@ -22,11 +22,11 @@ logger=logging.getLogger('icc.cellula')
 
 class View(object):
     scripts=[
-        ('javascript', 'jquery-1.9.0.js'),
+        ('javascript', 'jquery-1.9.0.js'), # FIXME .min.
         ('javascript', 'pengines.js'),
         ('javascript', 'jquery-migrate-1.0.0.js'),
-        ('javascript', 'handlebars.js'),
-        ('javascript', 'handlebars-pengines.js')
+        ('javascript', 'dust-full-0.3.0.js'), # FIXME .min.
+        ('javascript', 'async-templating.js')
     ]
     def __init__(self, *args, **kwargs):
         if args:

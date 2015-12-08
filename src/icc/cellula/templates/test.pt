@@ -10,53 +10,39 @@
     <button id="next" onclick="pengine.next()">Next</button>
     <div id="oa-out"></div>
   </tal:block>
-  <tal:block metal:fill-slot="handlebars-templates">
-    <script id="entry-template" type="text/x-handlebars-template">
-      <div class="entry">
-        <h1>{{title}}</h1>
-        <div class="body">
-          {{{body}}}
-        </div>
-      </div>
-    </script>
-    <script type="text/x-handlebars-template" id="oa-row">
-      {{#rel 'oa:hasTarget'}}
+  <tal:block metal:fill-slot="app-templates">
+    <script type="text/x-dust-template" id="oa-row">
+      {#rel 'oa:hasTarget'}
       <tr>
-        <td>{{rel 'nie:contentCreated'}}</td>
+        <td>{rel 'nie:contentCreated'}</td>
         <td>
           <a
              tal:attributes="href
              string:${request.route_url('get_doc')}?doc_id={{rel 'nie:identifier'}}"
-             >{{rel 'nie:fileName'}}</a>
+             >{rel 'nie:fileName'}</a>
         </td> <!-- FIXE Try to deduce rdfs:label -->
       </tr>
-      {{/rel}}
+      {/rel}
+    </script>
+    <script type="text/x-dust-template" id="atest">
+        <h1>{hello} 1223</h1>
+        <p>{bar}</p>
     </script>
   </tal:block>
 
   <tal:block metal:fill-slot="script-src">
-    <script type="text/javascript">
-      var td={
-      title: "All about <p> Tags",
-        body: "<p>This is a post about &lt;p&gt; tags</p>"
-      };
-      var html=hb_pengines.template(td);
-      jQuery(document).ready(function(){
-      $('#main_content').html(html);
-      //var
-      });
-    </script>
-    <script>
-      jQuery(document).ready(function(){
-      hb_renderer({
-       template:"#oa-row",
-       target:"#oa-out",
-       query:"icc:triple(Subject,rdf:type,oa:'Annotation',document)",
-       subject:'Subject',
-       server:'http://127.0.0.1:3020/pengine',
-       limit:100
-      });
-      });
-    </script>
+      <script type="text/javascript">
+       jQuery(document).ready(function(){
+           async_renderer({
+               //             template:"#oa-row",
+               template:"#atest",
+               target:"#oa-out",
+               query:"icc:triple(Subject,rdf:type,oa:'Annotation',document)",
+               subject:'Subject',
+               server:'http://127.0.0.1:3020/pengine',
+               limit:100
+           });
+       });
+      </script>
   </tal:block>
 </html>

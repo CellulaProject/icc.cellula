@@ -1,12 +1,4 @@
-var hb_pengines = (function(){
-    var source=$("#entry-template").html();
-    var o = {
-        template:Handlebars.compile(source)
-    };
-    return o;
-})();
-
-var hb_renderer = function(setup) {
+var async_renderer = function(setup) {
     if (setup.template===undefined) {
         console.error("Template id did not supported.");
         return;
@@ -39,10 +31,47 @@ var hb_renderer = function(setup) {
         console.error("Targer Node not found.");
         return;
     };
-    setup.template_compiled=Handlebars.compile(src_template.html());
-    var data={
-    };
-    target_node.html("<h2>Something wrong</h2>");
+    target_node.html("<h2>Something wrong</h2>");  // FIXME remove on going production.
+    setup.template_compiled=dust.compileFn(src_template.html(), setup.template);
+    var base = dust.makeBase({
+        hello: function() {
+            return "Hello!";
+        },
+        rel:function(relation, options) {
+            var psetup={
+                __proto__:pengine_main_setup,
+                usedata:function (data) {}
+            };
+
+            if (options.fn==undefined) {
+                return this.subject;
+            };
+            var out='';
+            var ob={subject:''};
+            for(var i=0, l=this.length; i<l; i++) {
+                ob.subject=this[i].subject;
+                out = out + options.fn(ob);
+            };
+            return out;
+        }
+    });
+
+    var context=base.push({
+        foo:"bar"
+    });
+
+    dust.render(setup.template, context,
+                function(err, out) {
+                    if (err !== null) {
+                        console.error(err);
+                    };
+                    if (out !== null) {
+                        target_node.html(out);
+                    };
+                }
+               );
+
+    var data={};
 
     var pengine_main_setup={
         ask: setup.query, // "icc:triple(Subject,rdf:type,oa:'Annotation',document)",
@@ -111,23 +140,5 @@ var hb_renderer = function(setup) {
         return query;
     };
 
-    Handlebars.registerHelper('rel', function(relation, options) {
-        var psetup={
-            __proto__:pengine_main_setup,
-            usedata:function (data) {}
-        };
-
-        if (options.fn==undefined) {
-            return this.subject;
-        };
-        var out='';
-        var ob={subject:''};
-        for(var i=0, l=this.length; i<l; i++) {
-            ob.subject=this[i].subject;
-            out = out + options.fn(ob);
-        };
-        return out;
-    });
-
-    var pengine = new Pengine(pengine_setup);
+    // var pengine = new Pengine(pengine_setup);
 };
