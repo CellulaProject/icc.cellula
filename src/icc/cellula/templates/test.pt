@@ -12,13 +12,15 @@
   </tal:block>
   <tal:block metal:fill-slot="app-templates">
     <script type="text/x-dust-template" id="oa-row">
+      {hello a=b}
+     {rdfa rel="oa:motivation"}
      {#rdf rel="oa:hasTarget"}
      <tr>
      <td>{rdf rel="nie:contentCreated"}</td>
      <td>
      <a
      tal:attributes="href
-         string:${request.route_url('get_doc')}?doc_id={rdf rel='nie:identifier'}"
+                     string:${request.route_url('get_doc')}?doc_id={rdf rel='nie:identifier'}"
      > {rdf rel="nie:fileName"} </a>
      </td> <!-- FIXE Try to deduce rdfs:label -->
      </tr>

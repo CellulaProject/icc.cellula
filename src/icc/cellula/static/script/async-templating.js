@@ -22,6 +22,7 @@ var async_renderer = function(setup) {
         setup.server='http://127.0.0.1:3020/pengine';
     };
     var src_template=$(setup.template);
+    console.log(src_template.html());
     if (src_template.length==0) {
         console.error("Source template not found.");
         return;
@@ -50,21 +51,47 @@ var async_renderer = function(setup) {
         subj: function(chunk, context, bodies) {
             return chunk.write("Hello "+context.get('subject')+"!!");
         },
-        rdf:function(chunk, context, bodies) {
+        hello:function(chunk, context, bodies, params) {
+            return "Hello!";
+        },
+        rdf:function(chunk, context, bodies, params) {
             /*
             var psetup={
                 __proto__:pengine_main_setup,
                 usedata:function (data) {}
             };
              */
-            subj=context.get('subject');
+            var subj=context.get('subject');
+            var head=context.current();
             if (bodies.block==undefined) {
                 return chunk.write(subj);
             };
             var ctx;
             for(var i=0, l=subj.length; i<l; i++) {
                 // chunk.render(bodies.block, base.push(subj[i]));
-                chunk.render(bodies.block, context);
+                ctx=context.push(subj[0], i, l);
+                chunk.render(bodies.block, ctx);
+            };
+            return '';
+        },
+        // rdfa:function(chunk, context, bodies, params) {
+        rdfa:function() {
+            /*
+            var psetup={
+                __proto__:pengine_main_setup,
+                usedata:function (data) {}
+            };
+             */
+            var subj=context.get('subject');
+            var head=context.current();
+            if (bodies.block==undefined) {
+                return chunk.write(subj);
+            };
+            var ctx;
+            for(var i=0, l=subj.length; i<l; i++) {
+                // chunk.render(bodies.block, base.push(subj[i]));
+                ctx=context.push(subj[0], i, l);
+                chunk.render(bodies.block, ctx);
             };
             return '';
         }
