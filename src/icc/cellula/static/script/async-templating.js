@@ -49,7 +49,8 @@ var async_renderer = function(setup) {
 
     var base = dust.makeBase({
         subj: function(chunk, context, bodies) {
-            return chunk.write("Hello "+context.get('subject')+"!!");
+            var subject=context.get('subject');
+            return chunk.write(subject);
         },
         hello:function(chunk, context, bodies, params) {
             return "Hello!";
@@ -69,7 +70,7 @@ var async_renderer = function(setup) {
             var ctx;
             for(var i=0, l=subj.length; i<l; i++) {
                 // chunk.render(bodies.block, base.push(subj[i]));
-                ctx=context.push(subj[0], i, l);
+                ctx=context.push(subj[i], i, l);
                 chunk.render(bodies.block, ctx);
             };
             return '';

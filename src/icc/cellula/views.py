@@ -25,7 +25,7 @@ class View(object):
         ('javascript', 'jquery-1.9.0.js'), # FIXME .min.
         ('javascript', 'pengines.js'),
         ('javascript', 'jquery-migrate-1.0.0.js'),
-        ('javascript', 'dust-full-0.3.0.js'), # FIXME .min.
+        ('javascript', 'dust-full-1.0.0.js'), # FIXME .min.
         ('javascript', 'async-templating.js')
     ]
     def __init__(self, *args, **kwargs):
