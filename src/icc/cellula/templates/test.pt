@@ -18,8 +18,8 @@
       </pre>
       <p>
       <ul>
-        {#rdf}
-          <li>{rdf subject}</li>
+        {#rdf oa:hasTarget}
+          <li>{rdf nie:identifier}</li>
         {/rdf}
       </ul>
       </p>

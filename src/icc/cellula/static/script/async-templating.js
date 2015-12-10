@@ -81,35 +81,50 @@ var async_renderer = function(setup) {
       var obj=context.current();
       var ps;
       var new_ob={};
-      var have_ob=false;
       if (params!==null) {
         ps=params.params;
       } else {
         ps={};
       };
+      var rels=new Array();
       var no_props=true;
       for (p in ps) {
-        no_props=false;
         v=ps[p];
         if (p.indexOf(":")>1) {
           if (v===true) {
-            // RDF Query
+            rels.push(p);
+          } else {
+            console.error("Unsupported property mapping: '"+p+"':'"+v+"'");
           };
         } else { // This is not a RDF entity.
           if (v===true) {
             obj=obj[p];
+            no_props=false;
           } else {
             var val=v;
             if (typeof v==="string") {
               val=obj[p];
             };
-            new_ob[v]=val;
-            have_ob=true;
+            obj[v]=val;
+            no_props=false;  // It seems that the object will be manipulated as a hash.
           };
         };
       };
       if (no_props) {
-        obj=context.get('subject');
+        if ('subject' in obj) {
+          obj=obj.subject;
+        };
+      };
+      var _mfun=function(s) {
+          return pTerm(s);
+      };
+      if (rels.length>0) {
+        rels=rels.map(_mfun);
+        if (Array.isArray(obj)) {
+          obj=obj.map(_mfun);
+        } else {
+          obj=_mfun(obj);
+        };
       };
       if (bodies===null || bodies.block==undefined) {
         return chunk.write(obj);
@@ -184,12 +199,12 @@ var async_renderer = function(setup) {
     if (term[0]===term[0].toUpperCase()) {
       term="'"+term+"'";
     };
-    return term+":";
+    return term+divider;
   };
 
   function pTerm(term) {
     var ns,t;
-    if (rel.indexOf(":")===-1) {
+    if (term.indexOf(":")===-1) {
       ns='';
       t=term;
     } else {
