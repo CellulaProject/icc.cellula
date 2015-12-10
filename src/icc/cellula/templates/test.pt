@@ -13,8 +13,11 @@
   <tal:block metal:fill-slot="app-templates">
     <script type="text/x-dust-template" id="oa-row">
       {hello}
-      {#rdf rel=oa:motivation }
-      {/rdf}
+      <ul>
+        {#rdf oa:hasTarget }
+          <li>{subject}</li>
+        {/rdf}
+      </ul>
     </script>
     <script type="text/x-dust-template" id="atest">
         <h1>{hello} 1223</h1>
