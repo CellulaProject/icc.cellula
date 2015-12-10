@@ -36,6 +36,8 @@ var async_renderer = function(setup) {
   try {
     setup.template_compiled=dust.compileFn(src_template.html(), setup.template);
   } catch (e){
+    console.log(dust.compile(src_template.html(), setup.template));
+    console.error(e);
     var lines=src_template.html().split("\n");
     var out='';
     var sp;
@@ -76,36 +78,46 @@ var async_renderer = function(setup) {
        usedata:function (data) {}
        };
        */
-      var subj=context.get('subject');
-      var head=context.current();
-      if (bodies.block==undefined) {
-        return chunk.write(subj);
+      var obj=context.current();
+      var ps;
+      var new_ob={};
+      var have_ob=false;
+      if (params!==null) {
+        ps=params.params;
+      } else {
+        ps={};
+      };
+      var no_props=true;
+      for (p in ps) {
+        no_props=false;
+        v=ps[p];
+        if (p.indexOf(":")>1) {
+          if (v===true) {
+            // RDF Query
+          };
+        } else { // This is not a RDF entity.
+          if (v===true) {
+            obj=obj[p];
+          } else {
+            var val=v;
+            if (typeof v==="string") {
+              val=obj[p];
+            };
+            new_ob[v]=val;
+            have_ob=true;
+          };
+        };
+      };
+      if (no_props) {
+        obj=context.get('subject');
+      };
+      if (bodies===null || bodies.block==undefined) {
+        return chunk.write(obj);
       };
       var ctx;
-      for(var i=0, l=subj.length; i<l; i++) {
+      for(var i=0, l=obj.length; i<l; i++) {
         // chunk.render(bodies.block, base.push(subj[i]));
-        ctx=context.push(subj[i], i, l);
-        chunk.render(bodies.block, ctx);
-      };
-      return '';
-    },
-    // rdfa:function(chunk, context, bodies, params) {
-    rdfa:function() {
-      /*
-       var psetup={
-       __proto__:pengine_main_setup,
-       usedata:function (data) {}
-       };
-       */
-      var subj=context.get('subject');
-      var head=context.current();
-      if (bodies.block==undefined) {
-        return chunk.write(subj);
-      };
-      var ctx;
-      for(var i=0, l=subj.length; i<l; i++) {
-        // chunk.render(bodies.block, base.push(subj[i]));
-        ctx=context.push(subj[0], i, l);
+        ctx=context.push(obj[i], i, l);
         chunk.render(bodies.block, ctx);
       };
       return '';

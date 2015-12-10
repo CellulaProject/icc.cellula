@@ -1022,7 +1022,7 @@ dust.helpers = helpers;
         list.push("\"" + filter + "\"");
       }
       return "\"" + context.auto + "\""
-        + (list.length ? ",[" + list.join(',') + "]" : '');
+        + (list.length ? ",[" + list.join(',') + "]" : ',null');
     },
 
     key: function(context, node) {
