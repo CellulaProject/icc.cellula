@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2015-12-11 18:56+0800\n"
+"POT-Creation-Date: 2015-12-11 22:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,6 +61,53 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
+#. Default: Date
+#: ./src/icc/cellula/templates/doc_table.pt:16
+msgid "table_data"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:17
+msgid "Title"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:18
+msgid "File"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:19
+msgid "Incoming #"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:49
+msgid "Username:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:60
+msgid "Password:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:74
+msgid "Confirm Password:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:94
+msgid "Go back"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:99
+#: ./src/icc/cellula/templates/login.pt:104
+msgid "Sign In"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:111
+#: ./src/icc/cellula/templates/login.pt:116
+msgid "Sign Up"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:127
+msgid "Forgot Something ?"
+msgstr ""
+
 #. Default: Cellula
 #: ./src/icc/cellula/templates/index.pt:91
 msgid "main_cellula"
@@ -96,51 +143,4 @@ msgstr ""
 
 #: ./src/icc/cellula/templates/index.pt:325
 msgid "Home"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:49
-msgid "Username:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:60
-msgid "Password:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:74
-msgid "Confirm Password:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:94
-msgid "Go back"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:99
-#: ./src/icc/cellula/templates/login.pt:104
-msgid "Sign In"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:111
-#: ./src/icc/cellula/templates/login.pt:116
-msgid "Sign Up"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:127
-msgid "Forgot Something ?"
-msgstr ""
-
-#. Default: Date
-#: ./src/icc/cellula/templates/doc_table.pt:16
-msgid "table_data"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:17
-msgid "Title"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:18
-msgid "File"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:19
-msgid "Incoming #"
 msgstr ""

@@ -7,8 +7,8 @@ var async_renderer = function(setup) {
     console.error("Prolog query did not supplied.");
     return;
   };
-  if (setup.format===undefined) {
-    console.error("Output format did not supplied.");
+  if (setup.struct===undefined) {
+    console.error("Output struct did not supplied.");
     return;
   };
   if (setup.limit===undefined) {
@@ -67,19 +67,15 @@ var async_renderer = function(setup) {
       return "Hello!";
     },
     rdf:function(chunk, context, bodies, params) {
-      /*
-       var psetup={
-       __proto__:pengine_main_setup,
-       usedata:function (data) {}
-       };
-       */
       var obj=context.current();
       var ps;
       var new_ob={};
-      if (params["@@reference"]!==undefined) {
-        ps=params.params;
-      } else if (params!==null) {
-        ps=params;
+      if (params!==null) {
+        if (params["@@reference"]!==undefined) {
+          ps=params.params;
+        } else {
+          ps=params;
+        };
       } else {
         ps={};
       };
@@ -115,6 +111,20 @@ var async_renderer = function(setup) {
       var _mfun=function(s) {
           return pTerm(s);
       };
+
+      function write(obj) {
+        if (bodies===null || bodies.block==undefined) {
+          return chunk.write(obj);
+        };
+        var ctx;
+        for(var i=0, l=obj.length; i<l; i++) {
+          // chunk.render(bodies.block, base.push(subj[i]));
+          ctx=context.push(obj[i], i, l);
+          chunk.render(bodies.block, ctx);
+        };
+        return '';
+      };
+
       if (rels.length>0) {
         rels=rels.map(_mfun);
         var obs;
@@ -126,28 +136,18 @@ var async_renderer = function(setup) {
           obs=obj;
         };
         var prexp="["+rels.join()+"],"+obs;
+        query_pengine(prexp, write);
+      } else {
+        write(obj);
       };
-      if (bodies===null || bodies.block==undefined) {
-        return chunk.write(obj);
-      };
-      var ctx;
-      for(var i=0, l=obj.length; i<l; i++) {
-        // chunk.render(bodies.block, base.push(subj[i]));
-        ctx=context.push(obj[i], i, l);
-        chunk.render(bodies.block, ctx);
-      };
-      return '';
     }
   });
-
 
   var data={};
 
   var pengine_main_setup={
-    ask: setup.query,
-    //        template:'[Subject]',
-    chunk:setup.limit,
     server:setup.server,
+    chunk:setup.limit,
     onsuccess: handleSuccess,
     onfailure: handleFailure,
     onerror: handleError,
@@ -156,6 +156,8 @@ var async_renderer = function(setup) {
 
   var pengine_setup = {
     __proto__: pengine_main_setup,
+    ask: setup.query,
+    struct: setup.struct,
     then: function(data) {
       var context=base.push({
         subject:"bar"
@@ -174,24 +176,39 @@ var async_renderer = function(setup) {
     }
   };
 
+  function query_pengine(query, callback){
+    var local_setup={
+      __proto__: pengine_main_setup,
+      // ask:"icc:template_query("+query+", Object)",
+      ask:"icc:ptest(Object)",
+      struct:'Object',
+      then: function(data) {
+        callback(data);
+      }
+    };
+    var p=new Pengine(local_setup);
+  };
+
   function handleSuccess() {
-    var rAsString=typeof setup.format === "string";
+    var struct=this.pengine.options.struct;
+    var rAsString=typeof struct === "string";
     var ans=new Array(this.data.length);
     this.data.forEach(function(answer, i, arr) {
       var val,key;
       if (rAsString) {
-        ans[i]=answer[setup.format];
+        ans[i]=answer[struct];
       } else {
         var o={};
-        for (var prop in setup.format) {
-          var vk=setup.format[prop];
+        for (var prop in struct) {
+          var vk=struct[prop];
           o[vk]=answer[prop];
           ans[i]=o;
         };
       };
     });
-    pengine.stop(); // FIXME Loosing other results.
-    pengine_setup.then(ans);
+    // pengine.stop(); // FIXME Loosing other results.
+    pengine.destroy(); // FIXME Loosing other results.
+    this.pengine.options.then(ans);
   };
   function handleFailure() {
     console.info(this.data);

@@ -15,11 +15,14 @@
       <h1>{hello}</h1>
       <pre>
         {.subject}
+        {#rdf}
+          <li>{.}</li>
+        {/rdf}
       </pre>
       <p>
       <ul>
         {#rdf oa:hasTarget}
-          <li>{rdf nie:identifier op:kk}</li>
+          <li>{.}</li>
         {/rdf}
       </ul>
       </p>
@@ -38,7 +41,8 @@
                template:"#oa-row",
                query:"icc:triple(Subject,rdf:type,oa:'Annotation',document)",
                // format:{'Subject':'subject'},
-               format:'Subject',
+               // format:'Subject',
+               struct:'Subject',
                then:function(html) {
                  $("#oa-out").html(html);
                }
