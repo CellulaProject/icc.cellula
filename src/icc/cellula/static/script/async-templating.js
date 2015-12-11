@@ -76,8 +76,10 @@ var async_renderer = function(setup) {
       var obj=context.current();
       var ps;
       var new_ob={};
-      if (params!==null) {
+      if (params["@@reference"]!==undefined) {
         ps=params.params;
+      } else if (params!==null) {
+        ps=params;
       } else {
         ps={};
       };
@@ -106,7 +108,7 @@ var async_renderer = function(setup) {
         };
       };
       if (no_props) {
-        if ('subject' in obj) {
+        if (typeof obj=="object" && 'subject' in obj) {
           obj=obj.subject;
         };
       };
@@ -118,7 +120,7 @@ var async_renderer = function(setup) {
         var obs;
         if (Array.isArray(obj)) {
           obj=obj.map(_mfun);
-          obs=obj.join();
+          obs="["+obj.join()+"]";
         } else {
           obj=_mfun(obj);
           obs=obj;

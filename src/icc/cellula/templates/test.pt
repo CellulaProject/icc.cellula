@@ -24,10 +24,6 @@
       </ul>
       </p>
     </script>
-    <script type="text/x-dust-template" id="atest">
-        <h1>{hello} 1223</h1>
-        <p>{bar}</p>
-    </script>
   </tal:block>
 
   <tal:block metal:fill-slot="script-src">
@@ -41,7 +37,8 @@
                __proto__:pengine_setup,
                template:"#oa-row",
                query:"icc:triple(Subject,rdf:type,oa:'Annotation',document)",
-               format:{'Subject':'subject'},
+               // format:{'Subject':'subject'},
+               format:'Subject',
                then:function(html) {
                  $("#oa-out").html(html);
                }
