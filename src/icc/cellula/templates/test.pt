@@ -19,7 +19,7 @@
       <p>
       <ul>
         {#rdf oa:hasTarget}
-          <li>{rdf nie:identifier}</li>
+          <li>{rdf nie:identifier op:kk}</li>
         {/rdf}
       </ul>
       </p>
@@ -31,16 +31,20 @@
   </tal:block>
 
   <tal:block metal:fill-slot="script-src">
-      <script type="text/javascript">
+    <script type="text/javascript">
+      var pengine_setup={
+        server:'http://127.0.0.1:3020/pengine',
+        limit:100,
+      };
        jQuery(document).ready(function(){
            async_renderer({
+               __proto__:pengine_setup,
                template:"#oa-row",
-               //template:"#atest",
-               target:"#oa-out",
                query:"icc:triple(Subject,rdf:type,oa:'Annotation',document)",
-               subject:'Subject',
-               server:'http://127.0.0.1:3020/pengine',
-               limit:100
+               format:{'Subject':'subject'},
+               then:function(html) {
+                 $("#oa-out").html(html);
+               }
            });
        });
       </script>

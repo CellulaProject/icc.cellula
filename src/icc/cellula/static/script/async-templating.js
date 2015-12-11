@@ -1,18 +1,14 @@
 var async_renderer = function(setup) {
   if (setup.template===undefined) {
-    console.error("Template id did not supported.");
-    return;
-  };
-  if (setup.target===undefined) {
-    console.error("Target id did not supported.");
+    console.error("Template id did not supplied.");
     return;
   };
   if (setup.query===undefined) {
-    console.error("Prolog query did not supported.");
+    console.error("Prolog query did not supplied.");
     return;
   };
-  if (setup.subject===undefined) {
-    console.error("Subject mapping did not supplied.");
+  if (setup.format===undefined) {
+    console.error("Output format did not supplied.");
     return;
   };
   if (setup.limit===undefined) {
@@ -27,12 +23,11 @@ var async_renderer = function(setup) {
     console.error("Source template not found.");
     return;
   };
-  var target_node=$(setup.target);
-  if (target_node.length==0) {
-    console.error("Targer Node not found.");
+  if (setup.then===undefined) {
+    console.error("No target function");
     return;
   };
-  target_node.html("<h2>Something wrong</h2>");  // FIXME remove on going production.
+  setup.then("<h2>Something wrong</h2>");  // FIXME remove on going production.
   try {
     setup.template_compiled=dust.compileFn(src_template.html(), setup.template);
   } catch (e){
@@ -120,11 +115,15 @@ var async_renderer = function(setup) {
       };
       if (rels.length>0) {
         rels=rels.map(_mfun);
+        var obs;
         if (Array.isArray(obj)) {
           obj=obj.map(_mfun);
+          obs=obj.join();
         } else {
           obj=_mfun(obj);
+          obs=obj;
         };
+        var prexp="["+rels.join()+"],"+obs;
       };
       if (bodies===null || bodies.block==undefined) {
         return chunk.write(obj);
@@ -143,19 +142,19 @@ var async_renderer = function(setup) {
   var data={};
 
   var pengine_main_setup={
-    ask: setup.query, // "icc:triple(Subject,rdf:type,oa:'Annotation',document)",
+    ask: setup.query,
     //        template:'[Subject]',
     chunk:setup.limit,
     server:setup.server,
     onsuccess: handleSuccess,
     onfailure: handleFailure,
     onerror: handleError,
-    usedata: function(data){console.error('Forgot to use data.');}
+    then: function(data){console.error('Forgot to define then function.');}
   };
 
   var pengine_setup = {
     __proto__: pengine_main_setup,
-    usedata: function(data) {
+    then: function(data) {
       var context=base.push({
         subject:"bar"
       });
@@ -164,26 +163,33 @@ var async_renderer = function(setup) {
       dust.render(setup.template, ctx, function(err, out) {
         if (err !== null) {
           console.error(err);
-          target_node.html("<strong>Template '"+setup.template+"' rendering failed. See error on console </strong>"); // FIXME suggest some more interesting
+          setup.then("<strong>Template '"+setup.template+"' rendering failed. See error on console </strong>"); // FIXME suggest some more interesting
         };
         if (out !== null) {
-          target_node.html(out);
+          setup.then(out);
         };
       });
     }
   };
 
   function handleSuccess() {
-    data.source=this.data;
+    var rAsString=typeof setup.format === "string";
     var ans=new Array(this.data.length);
     this.data.forEach(function(answer, i, arr) {
       var val,key;
-      var o={subject:answer[setup.subject]};
-      ans[i]=o;
+      if (rAsString) {
+        ans[i]=answer[setup.format];
+      } else {
+        var o={};
+        for (var prop in setup.format) {
+          var vk=setup.format[prop];
+          o[vk]=answer[prop];
+          ans[i]=o;
+        };
+      };
     });
     pengine.stop(); // FIXME Loosing other results.
-    data.subject=ans;
-    pengine_setup.usedata(data);
+    pengine_setup.then(ans);
   };
   function handleFailure() {
     console.info(this.data);
@@ -213,7 +219,7 @@ var async_renderer = function(setup) {
       t=a[1];
       a=null;
     };
-    return pEscape(ns,":")+pEscape(term,'');
+    return pEscape(ns,":")+pEscape(t,'');
   };
 
   function genQuery(item, relation, graph_name) {

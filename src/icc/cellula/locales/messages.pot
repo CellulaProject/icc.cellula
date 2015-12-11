@@ -2,25 +2,23 @@
 # SOME DESCRIPTIVE TITLE
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: cellula 1.0\n"
-"Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
+"Project-Id-Version: PACKAGE 1.0\n"
 "POT-Creation-Date: 2015-12-11 18:56+0800\n"
-"PO-Revision-Date: 2015-10-26 13:14+0000\n"
-"Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
-"Language: ru\n"
-"Language-Team: ru <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.1.1\n"
+"Language: \n"
+"Generated-By: Lingua 4.5.1\n"
 
 #: ./src/icc/cellula/views.py:41
 msgid "====TITLE====="
-msgstr "====Заголовок страницы===="
+msgstr ""
 
 #: ./src/icc/cellula/views.py:110
 msgid "Drag & Drop Files Here"
@@ -35,22 +33,21 @@ msgid "Enter Your account data"
 msgstr ""
 
 #: ./src/icc/cellula/views.py:564
-#, fuzzy
 msgid "Cellula"
-msgstr "ЭКлетка"
+msgstr ""
 
 #: ./src/icc/cellula/views.py:576
 msgid "Dashboard"
-msgstr "Информационная панель"
+msgstr ""
 
 #: ./src/icc/cellula/views.py:583 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
-msgstr "Архив документов"
+msgstr ""
 
 #: ./src/icc/cellula/views.py:658
-#, c-format, python-format
+#, c-format
 msgid "Debug graph '%s'"
-msgstr "Отладка графа '%s'"
+msgstr ""
 
 #: ./src/icc/cellula/views.py:665
 msgid "Debug search"
@@ -58,7 +55,7 @@ msgstr ""
 
 #: ./src/icc/cellula/views.py:672
 msgid "E-Mail"
-msgstr "Почта"
+msgstr ""
 
 #: ./src/icc/cellula/views.py:679 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
@@ -67,27 +64,27 @@ msgstr ""
 #. Default: Cellula
 #: ./src/icc/cellula/templates/index.pt:91
 msgid "main_cellula"
-msgstr "ЭКлетка"
+msgstr ""
 
 #. Default: Search here...
 #: ./src/icc/cellula/templates/index.pt:101
 msgid "placeholder_search_here"
-msgstr "Поиск по содержимому..."
+msgstr ""
 
 #. Default: Close
 #: ./src/icc/cellula/templates/index.pt:162
 msgid "btn_close"
-msgstr "Закрыть"
+msgstr ""
 
 #. Default: Save changes
 #: ./src/icc/cellula/templates/index.pt:164
 msgid "btn_save_changes"
-msgstr "Сохранить"
+msgstr ""
 
 #. Default: Dashboard
 #: ./src/icc/cellula/templates/index.pt:184
 msgid "side_dashboard"
-msgstr "Обзор"
+msgstr ""
 
 #: ./src/icc/cellula/templates/index.pt:244
 msgid "Metadata Storage"
@@ -99,7 +96,7 @@ msgstr ""
 
 #: ./src/icc/cellula/templates/index.pt:325
 msgid "Home"
-msgstr "Главная"
+msgstr ""
 
 #: ./src/icc/cellula/templates/login.pt:49
 msgid "Username:"
@@ -134,32 +131,16 @@ msgstr ""
 #. Default: Date
 #: ./src/icc/cellula/templates/doc_table.pt:16
 msgid "table_data"
-msgstr "Дата загрузки"
+msgstr ""
 
 #: ./src/icc/cellula/templates/doc_table.pt:17
 msgid "Title"
-msgstr "Название"
+msgstr ""
 
 #: ./src/icc/cellula/templates/doc_table.pt:18
 msgid "File"
-msgstr "Файл"
+msgstr ""
 
 #: ./src/icc/cellula/templates/doc_table.pt:19
 msgid "Incoming #"
-msgstr "Входящий №"
-
-#~ msgid "title_dashboard"
-#~ msgstr "Информационная панель"
-
-#~ msgid "Drag & Drop Files Here"
-#~ msgstr "Перемещайте файлы в это окно"
-
-#~ msgid "Date"
-#~ msgstr "Дата"
-
-#~ msgid "News:"
-#~ msgstr "Новости:"
-
-#~ msgid "Email"
-#~ msgstr "Почта"
-
+msgstr ""
