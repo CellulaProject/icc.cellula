@@ -70,8 +70,10 @@ var async_renderer = function(setup) {
       var obj=context.current();
       var ps;
       var new_ob={};
+      var asRef=false;
       if (params!==null) {
         if (params["@@reference"]!==undefined) {
+          asRef=true;
           ps=params.params;
         } else {
           ps=params;
@@ -126,7 +128,16 @@ var async_renderer = function(setup) {
       };
 
       function mapwrite(chunk,obj) {
-        return chunk.write(obj).end();
+        if (asRef) {
+          if (Array.isArray(obj)) {
+            if (obj.length===1) {
+              obj=obj[0];
+            } else {
+              obj=""+obj;
+            };
+          };
+        };
+        return write(chunk,obj).end();
       };
 
       if (rels.length>0) {
@@ -185,8 +196,8 @@ var async_renderer = function(setup) {
   function query_pengine(query, callback, chunk){
     var local_setup={
       __proto__: pengine_main_setup,
-      // ask:"icc:template_query("+query+", Object)",
-      ask:"icc:ptest(Object)",
+      ask:"icc:template_query("+query+", Object)",
+      // ask:"icc:ptest(Object)",
       struct:'Object',
       then: function(data) {
         callback(chunk,data);

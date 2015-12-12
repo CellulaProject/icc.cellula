@@ -25,7 +25,7 @@
       </pre>
         <h2>Third</h2>
       <h3>
-        {#rdf oa:hasTarget}{.}{/rdf}
+        {#rdf oa:hasTarget}{rdf nie:identifier}{/rdf}
       </h3>
     </script>
   </tal:block>
