@@ -112,7 +112,7 @@ var async_renderer = function(setup) {
           return pTerm(s);
       };
 
-      function write(obj) {
+      function write(chunk,obj) {
         if (bodies===null || bodies.block==undefined) {
           return chunk.write(obj);
         };
@@ -122,7 +122,11 @@ var async_renderer = function(setup) {
           ctx=context.push(obj[i], i, l);
           chunk.render(bodies.block, ctx);
         };
-        return '';
+        return chunk;
+      };
+
+      function mapwrite(chunk,obj) {
+        return chunk.write(obj).end();
       };
 
       if (rels.length>0) {
@@ -136,9 +140,11 @@ var async_renderer = function(setup) {
           obs=obj;
         };
         var prexp="["+rels.join()+"],"+obs;
-        query_pengine(prexp, write);
+        return chunk.map(function(chunk) {
+          query_pengine(prexp, mapwrite, chunk);
+        });
       } else {
-        write(obj);
+        return write(chunk,obj);
       };
     }
   });
@@ -176,14 +182,14 @@ var async_renderer = function(setup) {
     }
   };
 
-  function query_pengine(query, callback){
+  function query_pengine(query, callback, chunk){
     var local_setup={
       __proto__: pengine_main_setup,
       // ask:"icc:template_query("+query+", Object)",
       ask:"icc:ptest(Object)",
       struct:'Object',
       then: function(data) {
-        callback(data);
+        callback(chunk,data);
       }
     };
     var p=new Pengine(local_setup);

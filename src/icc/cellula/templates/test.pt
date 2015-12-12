@@ -18,14 +18,15 @@
         {#rdf}
           <li>{.}</li>
         {/rdf}
-      </pre>
-      <p>
-      <ul>
-        {#rdf oa:hasTarget}
+          <h2>Other</h2>
+        {#rdf}
           <li>{.}</li>
         {/rdf}
-      </ul>
-      </p>
+      </pre>
+        <h2>Third</h2>
+      <h3>
+        {#rdf oa:hasTarget}{.}{/rdf}
+      </h3>
     </script>
   </tal:block>
 
