@@ -12,21 +12,10 @@
   </tal:block>
   <tal:block metal:fill-slot="app-templates">
     <script type="text/x-dust-template" id="oa-row">
-      <h1>{hello}</h1>
-      <pre>
-        {.subject}
-        {#rdf}
-          <li>{.}</li>
-        {/rdf}
-          <h2>Other</h2>
-        {#rdf}
-          <li>{.}</li>
-        {/rdf}
-      </pre>
-        <h2>Third</h2>
-      <h3>
-        {#rdf oa:hasTarget}{rdf nie:identifier}{/rdf}
-      </h3>
+      <h3>Header</h3>
+      <ul>
+        {#rdf oa:hasTarget}<li><a href="/doc?doc_id={rdf nie:identifier}">{rdf nfo:fileName}</a></li>{/rdf}
+      </ul>
     </script>
   </tal:block>
 
@@ -34,7 +23,7 @@
     <script type="text/javascript">
       var pengine_setup={
         server:'http://127.0.0.1:3020/pengine',
-        limit:100,
+        limit:1000,
       };
        jQuery(document).ready(function(){
            async_renderer({

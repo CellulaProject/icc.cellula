@@ -119,12 +119,13 @@ var async_renderer = function(setup) {
           return chunk.write(obj);
         };
         var ctx;
+        var ch=chunk;
         for(var i=0, l=obj.length; i<l; i++) {
           // chunk.render(bodies.block, base.push(subj[i]));
           ctx=context.push(obj[i], i, l);
-          chunk.render(bodies.block, ctx);
+          ch=ch.render(bodies.block, ctx);
         };
-        return chunk;
+        return ch;
       };
 
       function mapwrite(chunk,obj) {
@@ -137,7 +138,8 @@ var async_renderer = function(setup) {
             };
           };
         };
-        return write(chunk,obj).end();
+        var c=write(chunk,obj);
+        return c.end();
       };
 
       if (rels.length>0) {
@@ -151,9 +153,12 @@ var async_renderer = function(setup) {
           obs=obj;
         };
         var prexp="["+rels.join()+"],"+obs;
-        return chunk.map(function(chunk) {
+        // chunk.write("(dyn )");
+        var new_c=chunk.map(function(chunk) {
           query_pengine(prexp, mapwrite, chunk);
         });
+        // new_c.write(" dyn)");
+        return new_c;
       } else {
         return write(chunk,obj);
       };
