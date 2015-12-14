@@ -1,10 +1,8 @@
 (function(global_setup){
   function renew_doc_list() {
     $.get(
-      "/doc",
-      function(data){
-        $("#doc_table").html(data);
-      }
+      global_setup.docsUrl,
+      global_setup.htmlReady
     );
   };
 
@@ -102,11 +100,9 @@
     {
       var fd = new FormData();
       fd.append('file', files[i]);
-
       var status = new createStatusbar(obj); //Using this we can set progress.
       status.setFileNameSize(files[i].name,files[i].size);
       sendFileToServer(fd,status);
-
     }
   }
 

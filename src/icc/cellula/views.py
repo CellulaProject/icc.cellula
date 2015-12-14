@@ -26,7 +26,8 @@ class View(object):
         ('javascript', 'pengines.js'),
         ('javascript', 'jquery-migrate-1.0.0.js'),
         ('javascript', 'dust-full-1.0.0.js'), # FIXME .min.
-        ('javascript', 'js-murmur3-min-1.0.0.js'),
+        ('javascript', 'goog.math.Long.js'),
+        ('javascript', 'js-murmur3-128-1.0.0.js'),
         ('javascript', 'doc-load-script.js'),
         ('javascript', 'async-templating.js')
     ]
@@ -138,15 +139,14 @@ class ArchiveView(View):
 '''
 var doc_load_setup={{
   uploadUrl:"{uploadUrl}",
-  docUrl:"{docUrl}",
+  docsUrl:"{docsUrl}",
   htmlReady:function(data){{
     $("#doc_table").html(data);
   }}
 }};
 
 '''.format(uploadUrl=self.request.route_url('upload'),
-           # docUrl=self.request.route_url('get_doc'))
-           docUrl="/doc")
+           docsUrl=self.request.route_url('get_docs'))
         return script
 
     @property
@@ -399,7 +399,8 @@ class ShowDocView(SendDocView):
             else:
                 mimeType='text/plain'
                 file_name+=".txt"
-        body=body.replace(br"\n",b"\n").replace(br'\r',b'')
+        if not content:
+            body=body.replace(br"\n",b"\n").replace(br'\r',b'')
         response = Response(body=body, content_type=mimeType)
         return response
 
@@ -465,8 +466,12 @@ def post_archive(*args):
         request.response.status_code=400
         return { 'error':'no file', 'explanation':'check input form if it contains "file" field of type file' }
 
-    things['File-Name']=fs.filename
+    #hash128=(request.POST.get("hash128_low", None),request.POST.get("hash128_high", None));
+    #hash128=[int(d) for d in hash128];
 
+    #client_hash=hexdigest(hash128);
+
+    things['File-Name']=fs.filename
 
     storage=getUtility(IContentStorage, name='content')
 
