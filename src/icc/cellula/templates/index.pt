@@ -809,5 +809,12 @@
             tal:content="structure view.tail_script"
             type="text/javascript">
     </script>
+    <span tal:omit-tag="" tal:repeat="script view.include_scripts | []">
+      <script type="text/javascript" src=""
+              tal:attributes="type string:text/${script[0]};
+                              src string:script/${script[1]}"></script>
+    </span>
+    <tal:block metal:define-slot="script-src">
+    </tal:block>
 </body>
 </html>
