@@ -19,7 +19,8 @@
               <a href="#"
                  tal:attributes="href
                                  string:${request.route_url('get_doc')}?doc_id=${r[3]}"
-                 tal:content="r[2]">
+                 tal:content="r[2]"
+                 target="_blank">
               </a>
               <!-- <span tal:content="r"></span> -->
             <td>

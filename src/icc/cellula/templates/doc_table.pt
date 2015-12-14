@@ -23,7 +23,7 @@
         <td tal:content="r[1]"></td>
         <td>
           <a href="#"
-             tal:attributes="href string:${request.route_url('get_doc')}?doc_id=${r[2]}" tal:content="r[3]"></a>
+             tal:attributes="href string:${request.route_url('get_doc')}?doc_id=${r[2]}" tal:content="r[3]" target="_blank"></a>
         </td>
         <td>
           <form>
