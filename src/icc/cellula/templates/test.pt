@@ -17,6 +17,12 @@
         {#rdf oa:hasTarget}<li><a href="/doc?doc_id={rdf nie:identifier}">{rdf nfo:fileName}</a></li>{/rdf}
       </ul>
     </script>
+    <script type="text/x-dust-template" id="oa-test">
+      {#rdf oa:hasTarget}{rdf nie:identifier}{/rdf}
+    </script>
+    <script type="text/x-dust-template" id="oa-simple">
+      {#rdf oa:hasTarget}{rdf}{/rdf}
+    </script>
   </tal:block>
 
   <tal:block metal:fill-slot="script-src">
@@ -34,6 +40,7 @@
                // format:'Subject',
                struct:'Subject',
                then:function(html) {
+                 //console.log(html);
                  $("#oa-out").html(html);
                }
            });
