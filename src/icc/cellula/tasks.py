@@ -5,8 +5,9 @@ from icc.cellula.indexer.interfaces import IIndexer
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
 from icc.contentstorage.interfaces import IContentStorage
 from icc.cellula.interfaces import ILock, ISingletonTask, IQueue, IWorker
-from zope.component import getUtility
-from zope.interface import implementer
+from zope.component import getUtility, queryUtility
+from zope.interface import implementer, Interface
+from string import Template
 import time
 import logging
 logger=logging.getLogger('icc.cellula')
@@ -116,12 +117,122 @@ class DocumentAcceptingTask(DocumentTask):
         self.enqueue(DocumentStoreTask(self.content, self.headers))
         self.enqueue(DocumentProcessingTask(self.content, self.headers))
 
+class MetadataStorageQueryMixin(object):
+    def sparql(self, **qp):  # qp=query_params as keywords
+        graph=qp['graph']
+        if self.__class__.query:
+            doc_meta=queryUtility(IRDFStorage, name=graph)
+            q=Template(self.__class__.query).substitute(**qp)
+            if 'LIMIT' in qp:
+                q+=" LIMIT {LIMIT}\n".format(**qp)
+            if doc_meta==None:
+                logger.error("Storage '{}' not found.".format(graph))
+                return []
+            return doc_meta.sparql(query=self.__class__.query)
+        else:
+            raise ValueError("No query supplied")
+
+@implementer(ISingletonTask)
+class MetadataRestoreTask(Task, MetadataStorageQueryMixin):
+    """Tries to find documents without metadata
+    (hasBody is absent). Get a number of them from
+    storage and process again with DocumentProcessing
+    task.
+    """
+    priority=10
+    processing="thread"
+    default_max_number=2
+    query="""
+        SELECT DISTINCT ?id
+        WHERE {
+           ?ann a oa:Annotation .
+           ?ann oa:hasTarget ?target .
+           ?target nie:identifier ?id .
+        FILTER NOT EXISTS { ?ann oa:hasBody ?body }
+        }
+    """
+    def __init__(self, processed=0):
+        """If processed>0 finally run indexer even
+        if we did not found any documents.
+        """
+
+        Task.__init__(self)
+        config=getUtility(Interface, "configuration")
+        keys=config["maintainence"]["keys"]
+        keys=(k.strip() for k in keys.split(","))
+        if "metadata" in keys:
+            self.max_number=config["maintainence_metadata"].get("bunch",self.__class__.default_max_number)
+        else:
+            self.max_number=self.__class__.default_max_number
+        self.max_number=int(self.max_number)
+        self.doc_ids=[]
+        self.processed=processed
+
+    def run(self):
+        self.doc_ids = self.sparql(graph="documents", LIMIT=self.max_number)
+
+    def finalize(self):
+        lids=0
+        for (doc_id,) in self.doc_ids:
+            lids+=1
+            self.enqueue(DocumentMetadataRestoreTask(doc_id))
+        if lids >= self.max_number:
+            #self.enqueue(MetadataRestoreTask(self.processed+lids)) # Process next bunch
+            pass
+        if lids+self.processed>0:
+            self.enqueue(ContentIndexTask())
+
+class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
+    """Find a document by its id in the storage,
+    load it, process it with a DocumentProcessingTask.
+    """
+    priority=8
+    processing="thread"
+    query="""
+        SELECT DISTINCT ?mimeType ?fileName
+        WHERE {
+           ?ann a oa:Annotation .
+           ?ann oa:hasTarget ?target .
+           ?target nie:identifier "$targetId" .
+           ?target nmo:mimeType ?mimeType .
+           ?target nfo:fileName ?fileName .
+        }
+    """
+
+    def __init__(self, doc_id):
+        Task.__init__(self)
+        self.doc_id=doc_id
+        self.content=None
+        self.headers={}
+
+    def run(self):
+        import pudb; pu.db
+        headers=self.headers
+        logger.info("Restoring ID='{}'".format(self.doc_id))
+        rset = self.sparql(graph="documents", targetId=self.doc_id)
+        for row in rset:
+            mimeType, fileName = row
+            headers["File-Name"]=fileName
+            headers["Content-Type"]=mimeType
+        headers["id"]=self.doc_id
+        headers["restore-metadata"]=True
+        storage=getUtility(IContentStorage, "content")
+        c=self.content=storage.get(self.doc_id)
+        if c==None:
+            pass
+
+    def finalize(self):
+        if self.content:
+            self.enqueue(DocumentProcessingTask(self.content,self.headers))
+        else:
+            logger.error("Document '{}' has metadata, but does not its content!".format(self.doc_id))
+            # FIXME Document must be eliminated from matadatastorage
 
 @implementer(ISingletonTask)
 class ContentIndexTask(Task):
     """Task devoting to index content data
     """
-    priority = 9 # lowest priority
+    priority = 20 # lowest priority
     delay = 10   # sec
     processing = "thread"
 

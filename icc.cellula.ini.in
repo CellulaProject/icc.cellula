@@ -156,3 +156,11 @@ qualname = waitress
 format = %(asctime)s_%(levelname)s_%(name)s:%(threadName)s: %(message)s
 
 # End logging configuration
+
+[maintainence]
+# Maintain consistency of databases
+keys=metadata
+
+[maintainence_metadata]
+#How many documents to process at a time
+bunch=1

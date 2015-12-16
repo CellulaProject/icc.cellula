@@ -16,7 +16,7 @@ from pyparsing import ParseException
 import tempfile
 
 import cgi
-from icc.cellula.tasks import DocumentAcceptingTask, GetQueue
+from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask
 import logging
 logger=logging.getLogger('icc.cellula')
 
@@ -550,6 +550,16 @@ def get_metal(*args):
     view=View(*args, "Test View")
     return view()
 
+@view_config(route_name='maintain',renderer='templates/maintain.pt')
+def get_maintain(*args):
+    request=args[1]
+    _ = request.translate
+    view=View(*args, title="Maintainance View")
+    tasks=GetQueue('tasks')
+    tasks.put(MetadataRestoreTask(), block=False)
+    tasks.put(ContentIndexTask(), block=False)
+    return view()
+
 def includeme(config):
     #config.scan("icc.cellula.views")
     config.scan()
@@ -565,6 +575,7 @@ def includeme(config):
     config.add_route('debug_graph', "/archive_debug")
     config.add_route('debug_search', "/search")
     config.add_route('metal_test', "/metal")
+    config.add_route('maintain', "/maintain")
 
 
     config.add_subscriber('icc.cellula.subscribers.add_base_template',

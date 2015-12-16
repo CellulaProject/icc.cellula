@@ -1,0 +1,12 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="main.macros['page']">
+  <tal:block metal:fill-slot="content">
+    Maintainance has been started, hopefully. <br/>
+    <a href="#" tal:attributes="href request.route_url('maintain')"
+       class="btn btn-primary" role="button">Maintain Again!</a>
+    <a href="#" tal:attributes="href request.route_url('maintain')"
+       role="button">Maintain Again!</a>
+  </tal:block>
+</html>

@@ -14,7 +14,8 @@
     <script type="text/x-dust-template" id="oa-row">
       <h3>Header</h3>
       <ul>
-        {#rdf oa:hasTarget}<li><a href="/doc?doc_id={rdf nie:identifier}">{rdf nfo:fileName}</a></li>{/rdf}
+        {#rdf oa:hasTarget}<li><a href="/doc?doc_id={rdf
+        nie:identifier}" target='_blank'>{rdf nfo:fileName}</a></li>{/rdf}
       </ul>
     </script>
     <script type="text/x-dust-template" id="oa-test">
