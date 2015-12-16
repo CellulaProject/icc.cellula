@@ -206,7 +206,6 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
         self.headers={}
 
     def run(self):
-        import pudb; pu.db
         headers=self.headers
         logger.info("Restoring ID='{}'".format(self.doc_id))
         rset = self.sparql(graph="documents", targetId=self.doc_id)
