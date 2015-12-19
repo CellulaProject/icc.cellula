@@ -128,7 +128,7 @@ class MetadataStorageQueryMixin(object):
             if doc_meta==None:
                 logger.error("Storage '{}' not found.".format(graph))
                 return []
-            return doc_meta.sparql(query=self.__class__.query)
+            return doc_meta.sparql(query=q)
         else:
             raise ValueError("No query supplied")
 
@@ -208,6 +208,8 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
     def run(self):
         headers=self.headers
         logger.info("Restoring ID='{}'".format(self.doc_id))
+
+        import pudb; pu.db
         rset = self.sparql(graph="documents", targetId=self.doc_id)
         for row in rset:
             mimeType, fileName = row

@@ -95,7 +95,7 @@ host=[::1]
 api=/api-fields
 
 [workers]
-threads=4
+threads=1
 processes=0
 
 [pengines]
