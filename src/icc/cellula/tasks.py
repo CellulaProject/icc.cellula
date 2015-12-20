@@ -121,7 +121,7 @@ class MetadataStorageQueryMixin(object):
     def sparql(self, **qp):  # qp=query_params as keywords
         graph=qp['graph']
         if self.__class__.query:
-            doc_meta=queryUtility(IRDFStorage, name=graph)
+            doc_meta=getUtility(IRDFStorage, name=graph)
             q=Template(self.__class__.query).substitute(**qp)
             if 'LIMIT' in qp:
                 q+=" LIMIT {LIMIT}\n".format(**qp)
@@ -131,6 +131,11 @@ class MetadataStorageQueryMixin(object):
             return doc_meta.sparql(query=q)
         else:
             raise ValueError("No query supplied")
+    def prolog_query(self, query, **qp):
+        graph=qp['graph']
+        q=Template(query).substitute(**qp)
+        doc_meta=getUtility(IRDFStorage, name=graph)
+        yield from doc_meta.query(query=q)
 
 @implementer(ISingletonTask)
 class MetadataRestoreTask(Task, MetadataStorageQueryMixin):
@@ -158,10 +163,10 @@ class MetadataRestoreTask(Task, MetadataStorageQueryMixin):
 
         Task.__init__(self)
         config=getUtility(Interface, "configuration")
-        keys=config["maintainence"]["keys"]
+        keys=config["maintainance"]["keys"]
         keys=(k.strip() for k in keys.split(","))
         if "metadata" in keys:
-            self.max_number=config["maintainence_metadata"].get("bunch",self.__class__.default_max_number)
+            self.max_number=config["maintainance_metadata"].get("bunch",self.__class__.default_max_number)
         else:
             self.max_number=self.__class__.default_max_number
         self.max_number=int(self.max_number)
@@ -170,6 +175,7 @@ class MetadataRestoreTask(Task, MetadataStorageQueryMixin):
 
     def run(self):
         self.doc_ids = self.sparql(graph="documents", LIMIT=self.max_number)
+        self.doc_ids = list(self.doc_ids)  # Must be a list, not a generator.
 
     def finalize(self):
         lids=0
@@ -177,7 +183,7 @@ class MetadataRestoreTask(Task, MetadataStorageQueryMixin):
             lids+=1
             self.enqueue(DocumentMetadataRestoreTask(doc_id))
         if lids >= self.max_number:
-            #self.enqueue(MetadataRestoreTask(self.processed+lids)) # Process next bunch
+            # self.enqueue(MetadataRestoreTask(self.processed+lids)) # Process next bunch
             pass
         if lids+self.processed>0:
             self.enqueue(ContentIndexTask())
@@ -208,8 +214,6 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
     def run(self):
         headers=self.headers
         logger.info("Restoring ID='{}'".format(self.doc_id))
-
-        import pudb; pu.db
         rset = self.sparql(graph="documents", targetId=self.doc_id)
         for row in rset:
             mimeType, fileName = row
@@ -217,10 +221,15 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
             headers["Content-Type"]=mimeType
         headers["id"]=self.doc_id
         headers["restore-metadata"]=True
+        logger.debug(headers)
         storage=getUtility(IContentStorage, "content")
-        c=self.content=storage.get(self.doc_id)
-        if c==None:
-            pass
+
+        try:
+            content=self.content=storage.get(self.doc_id)
+        except KeyError:
+            logger.error("Content key invalid! Removing meta for it.")
+            for _ in self.prolog_query("icc:annotation_remove(target,'$tid')",graph="documents", tid=self.doc_id):
+                logger.info("Removed document with id: {}".format(self.doc_id))
 
     def finalize(self):
         if self.content:

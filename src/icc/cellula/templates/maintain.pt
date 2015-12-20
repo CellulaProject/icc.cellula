@@ -6,7 +6,5 @@
     Maintainance has been started, hopefully. <br/>
     <a href="#" tal:attributes="href request.route_url('maintain')"
        class="btn btn-primary" role="button">Maintain Again!</a>
-    <a href="#" tal:attributes="href request.route_url('maintain')"
-       role="button">Maintain Again!</a>
   </tal:block>
 </html>

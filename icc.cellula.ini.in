@@ -157,10 +157,10 @@ format = %(asctime)s_%(levelname)s_%(name)s:%(threadName)s: %(message)s
 
 # End logging configuration
 
-[maintainence]
+[maintainance]
 # Maintain consistency of databases
 keys=metadata
 
-[maintainence_metadata]
+[maintainance_metadata]
 #How many documents to process at a time
 bunch=1

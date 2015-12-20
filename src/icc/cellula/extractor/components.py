@@ -280,12 +280,14 @@ class RecollExtractor(object):
 
     def extract_mime(self, content, headers, mimetype, tmpfile):
         meta={}
+
         index=self.config['index']
         try:
             script=index[mimetype]
         except KeyError as e:
             return meta
 
+        script=script.lstrip("\\").strip()
         logger.debug("Filter: "+ script)
         try:
             way, cmd = script.split()
@@ -309,18 +311,20 @@ class RecollExtractor(object):
 
         executable = os.path.join(self.filterdir, cmd)
 
-        out = ''
-        if way == 'exec':
+        out = None
+        if way.startswith('exec'):  # FIXME Make some difference for execm (exec many filters)
             try:
                 try:
-                    out=self.run(tmpfile,executable=executable)
+                    out=self.run(tmpfile,executable=executable, ignore_err=True)
                 except FileNotFoundError:
                     out=self.run(tmpfile,executable=cmd, encoding=meta.get("text|charset",'utf-8'))
             except RuntimeError:
-                out=""
+                pass
         else:
             logger.warning('Non-implemented filer class %s for script %s' % (way, script))
-        meta['text-body']=out
+        out=out.strip()
+        if out:
+            meta['text-body']=out
         return meta
 
     def run(self, *params, ignore_err=False, executable=None, encoding='utf-8'):

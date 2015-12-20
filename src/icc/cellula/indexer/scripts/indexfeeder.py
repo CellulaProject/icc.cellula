@@ -45,9 +45,11 @@ def bodies():
         key=key.decode('utf-8')  # !!! NOTE Sent as hexdigest, but received as bytes, must be decoded.
         try:
             content=storage.get(key)
-        except ValueError:
+        except KeyError:
+            #logger.error("Text for id: {} not found.".format(hexdigest(key)))
             continue
         if content == None: # Due to a bug, e.g.
+            #logger.error("Text for id: {} is empty.".format(hexdigest(key)))
             continue
         content=content.replace(b"\t",b" ").replace(b'"',b'""').replace(b"\n",b"\\n").replace(b"\000",b" ").replace(b"\x0d",b" ")
         content=content.decode('utf8')
