@@ -95,7 +95,7 @@ host=[::1]
 api=/api-fields
 
 [workers]
-threads=1
+threads=4
 processes=0
 
 [pengines]
@@ -163,4 +163,4 @@ keys=metadata
 
 [maintainance_metadata]
 #How many documents to process at a time
-bunch=1
+bunch=4

@@ -240,6 +240,7 @@ class SearchView(View):
 
     @property
     def body(self):
+
         answer=None
         matches=[]
         FORMAT='n3'
@@ -460,7 +461,14 @@ def post_archive(*args):
         request.response.status_code=400
         return { 'error':'no file', 'explanation':'check input form if it contains "file" field' }
 
-    things.update(fs.headers)
+    def _(v):
+        v=v.strip()
+        if v.startswith('"') and v.endswith('"'):
+            v=v.strip('"')
+        if v.startswith("'") and v.endswith("'"):
+            v=v.strip("'")
+        return v
+    things.update({k:_(v) for k,v in fs.headers.items()})
 
     if fs.filename == None:
         request.response.status_code=400

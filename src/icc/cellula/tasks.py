@@ -72,6 +72,7 @@ class DocumentProcessingTask(DocumentTask):
     processing="process"
 
     def run(self):
+
         self.text_content=None
         self.new_headers={}
         things=self.headers

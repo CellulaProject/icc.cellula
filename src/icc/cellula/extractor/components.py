@@ -102,7 +102,7 @@ class LibExtractorExtractor(object):
         file and process output.
         """
 
-        out=self.run(filepath)
+        out=self.run(filepath, ignore_err=True)
 
         lines=out.split("\n")
 
@@ -147,10 +147,7 @@ class TrackerExtractor(LibExtractorExtractor):
         file and process output.
         """
 
-        try:
-            out=self.run('-f', filepath)
-        except RuntimeError:
-            return {}
+        out=self.run('-f', filepath, ignore_err=True)
 
         #print("Output from filter: "+out)
         # FIXME user rdflib translator to process output
@@ -314,12 +311,9 @@ class RecollExtractor(object):
         out = None
         if way.startswith('exec'):  # FIXME Make some difference for execm (exec many filters)
             try:
-                try:
-                    out=self.run(tmpfile,executable=executable, ignore_err=True)
-                except FileNotFoundError:
-                    out=self.run(tmpfile,executable=cmd, encoding=meta.get("text|charset",'utf-8'))
-            except RuntimeError:
-                pass
+                out=self.run(tmpfile,executable=executable, ignore_err=True)
+            except FileNotFoundError:
+                out=self.run(tmpfile,executable=cmd, encoding=meta.get("text|charset",'utf-8'))
         else:
             logger.warning('Non-implemented filer class %s for script %s' % (way, script))
         out=out.strip()
