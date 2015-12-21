@@ -30,7 +30,7 @@
     <script type="text/javascript">
       var pengine_setup={
         server:'http://127.0.0.1:3020/pengine',
-        limit:1000,
+        limit:100,
       };
        jQuery(document).ready(function(){
            async_renderer({

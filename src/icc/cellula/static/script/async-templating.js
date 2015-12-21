@@ -206,6 +206,9 @@ var async_renderer = function(setup) {
       struct:'Object',
       then: function(data) {
         callback(chunk,data);
+      },
+      onfailure: function() {
+        chunk.end('failure');
       }
     };
     var p=new Pengine(local_setup);

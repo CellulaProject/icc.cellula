@@ -28,7 +28,6 @@ class View(object):
         ('javascript', 'dust-full-1.0.0.js'), # FIXME .min.
         ('javascript', 'goog.math.Long.js'),
         ('javascript', 'js-murmur3-128-1.0.0.js'),
-        ('javascript', 'doc-load-script.js'),
         ('javascript', 'async-templating.js')
     ]
     def __init__(self, *args, **kwargs):
@@ -107,6 +106,9 @@ class View(object):
 class ArchiveView(View):
     """View for archive
     """
+    scripts=View.scripts+[
+        ('javascript', 'doc-load-script.js')
+    ]
 
     @property
     def body(self):

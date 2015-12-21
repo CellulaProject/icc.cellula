@@ -184,7 +184,7 @@ class MetadataRestoreTask(Task, MetadataStorageQueryMixin):
             lids+=1
             self.enqueue(DocumentMetadataRestoreTask(doc_id))
         if lids >= self.max_number:
-            # self.enqueue(MetadataRestoreTask(self.processed+lids)) # Process next bunch
+            self.enqueue(MetadataRestoreTask(self.processed+lids)) # Process next bunch
             pass
         if lids+self.processed>0:
             self.enqueue(ContentIndexTask())
