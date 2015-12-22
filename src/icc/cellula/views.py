@@ -14,11 +14,16 @@ from icc.cellula.indexer.interfaces import IIndexer
 from rdflib import Literal
 from pyparsing import ParseException
 import tempfile
+import datetime
+from string import Template
 
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask
 import logging
 logger=logging.getLogger('icc.cellula')
+
+DATE_TIME_FORMAT="%Y-%m-%dT%H:%M:%SZ"
+DATE_TIME_FORMAT_IN="%Y-%m-%d %H:%M:%S%z"
 
 class View(object):
     scripts=[
@@ -312,8 +317,17 @@ class DocsView(View):
            ?target nie:identifier ?id .
            ?target nfo:fileName ?file .
            ?target nmo:mimeType ?mimetype .
+        FILTER ( ?date>="$min"^^xsd:dateTime && ?date<="$max"^^xsd:dateTime)
         }
         """
+        now=datetime.datetime.utcnow()
+        dmin=datetime.timedelta(days=-5)
+        dmax=datetime.timedelta(days=+1)
+        tmin=now+dmin
+        tmax=now+dmax
+        Q=Template(Q).substitute(
+                   min=tmin.strftime(DATE_TIME_FORMAT),
+                   max=tmax.strftime(DATE_TIME_FORMAT))
         qres=g.sparql(Q)
         return qres
 
