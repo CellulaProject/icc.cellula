@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2015-12-11 22:16+0800\n"
+"POT-Creation-Date: 2015-12-22 15:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,96 +16,49 @@ msgstr ""
 "Language: \n"
 "Generated-By: Lingua 4.5.1\n"
 
-#: ./src/icc/cellula/views.py:41
+#: ./src/icc/cellula/views.py:43
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:110
+#: ./src/icc/cellula/views.py:115
 msgid "Drag & Drop Files Here"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:557
+#: ./src/icc/cellula/views.py:420
 msgid "Register new user"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:559
+#: ./src/icc/cellula/views.py:422
 msgid "Enter Your account data"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:564
+#: ./src/icc/cellula/views.py:427
 msgid "Cellula"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:576
+#: ./src/icc/cellula/views.py:439
 msgid "Dashboard"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:583 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/views.py:446 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:658
+#: ./src/icc/cellula/views.py:532
 #, c-format
 msgid "Debug graph '%s'"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:665
+#: ./src/icc/cellula/views.py:539
 msgid "Debug search"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:672
+#: ./src/icc/cellula/views.py:546
 msgid "E-Mail"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:679 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/views.py:553 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
-msgstr ""
-
-#. Default: Date
-#: ./src/icc/cellula/templates/doc_table.pt:16
-msgid "table_data"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:17
-msgid "Title"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:18
-msgid "File"
-msgstr ""
-
-#: ./src/icc/cellula/templates/doc_table.pt:19
-msgid "Incoming #"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:49
-msgid "Username:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:60
-msgid "Password:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:74
-msgid "Confirm Password:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:94
-msgid "Go back"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:99
-#: ./src/icc/cellula/templates/login.pt:104
-msgid "Sign In"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:111
-#: ./src/icc/cellula/templates/login.pt:116
-msgid "Sign Up"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:127
-msgid "Forgot Something ?"
 msgstr ""
 
 #. Default: Cellula
@@ -143,4 +96,55 @@ msgstr ""
 
 #: ./src/icc/cellula/templates/index.pt:325
 msgid "Home"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:49
+msgid "Username:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:60
+msgid "Password:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:74
+msgid "Confirm Password:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:94
+msgid "Go back"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:99
+#: ./src/icc/cellula/templates/login.pt:104
+msgid "Sign In"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:111
+#: ./src/icc/cellula/templates/login.pt:116
+msgid "Sign Up"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:127
+msgid "Forgot Something ?"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:12
+msgid "Documents for the last five days"
+msgstr ""
+
+#. Default: Date
+#: ./src/icc/cellula/templates/doc_table.pt:16
+msgid "table_data"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:17
+msgid "Title"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:18
+msgid "File"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:19
+msgid "Incoming #"
 msgstr ""

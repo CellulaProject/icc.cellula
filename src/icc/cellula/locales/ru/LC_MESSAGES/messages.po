@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2015-12-11 22:16+0800\n"
+"POT-Creation-Date: 2015-12-22 15:21+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -18,98 +18,50 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 
-#: ./src/icc/cellula/views.py:41
+#: ./src/icc/cellula/views.py:43
 msgid "====TITLE====="
 msgstr "====Заголовок страницы===="
 
-#: ./src/icc/cellula/views.py:110
+#: ./src/icc/cellula/views.py:115
 msgid "Drag & Drop Files Here"
-msgstr ""
+msgstr "Кидайте ваши документы сюда"
 
-#: ./src/icc/cellula/views.py:557
+#: ./src/icc/cellula/views.py:420
 msgid "Register new user"
-msgstr ""
+msgstr "Зарегистрировать нового пользователя"
 
-#: ./src/icc/cellula/views.py:559
+#: ./src/icc/cellula/views.py:422
 msgid "Enter Your account data"
-msgstr ""
+msgstr "Данные вашей учетной записи"
 
-#: ./src/icc/cellula/views.py:564
-#, fuzzy
+#: ./src/icc/cellula/views.py:427
 msgid "Cellula"
 msgstr "ЭКлетка"
 
-#: ./src/icc/cellula/views.py:576
+#: ./src/icc/cellula/views.py:439
 msgid "Dashboard"
 msgstr "Информационная панель"
 
-#: ./src/icc/cellula/views.py:583 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/views.py:446 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
 msgstr "Архив документов"
 
-#: ./src/icc/cellula/views.py:658
+#: ./src/icc/cellula/views.py:532
 #, c-format, python-format
 msgid "Debug graph '%s'"
 msgstr "Отладка графа '%s'"
 
-#: ./src/icc/cellula/views.py:665
+#: ./src/icc/cellula/views.py:539
 msgid "Debug search"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:672
+#: ./src/icc/cellula/views.py:546
 msgid "E-Mail"
 msgstr "Почта"
 
-#: ./src/icc/cellula/views.py:679 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/views.py:553 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
-msgstr ""
-
-#. Default: Date
-#: ./src/icc/cellula/templates/doc_table.pt:16
-msgid "table_data"
-msgstr "Дата загрузки"
-
-#: ./src/icc/cellula/templates/doc_table.pt:17
-msgid "Title"
-msgstr "Название"
-
-#: ./src/icc/cellula/templates/doc_table.pt:18
-msgid "File"
-msgstr "Файл"
-
-#: ./src/icc/cellula/templates/doc_table.pt:19
-msgid "Incoming #"
-msgstr "Входящий №"
-
-#: ./src/icc/cellula/templates/login.pt:49
-msgid "Username:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:60
-msgid "Password:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:74
-msgid "Confirm Password:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:94
-msgid "Go back"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:99
-#: ./src/icc/cellula/templates/login.pt:104
-msgid "Sign In"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:111
-#: ./src/icc/cellula/templates/login.pt:116
-msgid "Sign Up"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:127
-msgid "Forgot Something ?"
-msgstr ""
+msgstr "Вход"
 
 #. Default: Cellula
 #: ./src/icc/cellula/templates/index.pt:91
@@ -148,6 +100,57 @@ msgstr ""
 msgid "Home"
 msgstr "Главная"
 
+#: ./src/icc/cellula/templates/login.pt:49
+msgid "Username:"
+msgstr "Псевдоним:"
+
+#: ./src/icc/cellula/templates/login.pt:60
+msgid "Password:"
+msgstr "Пароль:"
+
+#: ./src/icc/cellula/templates/login.pt:74
+msgid "Confirm Password:"
+msgstr "Подтверждение пароля:"
+
+#: ./src/icc/cellula/templates/login.pt:94
+msgid "Go back"
+msgstr "Вернуться"
+
+#: ./src/icc/cellula/templates/login.pt:99
+#: ./src/icc/cellula/templates/login.pt:104
+msgid "Sign In"
+msgstr "Войти"
+
+#: ./src/icc/cellula/templates/login.pt:111
+#: ./src/icc/cellula/templates/login.pt:116
+msgid "Sign Up"
+msgstr "Регистрировать"
+
+#: ./src/icc/cellula/templates/login.pt:127
+msgid "Forgot Something ?"
+msgstr "Забыли что-то ?"
+
+#: ./src/icc/cellula/templates/doc_table.pt:12
+msgid "Documents for the last five days"
+msgstr "Документы за последние пять дней"
+
+#. Default: Date
+#: ./src/icc/cellula/templates/doc_table.pt:16
+msgid "table_data"
+msgstr "Дата загрузки"
+
+#: ./src/icc/cellula/templates/doc_table.pt:17
+msgid "Title"
+msgstr "Название"
+
+#: ./src/icc/cellula/templates/doc_table.pt:18
+msgid "File"
+msgstr "Файл"
+
+#: ./src/icc/cellula/templates/doc_table.pt:19
+msgid "Incoming #"
+msgstr "Входящий №"
+
 #~ msgid "title_dashboard"
 #~ msgstr "Информационная панель"
 
@@ -162,4 +165,3 @@ msgstr "Главная"
 
 #~ msgid "Email"
 #~ msgstr "Почта"
-
