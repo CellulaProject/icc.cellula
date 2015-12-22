@@ -3,19 +3,19 @@ var async_renderer = function(setup) {
     console.error("Template id did not supplied.");
     return;
   };
-  if (setup.query===undefined) {
-    console.error("Prolog query did not supplied.");
+  if (setup.query===undefined && setup.sparql===undefined) {
+    console.error("Prolog or SPARQL query must be defined.");
     return;
   };
-  if (setup.struct===undefined) {
-    console.error("Output struct did not supplied.");
+  if (setup.query!==undefined && setup.struct===undefined) {
+    console.error("Output struct did not supplied for the query.");
     return;
   };
   if (setup.limit===undefined) {
     setup.limit=100;
   };
   if (setup.server===undefined) {
-    setup.server='http://127.0.0.1:3020/pengine';
+    setup.server='http://127.0.0.1:3020';
   };
   var src_template=$(setup.template);
   console.log(src_template.html());
@@ -168,12 +168,12 @@ var async_renderer = function(setup) {
   var data={};
 
   var pengine_main_setup={
-    server:setup.server,
+    server:setup.server+"/pengine",
     chunk:setup.limit,
     onsuccess: handleSuccess,
     onfailure: handleFailure,
     onerror: handleError,
-    then: function(data){console.error('Forgot to define then function.');}
+    then: function(data){console.error('Forgot to define "then" function.');}
   };
 
   var pengine_setup = {
@@ -271,5 +271,12 @@ var async_renderer = function(setup) {
     return query;
   };
 
-  var pengine = new Pengine(pengine_setup);
+  var engine;
+  if (setup.query!==undefined) {
+    engine = new Pengine(pengine_setup);
+    engine.type="pengine";
+  } else {
+    engine = new Sparql(sparql_setup);
+    engine.type="sparql";
+  }
 };

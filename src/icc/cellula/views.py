@@ -31,8 +31,8 @@ class View(object):
         ('javascript', 'pengines.js'),
         ('javascript', 'jquery-migrate-1.0.0.js'),
         ('javascript', 'dust-full-1.0.0.js'), # FIXME .min.
-        ('javascript', 'goog.math.Long.js'),
-        ('javascript', 'js-murmur3-128-1.0.0.js'),
+#        ('javascript', 'goog.math.Long.js'),
+#        ('javascript', 'js-murmur3-128-1.0.0.js'),
         ('javascript', 'async-templating.js')
     ]
     def __init__(self, *args, **kwargs):

@@ -33,5 +33,64 @@
           </form>
         </td>
       </tr>
+      <span id="#table-rows"></span>
     </table>
+
+    <script type="text/x-dust-template" id="doc-rows">
+      {#rdf }
+      <tr>
+        <td>{date}</td>
+        <td>{title}</td>
+        <td><a href="#"
+               tal:attributes="href
+                                     string:${request.route_url('get_doc')}?doc_id={tid}"
+               target='_blank'>{file}</a></td>
+        <td>
+          <form>
+              <input type="text" class="form-control"
+                     placeholder="Registry number"
+                     aria-describedby="basic-addon1"/>
+          </form>
+        </td>
+      </tr>
+      {/rdf }
+    </script>
+    <script type="text/x-sparql" id="sparql-query">
+        SELECT DISTINCT ?date ?title ?tid ?file ?mimetype
+        WHERE {
+           ?ann a oa:Annotation .
+           ?ann oa:annotatedAt ?date .
+           ?ann oa:hasTarget ?target .
+        OPTIONAL { ?target nie:title ?title } .
+           ?target nie:identifier ?tid .
+           ?target nfo:fileName ?file .
+           ?target nmo:mimeType ?mimetype .
+           <span tal:replace="view.sparql_filter | nothing "></span>
+        }
+    </script>
+    <script tal:condition="view.tail_script | nothing"
+            tal:content="structure view.tail_script"
+            type="text/javascript">
+    </script>
+    <span tal:omit-tag="" tal:repeat="script view.include_scripts | []">
+      <script type="text/javascript" src=""
+              tal:attributes="type string:text/${script[0]};
+                              src string:script/${script[1]}"></script>
+    </span>
+    <script type="text/javascript">
+      var cliopatria_setup={
+        server:'http://192.168.10.126:3020',
+        limit:100,
+      };
+       jQuery(document).ready(function(){
+           async_renderer({
+               __proto__:cliopatria_setup,
+               template:"#doc_rows",
+               sparql:"#sparql-query"
+               then:function(html) {
+                 $("#table-rows").html(html);
+               }
+           });
+       });
+    </script>
 </div>
