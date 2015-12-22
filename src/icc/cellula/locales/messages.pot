@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2015-12-22 15:21+0800\n"
+"POT-Creation-Date: 2015-12-22 15:33+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -126,6 +126,10 @@ msgstr ""
 
 #: ./src/icc/cellula/templates/login.pt:127
 msgid "Forgot Something ?"
+msgstr ""
+
+#: ./src/icc/cellula/templates/doc_table.pt:8
+msgid "Documents"
 msgstr ""
 
 #: ./src/icc/cellula/templates/doc_table.pt:12

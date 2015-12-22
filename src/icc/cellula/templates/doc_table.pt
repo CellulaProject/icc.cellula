@@ -5,7 +5,7 @@
      i18n:domain="icc.cellula"
      tal:omit-tag=""
      >
-    <div class="panel-heading">
+    <div class="panel-heading" i18n:translate=''>
       Documents
     </div>
     <div class="panel-body">

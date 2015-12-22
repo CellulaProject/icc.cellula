@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2015-12-22 15:21+0800\n"
+"POT-Creation-Date: 2015-12-22 15:33+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -130,6 +130,10 @@ msgstr "Регистрировать"
 msgid "Forgot Something ?"
 msgstr "Забыли что-то ?"
 
+#: ./src/icc/cellula/templates/doc_table.pt:8
+msgid "Documents"
+msgstr "Документы"
+
 #: ./src/icc/cellula/templates/doc_table.pt:12
 msgid "Documents for the last five days"
 msgstr "Документы за последние пять дней"
@@ -165,3 +169,4 @@ msgstr "Входящий №"
 
 #~ msgid "Email"
 #~ msgstr "Почта"
+
