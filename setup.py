@@ -37,11 +37,8 @@ setup(name='icc.cellula',
 	'pyramid_chameleon',
 	'Babel',
 	'lingua',
-#	'mysqlclient',
-#	'cymysql'
-#	'oursql',
-#	'PyMySQL',
-#	'pyramid_tm',
+	'passlib',
+	'bcrypt',
         ],
       dependency_links = [
         'https://github.com/eugeneai/rdflib-kyotocabinet/archive/master.zip#egg=rdflib-kyotocabinet-0.1',

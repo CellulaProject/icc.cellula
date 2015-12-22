@@ -29,7 +29,7 @@
   <tal:block metal:fill-slot="script-src">
     <script type="text/javascript">
       var pengine_setup={
-        server:'http://127.0.0.1:3020/pengine',
+        server:'http://192.168.10.126:3020/pengine',
         limit:100,
       };
        jQuery(document).ready(function(){

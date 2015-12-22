@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2015-12-22 15:33+0800\n"
+"POT-Creation-Date: 2015-12-22 16:40+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -18,48 +18,48 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 
-#: ./src/icc/cellula/views.py:43
+#: ./src/icc/cellula/views.py:48
 msgid "====TITLE====="
 msgstr "====Заголовок страницы===="
 
-#: ./src/icc/cellula/views.py:115
+#: ./src/icc/cellula/views.py:120
 msgid "Drag & Drop Files Here"
 msgstr "Кидайте ваши документы сюда"
 
-#: ./src/icc/cellula/views.py:420
+#: ./src/icc/cellula/views.py:434
 msgid "Register new user"
 msgstr "Зарегистрировать нового пользователя"
 
-#: ./src/icc/cellula/views.py:422
+#: ./src/icc/cellula/views.py:436
 msgid "Enter Your account data"
 msgstr "Данные вашей учетной записи"
 
-#: ./src/icc/cellula/views.py:427
+#: ./src/icc/cellula/views.py:441
 msgid "Cellula"
 msgstr "ЭКлетка"
 
-#: ./src/icc/cellula/views.py:439
+#: ./src/icc/cellula/views.py:453
 msgid "Dashboard"
 msgstr "Информационная панель"
 
-#: ./src/icc/cellula/views.py:446 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/views.py:460 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
 msgstr "Архив документов"
 
-#: ./src/icc/cellula/views.py:532
+#: ./src/icc/cellula/views.py:546
 #, c-format, python-format
 msgid "Debug graph '%s'"
 msgstr "Отладка графа '%s'"
 
-#: ./src/icc/cellula/views.py:539
+#: ./src/icc/cellula/views.py:553
 msgid "Debug search"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:546
+#: ./src/icc/cellula/views.py:560
 msgid "E-Mail"
 msgstr "Почта"
 
-#: ./src/icc/cellula/views.py:553 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/views.py:567 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
 msgstr "Вход"
 

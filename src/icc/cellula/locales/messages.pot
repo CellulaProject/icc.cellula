@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2015-12-22 15:33+0800\n"
+"POT-Creation-Date: 2015-12-22 16:40+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,48 +16,48 @@ msgstr ""
 "Language: \n"
 "Generated-By: Lingua 4.5.1\n"
 
-#: ./src/icc/cellula/views.py:43
+#: ./src/icc/cellula/views.py:48
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:115
+#: ./src/icc/cellula/views.py:120
 msgid "Drag & Drop Files Here"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:420
+#: ./src/icc/cellula/views.py:434
 msgid "Register new user"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:422
+#: ./src/icc/cellula/views.py:436
 msgid "Enter Your account data"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:427
+#: ./src/icc/cellula/views.py:441
 msgid "Cellula"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:439
+#: ./src/icc/cellula/views.py:453
 msgid "Dashboard"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:446 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/views.py:460 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:532
+#: ./src/icc/cellula/views.py:546
 #, c-format
 msgid "Debug graph '%s'"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:539
+#: ./src/icc/cellula/views.py:553
 msgid "Debug search"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:546
+#: ./src/icc/cellula/views.py:560
 msgid "E-Mail"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:553 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/views.py:567 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
 msgstr ""
 
