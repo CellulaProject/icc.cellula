@@ -5,6 +5,22 @@
   <tal:block metal:fill-slot="content">
     Maintainance has been started, hopefully. <br/>
     <a href="#" tal:attributes="href request.route_url('maintain')"
-       class="btn btn-primary" role="button">Maintain Again!</a>
+       class="btn btn-primary" role="button">Maintain Again!</a><br/><br/>
+    <ul>
+      <li><a href="Animation.html" class="btn btn-primary"
+             tal:attributes="href string:http://127.0.0.1:3020/browse/list_triples?graph=document">
+          <i class="fa fa-medkit fa-fw">
+            <div class="icon-bg bg-green"></div>
+          </i><span class="menu-title"
+                    i18n:translate=''>Metadata Storage</span></a>
+      </li>
+      <li><a href="Animation.html" class="btn btn-primary"
+             tal:attributes="href string:http://127.0.0.1:3020/browse/list_triples?graph=agent">
+          <i class="fa fa-user fa-fw">
+            <div class="icon-bg bg-dark"></div>
+          </i><span class="menu-title"
+                    i18n:translate=''>Principals</span></a>
+      </li>
+    </ul>
   </tal:block>
 </html>

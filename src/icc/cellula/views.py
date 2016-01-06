@@ -25,6 +25,9 @@ logger=logging.getLogger('icc.cellula')
 DATE_TIME_FORMAT="%Y-%m-%dT%H:%M:%SZ"
 DATE_TIME_FORMAT_IN="%Y-%m-%d %H:%M:%S%z"
 
+def _T(x):
+    return x
+
 class View(object):
     scripts=[
         ('javascript', 'jquery-1.9.0.js'), # FIXME .min.
@@ -35,6 +38,13 @@ class View(object):
         ('javascript', 'js-murmur3-128-1.0.0.js'),
         ('javascript', 'async-templating.js')
     ]
+    panel_routes=[
+        ('dashboard',_T('Dashboard'), 'fa-dashboard'),
+        ('archive',_T('Archive'), 'fa-database'),
+        ('metal_test',_T('Metal'), 'fa-table'),
+        ('maintain',_T('Maintain'), 'fa-cogs'),
+        ('debug_graph',_T('Debug'), 'fa-wrench'),
+        ]
     def __init__(self, *args, **kwargs):
         if args:
             self.request=args[1]
@@ -48,6 +58,21 @@ class View(object):
         self.title=kw.get('title', _('====TITLE====='))
         self.context=kw.get('context', kw.get('ob',None))
         self.exception=None
+
+    @property
+    def panel_items(self):
+        """Return a generator for panel items URLs.
+        """
+        _ = self.request.translate
+        def pack(item):
+            url, name, icon=item
+            d={
+                'URL':self.request.route_url(url),
+                'icon':icon,
+                'name':name
+            }
+            return d
+        return (pack(item) for item in self.__class__.panel_routes)
 
     @property
     def body(self):
