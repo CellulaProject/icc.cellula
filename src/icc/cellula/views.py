@@ -446,14 +446,14 @@ class RegisterView(View):
 
 # ---------------- Actual routes ------------------------------------------
 
-@view_config(route_name='dashboard',renderer='templates/index.pt')
+@view_config(route_name='dashboard',renderer='templates/indexLTE.pt')
 def get_dashboard(*args):
     request=args[1]
     _ = request.translate
     view=View(*args, title=_('Dashboard'))
     return view()
 
-@view_config(route_name='archive',renderer='templates/index.pt', request_method="GET")
+@view_config(route_name='archive',renderer='templates/indexLTE.pt', request_method="GET")
 def get_archive(*args):
     request=args[1]
     _ = request.translate
@@ -538,7 +538,7 @@ def get_doc(*args, **kwargs):
     view=ShowDocView(*args) #Send
     return view()
 
-@view_config(route_name="debug_graph", renderer='templates/index.pt')
+@view_config(route_name="debug_graph", renderer='templates/indexLTE.pt')
 def get_debug(*args):
     request=args[1]
     _ = request.translate
@@ -553,7 +553,7 @@ def get_search(*args):
     view=SearchView(*args, title=_("Debug search"))
     return view()
 
-@view_config(route_name='email',renderer='templates/index.pt')
+@view_config(route_name='email',renderer='templates/indexLTE.pt')
 def get_email(*args):
     request=args[1]
     _ = request.translate
