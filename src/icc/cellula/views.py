@@ -2,7 +2,7 @@
 """
 from cornice import Service
 from pyramid.response import Response, FileResponse
-from pyramid.view import view_config
+import pyramid.view
 from pprint import pprint, pformat
 from icc.contentstorage.interfaces import IContentStorage
 from icc.contentstorage import hexdigest
@@ -25,10 +25,24 @@ logger=logging.getLogger('icc.cellula')
 DATE_TIME_FORMAT="%Y-%m-%dT%H:%M:%SZ"
 DATE_TIME_FORMAT_IN="%Y-%m-%d %H:%M:%S%z"
 
-def _T(x):
+def _(x):
     return x
 
+class view_config(pyramid.view.view_config):
+    __view_properties__= {
+        'title':_('====TITLE====='),
+        # 'context':None, # a clash with add_wiew
+        }
+    def __call__(self, wrapped):
+        props=wrapped.__view_properties__={}
+        for prop, default in self.__class__.__view_properties__.items():
+            value=self.__dict__.pop(prop, default)
+            props[prop]=value
+
+        return pyramid.view.view_config.__call__(self,wrapped)
+
 class View(object):
+    __view_properties__={}
     scripts=[
         ('javascript', 'jquery-1.9.0.js'), # FIXME .min.
         ('javascript', 'pengines.js'),
@@ -39,25 +53,31 @@ class View(object):
         ('javascript', 'async-templating.js')
     ]
     panel_routes=[
-        ('dashboard',_T('Dashboard'), 'fa-dashboard'),
-        ('archive',_T('Archive'), 'fa-database'),
-        ('metal_test',_T('Metal'), 'fa-table'),
-        ('maintain',_T('Maintain'), 'fa-cogs'),
-        ('debug_graph',_T('Debug'), 'fa-wrench'),
+        ('dashboard',_('Dashboard'), 'fa-dashboard'),
+        ('archive',_('Archive'), 'fa-database'),
+        ('metal_test',_('Metal'), 'fa-table'),
+        ('maintain',_('Maintain'), 'fa-cogs'),
+        ('debug_graph',_('Debug'), 'fa-wrench'),
         ]
+
     def __init__(self, *args, **kwargs):
+        _vp=self.__class__.__view_properties__
+
         if args:
-            self.request=args[1]
             self.traverse=args[0]
+            self.request=args[1]
         else:
             self.request=kwargs.get('request', None)
             self.traverse=kwargs.get('traverse', None)
         _ = self.request.translate
         self._=_
         kw=kwargs
-        self.title=kw.get('title', _('====TITLE====='))
-        self.context=kw.get('context', kw.get('ob',None))
+        #self.context=kw.get('context', kw.get('ob',None))
+        self.title=kw.get('title', _vp.get('title'))
         self.exception=None
+
+    def set_property(self, prop, value):
+        return self.setattr(prop, value)
 
     @property
     def panel_items(self):
@@ -86,10 +106,20 @@ class View(object):
     def route_url(self):
         return self.request.route_url(self.route_name)
 
+    def answer(self):
+        """Do something smart.
+        This called from __call__,
+        and return value (if not None) set as 'answer'
+        global in template rendering.
+        """
+
     def __call__(self):
+        answer=self.answer()
         view={'view':self}
-        if self.context != None:
-            view['context']=self.context
+        if answer != None:
+            view['answer']=answer
+        #if self.context != None:
+        #    view['context']=self.context
         # template
         # attrs
         self.request.response.headers['Access-Control-Allow-Origin']='*'
@@ -133,6 +163,8 @@ class View(object):
     def include_scripts(self):
         return self.__class__.scripts
 
+@view_config(route_name='archive',renderer='templates/indexLTE.pt',
+             request_method="GET", title=_('Document Archive'))
 class ArchiveView(View):
     """View for archive
     """
@@ -253,9 +285,9 @@ margin-right:5px;
     }
 
         """
-
+@view_config(route_name="debug_graph", renderer='templates/indexLTE.pt',
+             title=_("Debug graph"))
 class GraphView(View):
-
     @property
     def body(self):
         FORMAT='n3'
@@ -268,6 +300,8 @@ class GraphView(View):
         b = "<pre>"+cgi.escape(s)+"</pre>"
         return h+b
 
+@view_config(route_name="debug_search", renderer='templates/search.pt',
+             title=_("Debug search"))
 class SearchView(View):
 
     @property
@@ -328,6 +362,7 @@ class SearchView(View):
         logger.debug(Q)
         yield from self.sparql(Q, self.doc)
 
+@view_config(route_name="get_docs", renderer='templates/doc_table.pt')
 class DocsView(View):
     @property
     def docs(self):
@@ -421,6 +456,7 @@ class SendDocView(View):
         return response
 
 
+@view_config(route_name="get_doc")
 class ShowDocView(SendDocView):
     """Show a document
     """
@@ -446,6 +482,8 @@ class ShowDocView(SendDocView):
         response = Response(body=body, content_type=mimeType)
         return response
 
+@view_config(route_name="login",renderer="templates/login.pt",
+             title=_("Login"))
 class RegisterView(View):
 
     @property
@@ -469,145 +507,93 @@ class RegisterView(View):
         print (self.request.GET)
         return True
 
-# ---------------- Actual routes ------------------------------------------
+@view_config(route_name='maintain',renderer='templates/maintain.pt',
+             title=_("Maintainance View"))
+class MaintainanceView(View):
+    def answer(self):
+        tasks=GetQueue('tasks')
+        tasks.put(MetadataRestoreTask(), block=False)
+        tasks.put(ContentIndexTask(), block=False)
 
-@view_config(route_name='dashboard',renderer='templates/indexLTE.pt')
-def get_dashboard(*args):
-    request=args[1]
-    _ = request.translate
-    view=View(*args, title=_('Dashboard'))
-    return view()
+@view_config(route_name='metal_test',renderer='templates/test.pt',
+             title=_("Test View"))
+class MetalTestView(View):
+    pass
 
-@view_config(route_name='archive',renderer='templates/indexLTE.pt', request_method="GET")
-def get_archive(*args):
-    request=args[1]
-    _ = request.translate
-    view=ArchiveView(*args, title=_('Document Archive'))
-    return view()
+@view_config(route_name='email',renderer='templates/indexLTE.pt',
+             title=_("E-Mail"))
+class EmailView(View):
+    pass
+
+@view_config(route_name='dashboard',renderer='templates/indexLTE.pt',
+             title=_('Dashboard'))
+class DashboardView(View):
+    pass
 
 @view_config(route_name='upload', request_method="POST", renderer='json')
-def post_archive(*args):
-    request=args[1]
-    _ = request.translate
+class UploadDocView(View):
+    def __call__(self):
+        request=self.request
+        _ = request.translate
 
-    body = request.body
-    headers = request.headers
+        body = request.body
+        headers = request.headers
 
-    things={}
-    things.update(headers)
+        things={}
+        things.update(headers)
 
-    fs=request.POST.get('file', None)
+        fs=request.POST.get('file', None)
 
-    if fs == None:
-        request.response.status_code=400
-        return { 'error':'no file', 'explanation':'check input form if it contains "file" field' }
+        if fs == None:
+            request.response.status_code=400
+            return { 'error':'no file', 'explanation':'check input form if it contains "file" field' }
 
-    def _(v):
-        v=v.strip()
-        if v.startswith('"') and v.endswith('"'):
-            v=v.strip('"')
-        if v.startswith("'") and v.endswith("'"):
-            v=v.strip("'")
-        return v
-    things.update({k:_(v) for k,v in fs.headers.items()})
+        def _(v):
+            v=v.strip()
+            if v.startswith('"') and v.endswith('"'):
+                v=v.strip('"')
+                if v.startswith("'") and v.endswith("'"):
+                    v=v.strip("'")
+                    return v
+                    things.update({k:_(v) for k,v in fs.headers.items()})
 
-    if fs.filename == None:
-        request.response.status_code=400
-        return { 'error':'no file', 'explanation':'check input form if it contains "file" field of type file' }
+        if fs.filename == None:
+            request.response.status_code=400
+            return { 'error':'no file', 'explanation':'check input form if it contains "file" field of type file' }
 
-    #hash128=(request.POST.get("hash128_low", None),request.POST.get("hash128_high", None));
-    #hash128=[int(d) for d in hash128];
+        #hash128=(request.POST.get("hash128_low", None),request.POST.get("hash128_high", None));
+            #hash128=[int(d) for d in hash128];
 
-    #client_hash=hexdigest(hash128);
+        #client_hash=hexdigest(hash128);
 
-    things['File-Name']=fs.filename
+        things['File-Name']=fs.filename
 
-    storage=getUtility(IContentStorage, name='content')
+        storage=getUtility(IContentStorage, name='content')
 
-    content=fs.value #file
-    doc_id=things['id']=storage.hash(content)
-    rc=storage.resolve(doc_id)
-    logger.debug((rc, doc_id, storage.db.error()))
-    if rc:
-        request.response.status_code=400
-        return { 'error':'already exists', 'explanation':'the file is already stored' }
+        content=fs.value #file
+        doc_id=things['id']=storage.hash(content)
+        rc=storage.resolve(doc_id)
+        logger.debug((rc, doc_id, storage.db.error()))
+        if rc:
+            request.response.status_code=400
+            return { 'error':'already exists', 'explanation':'the file is already stored' }
 
-    headers=things
-    tasks=GetQueue('tasks')
+        headers=things
+        tasks=GetQueue('tasks')
 
-    tasks.put(DocumentAcceptingTask(content, headers), block=False)
-    logger.info("Task Queue has %d tasks undone" % tasks.qsize())
+        tasks.put(DocumentAcceptingTask(content, headers), block=False)
+        logger.info("Task Queue has %d tasks undone" % tasks.qsize())
 
-    request.response.status_code=201
+        request.response.status_code=201
 
-    things['result']='file stored'
+        things['result']='file stored'
 
-    things['user-id']="eugeneai@npir.ru"
+        things['user-id']="eugeneai@npir.ru"
 
-    if logger.isEnabledFor(logging.DEBUG):
-        logger.debug(things)
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(things)
 
-    return things
-
-@view_config(route_name="get_docs", renderer='templates/doc_table.pt')
-def docs(*args, **kwargs):
-    request=args[1]
-    _ = request.translate
-    view=DocsView(*args)
-    return view()
-
-@view_config(route_name="get_doc")
-def get_doc(*args, **kwargs):
-    request=args[1]
-    _ = request.translate
-    view=ShowDocView(*args) #Send
-    return view()
-
-@view_config(route_name="debug_graph", renderer='templates/indexLTE.pt')
-def get_debug(*args):
-    request=args[1]
-    _ = request.translate
-    name=request.GET.get("name", "doc")
-    view=GraphView(*args, title=_("Debug graph '%s'") % name)
-    return view()
-
-@view_config(route_name="debug_search", renderer='templates/search.pt')
-def get_search(*args):
-    request=args[1]
-    _ = request.translate
-    view=SearchView(*args, title=_("Debug search"))
-    return view()
-
-@view_config(route_name='email',renderer='templates/indexLTE.pt')
-def get_email(*args):
-    request=args[1]
-    _ = request.translate
-    view=View(*args, title=_("E-Mail"))
-    return view()
-
-@view_config(route_name="login",renderer="templates/login.pt")
-def get_login(*args):
-    request=args[1]
-    _ = request.translate
-    view=RegisterView(*args, title=_("Login"))
-    return view()
-
-@view_config(route_name='metal_test',renderer='templates/test.pt')
-def get_metal(*args):
-    request=args[1]
-    _ = request.translate
-    view=View(*args, "Test View")
-    return view()
-
-@view_config(route_name='maintain',renderer='templates/maintain.pt')
-def get_maintain(*args):
-    request=args[1]
-    _ = request.translate
-    view=View(*args, title="Maintainance View")
-    tasks=GetQueue('tasks')
-    tasks.put(MetadataRestoreTask(), block=False)
-    tasks.put(ContentIndexTask(), block=False)
-    return view()
+        return things
 
 def includeme(config):
     #config.scan("icc.cellula.views")
