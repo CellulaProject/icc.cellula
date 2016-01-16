@@ -71,11 +71,11 @@ class View(object):
         else:
             self.request=kwargs.get('request', None)
             self.traverse=kwargs.get('traverse', None)
-        _ = self.request.translate
+        _ = _T = self.request.translate
         self._=_
         kw=kwargs
         #self.context=kw.get('context', kw.get('ob',None))
-        self.title=kw.get('title', _vp.get('title'))
+        self.title=_T(kw.get('title', _vp.get('title')))
         self.exception=None
 
     def set_property(self, prop, value):
@@ -484,7 +484,7 @@ class ShowDocView(SendDocView):
         response = Response(body=body, content_type=mimeType)
         return response
 
-@view_config(route_name="login",renderer="templates/login.pt",
+@view_config(route_name="login",renderer="templates/loginLTE.pt",
              title=_("Login"))
 class RegisterView(View):
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2016-01-16 11:10+0800\n"
+"POT-Creation-Date: 2016-01-17 03:41+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -18,50 +18,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
 
-#: ./src/icc/cellula/views.py:58
+#: ./src/icc/cellula/views.py:35
 msgid "====TITLE====="
 msgstr "====Заголовок страницы===="
 
-#: ./src/icc/cellula/views.py:145
-msgid "Drag & Drop Files Here"
-msgstr "Кидайте ваши документы сюда"
-
-#: ./src/icc/cellula/views.py:459
-msgid "Register new user"
-msgstr "Зарегистрировать нового пользователя"
-
-#: ./src/icc/cellula/views.py:461
-msgid "Enter Your account data"
-msgstr "Данные вашей учетной записи"
-
-#: ./src/icc/cellula/views.py:466
-msgid "Cellula"
-msgstr "ЭКлетка"
-
-#: ./src/icc/cellula/views.py:478
+#: ./src/icc/cellula/views.py:58 ./src/icc/cellula/views.py:531
 msgid "Dashboard"
 msgstr "Информационная панель"
 
-#: ./src/icc/cellula/views.py:485 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/views.py:59
+msgid "Archive"
+msgstr "Архив"
+
+#: ./src/icc/cellula/views.py:60
+msgid "Metal"
+msgstr "Металл"
+
+#: ./src/icc/cellula/views.py:61
+msgid "Maintain"
+msgstr "Обслуживание"
+
+#: ./src/icc/cellula/views.py:62
+msgid "Debug"
+msgstr "Отладка"
+
+#: ./src/icc/cellula/views.py:169 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
 msgstr "Архив документов"
 
-#: ./src/icc/cellula/views.py:571
-#, c-format, python-format
-msgid "Debug graph '%s'"
+#: ./src/icc/cellula/views.py:179
+msgid "Drag & Drop Files Here"
+msgstr "Кидайте ваши документы сюда"
+
+#: ./src/icc/cellula/views.py:291
+#, c-format, fuzzy
+msgid "Debug graph"
 msgstr "Отладка графа '%s'"
 
-#: ./src/icc/cellula/views.py:578
+#: ./src/icc/cellula/views.py:306
 msgid "Debug search"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:585
-msgid "E-Mail"
-msgstr "Почта"
-
-#: ./src/icc/cellula/views.py:592 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/views.py:488 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
 msgstr "Вход"
+
+#: ./src/icc/cellula/views.py:499
+msgid "Register new user"
+msgstr "Зарегистрировать нового пользователя"
+
+#: ./src/icc/cellula/views.py:501
+msgid "Enter Your account data"
+msgstr "Данные вашей учетной записи"
+
+#: ./src/icc/cellula/views.py:506
+msgid "Cellula"
+msgstr "ЭКлетка"
+
+#: ./src/icc/cellula/views.py:513
+msgid "Maintainance View"
+msgstr "Обслуживание"
+
+#: ./src/icc/cellula/views.py:521
+msgid "Test View"
+msgstr "Тестовый вид"
+
+#: ./src/icc/cellula/views.py:526
+msgid "E-Mail"
+msgstr "Почта"
 
 #: ./src/icc/cellula/templates/login.pt:49
 msgid "Username:"
@@ -81,6 +105,7 @@ msgstr "Вернуться"
 
 #: ./src/icc/cellula/templates/login.pt:99
 #: ./src/icc/cellula/templates/login.pt:104
+#: ./src/icc/cellula/templates/loginLTE.pt:66
 msgid "Sign In"
 msgstr "Войти"
 
@@ -154,6 +179,43 @@ msgstr "Файл"
 #: ./src/icc/cellula/templates/doc_table.pt:19
 msgid "Incoming #"
 msgstr "Входящий №"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:12
+#, fuzzy
+msgid "Log in"
+msgstr "Вход"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:45
+msgid "Email"
+msgstr "Адрес email"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:50
+msgid "Password"
+msgstr "Пароль"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:59
+msgid "Remember Me"
+msgstr "Запомнить меня"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:73
+msgid "- OR -"
+msgstr "- ИЛИ -"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:76
+msgid "Sign in using Facebook"
+msgstr "Войти учетной записью Facebook"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:80
+msgid "Sign in using Google+"
+msgstr "Войти учетной записью Google+"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:85
+msgid "I forgot my password"
+msgstr "Я забыл свой пароль"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:86
+msgid "Register a new membership"
+msgstr "Зарегистрировать нового пользователя"
 
 #~ msgid "title_dashboard"
 #~ msgstr "Информационная панель"
