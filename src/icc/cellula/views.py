@@ -78,6 +78,10 @@ class View(object):
         self.title=_T(kw.get('title', _vp.get('title')))
         self.exception=None
 
+    @property
+    def route_name(self):
+        return self.request.matched_route.name
+
     def set_property(self, prop, value):
         return self.setattr(prop, value)
 
@@ -99,10 +103,6 @@ class View(object):
     @property
     def body(self):
         return " "
-
-    @property
-    def route_name(self):
-        return self.request.matched_route.name
 
     @property
     def route_url(self):
@@ -486,11 +486,15 @@ class ShowDocView(SendDocView):
 
 @view_config(route_name="login",renderer="templates/loginLTE.pt",
              title=_("Login"))
-class RegisterView(View):
+class LoginRegisterView(View):
 
     @property
     def register(self):
-        return self.request.GET.get('register',None)!=None
+        return self.route_name=='register'
+
+    @property
+    def login(self):
+        return self.route_name=="login"
 
     @property
     def prompt(self):
@@ -508,6 +512,11 @@ class RegisterView(View):
     def action(self):
         print (self.request.GET)
         return True
+
+@view_config(route_name="register",renderer="templates/loginLTE.pt",
+             title=_("Register"))
+class RegisterView(LoginRegisterView):
+    pass
 
 @view_config(route_name='maintain',renderer='templates/maintain.pt',
              title=_("Maintainance View"))
@@ -608,12 +617,12 @@ def includeme(config):
     config.add_route('get_doc', "/doc")
 
     config.add_route('login', "/login")
+    config.add_route('register', "/register")
 
     config.add_route('debug_graph', "/archive_debug")
     config.add_route('debug_search', "/search")
     config.add_route('metal_test', "/metal")
     config.add_route('maintain', "/maintain")
-
 
     config.add_subscriber('icc.cellula.subscribers.add_base_template',
                       'pyramid.events.BeforeRender')

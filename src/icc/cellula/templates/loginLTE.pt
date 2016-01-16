@@ -51,6 +51,12 @@
                i18n:attributes="placeholder">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
+      <div class="form-group has-feedback" tal:condition='view.register'>
+        <input type="password" class="form-control"
+               placeholder="Confirm password"
+               i18n:attributes="placeholder">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox icheck">
@@ -69,6 +75,20 @@
       </div>
     </form>
 
+    <a href="register.html"
+       tal:attributes="href request.route_url('register')"
+       class="text-center"
+       i18n:translate=''
+       tal:condition="view.login">Register a new membership</a>
+
+    <a href="register.html"
+       tal:attributes="href request.route_url('login')"
+       class="text-center"
+       i18n:translate=''
+       tal:condition="view.register">Login to an existing account</a>
+    <br>
+    <a href="#" i18n:translate=''>I forgot my password</a><br>
+
     <div class="social-auth-links text-center">
       <p i18n:translate=''>- OR -</p>
       <a href="#" class="btn btn-block btn-social btn-facebook
@@ -81,9 +101,6 @@
       </a>
     </div>
     <!-- /.social-auth-links -->
-
-    <a href="#" i18n:translate=''>I forgot my password</a><br>
-    <a href="register.html" class="text-center" i18n:translate=''>Register a new membership</a>
 
   </div>
   <!-- /.login-box-body -->

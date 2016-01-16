@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2016-01-17 03:41+0800\n"
+"POT-Creation-Date: 2016-01-17 04:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:58 ./src/icc/cellula/views.py:531
+#: ./src/icc/cellula/views.py:58 ./src/icc/cellula/views.py:540
 msgid "Dashboard"
 msgstr ""
 
@@ -60,27 +60,31 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:499
+#: ./src/icc/cellula/views.py:503
 msgid "Register new user"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:501
+#: ./src/icc/cellula/views.py:505
 msgid "Enter Your account data"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:506
+#: ./src/icc/cellula/views.py:510
 msgid "Cellula"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:513
+#: ./src/icc/cellula/views.py:517
+msgid "Register"
+msgstr ""
+
+#: ./src/icc/cellula/views.py:522
 msgid "Maintainance View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:521
+#: ./src/icc/cellula/views.py:530
 msgid "Test View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:526
+#: ./src/icc/cellula/views.py:535
 msgid "E-Mail"
 msgstr ""
 
@@ -102,7 +106,7 @@ msgstr ""
 
 #: ./src/icc/cellula/templates/login.pt:99
 #: ./src/icc/cellula/templates/login.pt:104
-#: ./src/icc/cellula/templates/loginLTE.pt:66
+#: ./src/icc/cellula/templates/loginLTE.pt:72
 msgid "Sign In"
 msgstr ""
 
@@ -189,26 +193,34 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:59
+#: ./src/icc/cellula/templates/loginLTE.pt:56
+msgid "Confirm password"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:65
 msgid "Remember Me"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:73
-msgid "- OR -"
+#: ./src/icc/cellula/templates/loginLTE.pt:82
+msgid "Register a new membership"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:76
-msgid "Sign in using Facebook"
+#: ./src/icc/cellula/templates/loginLTE.pt:88
+msgid "Login to an existing account"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:80
-msgid "Sign in using Google+"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:85
+#: ./src/icc/cellula/templates/loginLTE.pt:90
 msgid "I forgot my password"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:86
-msgid "Register a new membership"
+#: ./src/icc/cellula/templates/loginLTE.pt:93
+msgid "- OR -"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:96
+msgid "Sign in using Facebook"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:100
+msgid "Sign in using Google+"
 msgstr ""

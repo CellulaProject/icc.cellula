@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2016-01-17 03:41+0800\n"
+"POT-Creation-Date: 2016-01-17 04:21+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "====TITLE====="
 msgstr "====Заголовок страницы===="
 
-#: ./src/icc/cellula/views.py:58 ./src/icc/cellula/views.py:531
+#: ./src/icc/cellula/views.py:58 ./src/icc/cellula/views.py:540
 msgid "Dashboard"
 msgstr "Информационная панель"
 
@@ -51,39 +51,42 @@ msgid "Drag & Drop Files Here"
 msgstr "Кидайте ваши документы сюда"
 
 #: ./src/icc/cellula/views.py:291
-#, c-format, fuzzy
 msgid "Debug graph"
-msgstr "Отладка графа '%s'"
+msgstr "Отладка графа"
 
 #: ./src/icc/cellula/views.py:306
 msgid "Debug search"
-msgstr ""
+msgstr "Отладка поиска"
 
 #: ./src/icc/cellula/views.py:488 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
 msgstr "Вход"
 
-#: ./src/icc/cellula/views.py:499
+#: ./src/icc/cellula/views.py:503
 msgid "Register new user"
 msgstr "Зарегистрировать нового пользователя"
 
-#: ./src/icc/cellula/views.py:501
+#: ./src/icc/cellula/views.py:505
 msgid "Enter Your account data"
 msgstr "Данные вашей учетной записи"
 
-#: ./src/icc/cellula/views.py:506
+#: ./src/icc/cellula/views.py:510
 msgid "Cellula"
 msgstr "ЭКлетка"
 
-#: ./src/icc/cellula/views.py:513
+#: ./src/icc/cellula/views.py:517
+msgid "Register"
+msgstr "Регистрация"
+
+#: ./src/icc/cellula/views.py:522
 msgid "Maintainance View"
 msgstr "Обслуживание"
 
-#: ./src/icc/cellula/views.py:521
+#: ./src/icc/cellula/views.py:530
 msgid "Test View"
 msgstr "Тестовый вид"
 
-#: ./src/icc/cellula/views.py:526
+#: ./src/icc/cellula/views.py:535
 msgid "E-Mail"
 msgstr "Почта"
 
@@ -105,7 +108,7 @@ msgstr "Вернуться"
 
 #: ./src/icc/cellula/templates/login.pt:99
 #: ./src/icc/cellula/templates/login.pt:104
-#: ./src/icc/cellula/templates/loginLTE.pt:66
+#: ./src/icc/cellula/templates/loginLTE.pt:72
 msgid "Sign In"
 msgstr "Войти"
 
@@ -181,7 +184,6 @@ msgid "Incoming #"
 msgstr "Входящий №"
 
 #: ./src/icc/cellula/templates/loginLTE.pt:12
-#, fuzzy
 msgid "Log in"
 msgstr "Вход"
 
@@ -193,29 +195,37 @@ msgstr "Адрес email"
 msgid "Password"
 msgstr "Пароль"
 
-#: ./src/icc/cellula/templates/loginLTE.pt:59
+#: ./src/icc/cellula/templates/loginLTE.pt:56
+msgid "Confirm password"
+msgstr "Подтверждение пароля"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:65
 msgid "Remember Me"
 msgstr "Запомнить меня"
 
-#: ./src/icc/cellula/templates/loginLTE.pt:73
-msgid "- OR -"
-msgstr "- ИЛИ -"
+#: ./src/icc/cellula/templates/loginLTE.pt:82
+msgid "Register a new membership"
+msgstr "Зарегистрировать нового пользователя"
 
-#: ./src/icc/cellula/templates/loginLTE.pt:76
-msgid "Sign in using Facebook"
-msgstr "Войти учетной записью Facebook"
+#: ./src/icc/cellula/templates/loginLTE.pt:88
+msgid "Login to an existing account"
+msgstr "Войти в существующую учетную запись"
 
-#: ./src/icc/cellula/templates/loginLTE.pt:80
-msgid "Sign in using Google+"
-msgstr "Войти учетной записью Google+"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:85
+#: ./src/icc/cellula/templates/loginLTE.pt:90
 msgid "I forgot my password"
 msgstr "Я забыл свой пароль"
 
-#: ./src/icc/cellula/templates/loginLTE.pt:86
-msgid "Register a new membership"
-msgstr "Зарегистрировать нового пользователя"
+#: ./src/icc/cellula/templates/loginLTE.pt:93
+msgid "- OR -"
+msgstr "- ИЛИ -"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:96
+msgid "Sign in using Facebook"
+msgstr "Войти учетной записью Facebook"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:100
+msgid "Sign in using Google+"
+msgstr "Войти учетной записью Google+"
 
 #~ msgid "title_dashboard"
 #~ msgstr "Информационная панель"
