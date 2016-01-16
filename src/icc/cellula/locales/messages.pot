@@ -1,12 +1,12 @@
 #
 # SOME DESCRIPTIVE TITLE
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2015-12-22 16:40+0800\n"
+"POT-Creation-Date: 2016-01-16 11:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,51 +14,81 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
-"Generated-By: Lingua 4.5.1\n"
+"Generated-By: Lingua 4.6\n"
 
-#: ./src/icc/cellula/views.py:48
+#: ./src/icc/cellula/views.py:58
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:120
+#: ./src/icc/cellula/views.py:145
 msgid "Drag & Drop Files Here"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:434
+#: ./src/icc/cellula/views.py:459
 msgid "Register new user"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:436
+#: ./src/icc/cellula/views.py:461
 msgid "Enter Your account data"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:441
+#: ./src/icc/cellula/views.py:466
 msgid "Cellula"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:453
+#: ./src/icc/cellula/views.py:478
 msgid "Dashboard"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:460 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/views.py:485 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:546
+#: ./src/icc/cellula/views.py:571
 #, c-format
 msgid "Debug graph '%s'"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:553
+#: ./src/icc/cellula/views.py:578
 msgid "Debug search"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:560
+#: ./src/icc/cellula/views.py:585
 msgid "E-Mail"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:567 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/views.py:592 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:49
+msgid "Username:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:60
+msgid "Password:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:74
+msgid "Confirm Password:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:94
+msgid "Go back"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:99
+#: ./src/icc/cellula/templates/login.pt:104
+msgid "Sign In"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:111
+#: ./src/icc/cellula/templates/login.pt:116
+msgid "Sign Up"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:127
+msgid "Forgot Something ?"
 msgstr ""
 
 #. Default: Cellula
@@ -96,36 +126,6 @@ msgstr ""
 
 #: ./src/icc/cellula/templates/index.pt:325
 msgid "Home"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:49
-msgid "Username:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:60
-msgid "Password:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:74
-msgid "Confirm Password:"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:94
-msgid "Go back"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:99
-#: ./src/icc/cellula/templates/login.pt:104
-msgid "Sign In"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:111
-#: ./src/icc/cellula/templates/login.pt:116
-msgid "Sign Up"
-msgstr ""
-
-#: ./src/icc/cellula/templates/login.pt:127
-msgid "Forgot Something ?"
 msgstr ""
 
 #: ./src/icc/cellula/templates/doc_table.pt:8
