@@ -288,7 +288,7 @@ margin-right:5px;
 
         """
 @view_config(route_name="debug_graph", renderer='templates/indexLTE.pt',
-             title=_("Debug graph"))
+             title=_("Debug graph"), permission='view_debug')
 class GraphView(View):
     @property
     def body(self):

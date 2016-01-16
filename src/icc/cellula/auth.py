@@ -6,6 +6,8 @@ import logging
 logger=logging.getLogger('icc.cellula')
 
 def auth_callback(userid, request):
+
+    import pdb; pdb.set_trace()
     logger.warning("No User Storage implemented Yet.")
     return None
 
