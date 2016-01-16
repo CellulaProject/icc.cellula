@@ -17,6 +17,8 @@ import tempfile
 import datetime
 from string import Template
 
+from icc.cellula.auth import *
+
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask
 import logging

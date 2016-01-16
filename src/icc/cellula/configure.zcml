@@ -56,6 +56,19 @@
       factory="icc.rdfservice.DocMetadataStorage"
       name="documents"
       />
+
+  <utility
+      factory="icc.cellula.auth.AuthenticationPolicy"
+      provides="pyramid.interfaces.IAuthenticationPolicy"
+      name="authen_policy"
+      />
+
+  <utility
+      factory="icc.cellula.auth.AuthorizationPolicy"
+      provides="pyramid.interfaces.IAuthorizationPolicy"
+      name="author_policy"
+      />
+
 <!--
   <utility
       factory="icc.rdfservice.OrgStorage"

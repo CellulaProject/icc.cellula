@@ -6,6 +6,7 @@ from pkg_resources import resource_filename,resource_stream
 from zope.component import getGlobalSiteManager, getUtility
 from zope.interface import Interface
 from icc.cellula.interfaces import IWorker
+from pyramid.interfaces import IAuthorizationPolicy, IAuthenticationPolicy
 import sys,os
 import logging
 logger=logging.getLogger("icc.cellula")
@@ -51,7 +52,10 @@ config.set_request_factory(request_factory)
 """
 
 def main(global_config, **settings):
-    config = Configurator(settings=settings)
+    config = Configurator(settings=settings,
+        authentication_policy=getUtility(IAuthenticationPolicy, "authen_policy"),
+        authorization_policy=getUtility(IAuthorizationPolicy,   "author_policy")
+    )
     config.add_static_view('images', 'icc.cellula:static/images', cache_max_age=3600)
     config.add_static_view('fonts', 'icc.cellula:static/fonts', cache_max_age=3600)
     config.add_static_view('script', 'icc.cellula:static/script', cache_max_age=3600)
