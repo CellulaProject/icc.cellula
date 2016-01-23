@@ -5,7 +5,7 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       i18n:domain="icc.cellula"
       >
-<head tal:define="_action view.action()">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title><span tal:replace="view.sys_info|default">AdminLTE 2</span>
@@ -52,7 +52,7 @@
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback" tal:condition='view.register'>
-        <input type="password" class="form-control"
+        <input type="password_confirm" class="form-control"
                placeholder="Confirm password"
                i18n:attributes="placeholder">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>

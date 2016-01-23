@@ -117,8 +117,12 @@ class View(object):
         and return value (if not None) set as 'answer'
         global in template rendering.
         """
+    def action(self):
+        """Make some action, e.g. use POST data.
+        """
 
     def __call__(self):
+        self.action()
         answer=self.answer()
         view={'view':self}
         if answer != None:
@@ -502,7 +506,7 @@ class ShowDocView(SendDocView):
         return response
 
 @view_config(route_name="login",renderer="templates/loginLTE.pt",
-             title=_("Login"))
+             title=_("Login"), request_method=("GET", "POST"))
 class LoginRegisterView(View):
 
     @property
@@ -527,7 +531,10 @@ class LoginRegisterView(View):
         return _("Cellula")
 
     def action(self):
-        print (self.request.GET)
+        print ("-----> ", list(self.request.POST.items()))
+        print (self.request.POST.get("email"))
+        print (self.request.POST.get("password"))
+        print (self.request.POST.get("password_confirm"))
         return True
 
 @view_config(route_name="register",renderer="templates/loginLTE.pt",
