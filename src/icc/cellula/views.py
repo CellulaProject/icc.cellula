@@ -19,6 +19,9 @@ from string import Template
 
 from icc.cellula.auth import *
 
+from pyramid.security import Allow
+from pyramid.security import Everyone, Authenticated
+
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask
 import logging
@@ -287,9 +290,15 @@ margin-right:5px;
     }
 
         """
+
 @view_config(route_name="debug_graph", renderer='templates/indexLTE.pt',
-             title=_("Debug graph"), permission='view_debug')
+             title=_("Debug graph"))
 class GraphView(View):
+
+    __acl__ = [
+            (Allow, Authenticated, 'view_debug'),
+        ]
+
     @property
     def body(self):
         FORMAT='n3'
@@ -301,6 +310,14 @@ class GraphView(View):
             "Graph storage: "+cgi.escape(str(g.store))+" <br/>"
         b = "<pre>"+cgi.escape(s)+"</pre>"
         return h+b
+
+    '''
+    def __acl__(self):
+        logger.info("-----> ACL query ----")
+        return [
+            (Allow, Everyone, 'view_debug'),
+        ]
+    '''
 
 @view_config(route_name="debug_search", renderer='templates/search.pt',
              title=_("Debug search"))
