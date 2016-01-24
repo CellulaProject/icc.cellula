@@ -9,7 +9,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title><span tal:replace="view.sys_info|default">AdminLTE 2</span>
-  | <span i18n:translate='' tal:omit-tag=''>Log in</span></title>
+    | <span i18n:translate='' tal:omit-tag=''>Log in </span>
+  </title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.5 -->
@@ -40,56 +41,72 @@
   <div class="login-box-body">
     <p class="login-box-msg" tal:content="view.title">Sign in to start your session</p>
 
-    <form action="../../index2.html" tal:attributes="action request.url" method="post">
+    <form action="../../index2.html"
+          tal:attributes="action request.url"
+          method="post"
+          tal:condition="not: view.logout"
+          >
       <div class="form-group has-feedback">
-        <input type="email" class="form-control" placeholder="Email"
+        <input type="email" class="form-control" placeholder="Email" name="email"
                i18n:attributes="placeholder">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password"
+        <input type="password" class="form-control"
+               placeholder="Password"
+               name="password"
                i18n:attributes="placeholder">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback" tal:condition='view.register'>
-        <input type="password_confirm" class="form-control"
-               placeholder="Confirm password"
+        <input type="password" class="form-control"
+               placeholder="Confirm password" name="password_confirm"
                i18n:attributes="placeholder">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
         <div class="col-xs-8">
-          <div class="checkbox icheck">
+          <div class="checkbox icheck" tal:condition="view.login">
             <label>
-              <input type="checkbox">
+              <input type="checkbox" name="remember">
               <span i18n:translate=''>Remember Me</span>
             </label>
           </div>
         </div>
-        <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block
-          btn-flat" i18n:translate=''>Sign In</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat"
+                                       tal:condition="view.login"
+                  i18n:translate='' name="sign_in">Sign In</button>
+          <button type="submit" class="btn btn-success btn-block btn-flat"
+                                       tal:condition="view.register"
+                  i18n:translate='' name="sign_up">Sign up</button>
         </div>
         <!-- /.col -->
       </div>
     </form>
 
-    <a href="register.html"
-       tal:attributes="href request.route_url('register')"
-       class="text-center"
-       i18n:translate=''
-       tal:condition="view.login">Register a new membership</a>
+    <div class="callout callout-info" tal:condition="view.logout">
+      <h4 i18n:translate=''>You logged out!</h4>
+
+      <p i18n:translate=''>You can login again with a link below.</p>
+    </div>
 
     <a href="register.html"
        tal:attributes="href request.route_url('login')"
        class="text-center"
        i18n:translate=''
-       tal:condition="view.register">Login to an existing account</a>
+       tal:condition="not: view.login">Login to an existing account</a>
+    <br>
+    <a href="register.html"
+       tal:attributes="href request.route_url('register')"
+       class="text-center"
+       i18n:translate=''
+       tal:condition="not: view.register">Register a new membership</a>
     <br>
     <a href="#" i18n:translate=''>I forgot my password</a><br>
 
-    <div class="social-auth-links text-center">
+    <div class="social-auth-links text-center"
+         tal:condition="not: view.logout">
       <p i18n:translate=''>- OR -</p>
       <a href="#" class="btn btn-block btn-social btn-facebook
                          btn-flat"><i class="fa fa-facebook"></i>

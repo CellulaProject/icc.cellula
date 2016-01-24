@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2016-01-17 04:21+0800\n"
+"POT-Creation-Date: 2016-01-24 22:33+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,75 +16,79 @@ msgstr ""
 "Language: \n"
 "Generated-By: Lingua 4.6\n"
 
-#: ./src/icc/cellula/views.py:35
+#: ./src/icc/cellula/views.py:40
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:58 ./src/icc/cellula/views.py:540
+#: ./src/icc/cellula/views.py:63 ./src/icc/cellula/views.py:628
 msgid "Dashboard"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:59
+#: ./src/icc/cellula/views.py:64
 msgid "Archive"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:60
+#: ./src/icc/cellula/views.py:65
 msgid "Metal"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:61
+#: ./src/icc/cellula/views.py:66
 msgid "Maintain"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:62
+#: ./src/icc/cellula/views.py:67
 msgid "Debug"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:169 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/views.py:194 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:179
+#: ./src/icc/cellula/views.py:204
 msgid "Drag & Drop Files Here"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:291
+#: ./src/icc/cellula/views.py:317
 msgid "Debug graph"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:306
+#: ./src/icc/cellula/views.py:345
 msgid "Debug search"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:488 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/views.py:527 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:503
+#: ./src/icc/cellula/views.py:546
 msgid "Register new user"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:505
+#: ./src/icc/cellula/views.py:548
 msgid "Enter Your account data"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:510
+#: ./src/icc/cellula/views.py:553
 msgid "Cellula"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:517
+#: ./src/icc/cellula/views.py:599
 msgid "Register"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:522
+#: ./src/icc/cellula/views.py:604
+msgid "Logout"
+msgstr ""
+
+#: ./src/icc/cellula/views.py:610
 msgid "Maintainance View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:530
+#: ./src/icc/cellula/views.py:618
 msgid "Test View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:535
+#: ./src/icc/cellula/views.py:623
 msgid "E-Mail"
 msgstr ""
 
@@ -106,7 +110,7 @@ msgstr ""
 
 #: ./src/icc/cellula/templates/login.pt:99
 #: ./src/icc/cellula/templates/login.pt:104
-#: ./src/icc/cellula/templates/loginLTE.pt:72
+#: ./src/icc/cellula/templates/loginLTE.pt:79
 msgid "Sign In"
 msgstr ""
 
@@ -181,46 +185,70 @@ msgstr ""
 msgid "Incoming #"
 msgstr ""
 
+#: ./src/icc/cellula/templates/indexLTE.pt:339
+msgid "Profile"
+msgstr ""
+
+#: ./src/icc/cellula/templates/indexLTE.pt:345
+msgid "Sign out"
+msgstr ""
+
+#: ./src/icc/cellula/templates/indexLTE.pt:354
+msgid "Login or register new user"
+msgstr ""
+
 #: ./src/icc/cellula/templates/loginLTE.pt:12
 msgid "Log in"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:45
+#: ./src/icc/cellula/templates/loginLTE.pt:50
 msgid "Email"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:50
+#: ./src/icc/cellula/templates/loginLTE.pt:56
 msgid "Password"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:56
+#: ./src/icc/cellula/templates/loginLTE.pt:63
 msgid "Confirm password"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:65
+#: ./src/icc/cellula/templates/loginLTE.pt:72
 msgid "Remember Me"
 msgstr ""
 
 #: ./src/icc/cellula/templates/loginLTE.pt:82
-msgid "Register a new membership"
+msgid "Sign up"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:88
+#: ./src/icc/cellula/templates/loginLTE.pt:89
+msgid "You logged out!"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:91
+msgid "You can login again with a link below."
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:98
 msgid "Login to an existing account"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:90
+#: ./src/icc/cellula/templates/loginLTE.pt:104
+msgid "Register a new membership"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:106
 msgid "I forgot my password"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:93
+#: ./src/icc/cellula/templates/loginLTE.pt:110
 msgid "- OR -"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:96
+#: ./src/icc/cellula/templates/loginLTE.pt:113
 msgid "Sign in using Facebook"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:100
+#: ./src/icc/cellula/templates/loginLTE.pt:117
 msgid "Sign in using Google+"
 msgstr ""

@@ -282,18 +282,37 @@
           </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
+            <span tal:omit-tag="" tal:condition="view.auth_user">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander Pierce</span>
+              <img src="dist/img/user2-160x160.jpg"
+                   class="user-image"
+                   alt="User Image"
+                   tal:condition="view.auth_user_image"
+                   tal:attributes="src string:dist/img/{view.auth_user_image}-160x160.jpg"
+                   >
+              <span class="hidden-xs"
+                    tal:content="view.auth_user_name"
+                    tal:condition="nothing"
+                    >Alexander Pierce</span>
+              <i class="glyphicon glyphicon-user"
+                 tal:condition="not: view.auth_user_image"
+                 ></i>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="dist/img/user2-160x160.jpg"
+                     class="img-circle" alt="User Image"
+                     tal:condition="view.auth_user_image"
+                     tal:attributes="src string:dist/img/{view.auth_user_image}-160x160.jpg"
+                     >
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <span tal:replace="view.auth_user_name"
+                        >Alexander Pierce</span>
+                  - <span tal:replace="view.auth_user_role"
+                          >Web Developer</span>
+                  <small>Member since Jan. 2016</small>
                 </p>
               </li>
               <!-- Menu Body -->
@@ -314,16 +333,31 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="#" class="btn btn-default btn-flat"
+                     i18n:translate=''
+                     tal:attributes="href request.route_url('profile')"
+                     >Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="#" class="btn btn-default btn-flat"
+                     i18n:translate=''
+                     tal:attributes="href request.route_url('logout')"
+                     >Sign out</a>
                 </div>
               </li>
             </ul>
+            </span>
+            <span tal:condition="not: view.auth_user" tal:omit-tag="">
+              <a href="#"
+                 tal:attributes="href request.route_url('login')"
+                 ><i class="glyphicon glyphicon-log-in"
+                     title="Login or register new user"
+                     i18n:attributes="title"
+                     ></i></a>
+            </span>
           </li>
           <!-- Control Sidebar Toggle Button -->
-          <li>
+          <li tal:condition="nothing">
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
           </li>
         </ul>
@@ -651,7 +685,8 @@
 
                 <p class="message">
                   <a href="#" class="name">
-                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
+                    <small class="text-muted pull-right">
+                      <i class="fa fa-clock-o"></i> 5:15</small>
                     Alexander Pierce
                   </a>
                   I would like to meet you to discuss the latest news about

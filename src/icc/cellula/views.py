@@ -21,6 +21,8 @@ from icc.cellula.auth import *
 
 from pyramid.security import Allow
 from pyramid.security import Everyone, Authenticated
+from pyramid.security import remember, forget
+from pyramid.httpexceptions import HTTPFound
 
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask
@@ -171,6 +173,22 @@ class View(object):
     @property
     def include_scripts(self):
         return self.__class__.scripts
+
+    @property
+    def auth_user(self):
+        return self.request.authenticated_userid
+
+    @property
+    def auth_user_name(self):
+        return "Evgeny Cherkashin"
+
+    @property
+    def auth_user_role(self):
+        return "Administrator"
+
+    @property
+    def auth_user_image(self):
+        return None
 
 @view_config(route_name='archive',renderer='templates/indexLTE.pt',
              request_method="GET", title=_('Document Archive'))
@@ -324,7 +342,7 @@ class GraphView(View):
     '''
 
 @view_config(route_name="debug_search", renderer='templates/search.pt',
-             title=_("Debug search"))
+             title=_("Debug search"), permission='view')
 class SearchView(View):
 
     @property
@@ -506,7 +524,7 @@ class ShowDocView(SendDocView):
         return response
 
 @view_config(route_name="login",renderer="templates/loginLTE.pt",
-             title=_("Login"), request_method=("GET", "POST"))
+             title=_("Login"), request_method=("GET","POST"))
 class LoginRegisterView(View):
 
     @property
@@ -516,6 +534,10 @@ class LoginRegisterView(View):
     @property
     def login(self):
         return self.route_name=="login"
+
+    @property
+    def logout(self):
+        return self.route_name=="logout"
 
     @property
     def prompt(self):
@@ -530,17 +552,59 @@ class LoginRegisterView(View):
         _=self._
         return _("Cellula")
 
-    def action(self):
-        print ("-----> ", list(self.request.POST.items()))
-        print (self.request.POST.get("email"))
-        print (self.request.POST.get("password"))
-        print (self.request.POST.get("password_confirm"))
-        return True
+    def answer(self):
+        req=self.request
+        p=req.POST
+        email=p.get('email', '')
+        password=p.get('password', '')
+        confirm=p.get('password_confirm', '')
+        stay=p.get('remember', '')
+        sign_in=p.get('sign_in', None)
+        sign_up=p.get('sign_up', None)
+        if sign_up!=None:
+            if '' in [email, password, confirm]:
+                logger.error("Wrong Sign_Up parameters")
+                return
+        if sign_in!=None:
+            if None in [email, password]:
+                logger.error("Wrong Sign_In parameters")
+                return
+        email=email.strip()
+        # check or register user
+        if sign_in!=None:
+            if stay == 'on':
+                max_age=864000 # 10 days FIXME
+                headers = remember(req, email, max_age=max_age)
+            else:
+                headers = remember(req, email)
+            response = req.response
+            response.headerlist.extend(headers)
+            url=req.route_url('dashboard')
+            response.status_int=302
+            response.location=url
+            return response
+
+    def unregister(self):
+        headers = forget(self.request)
+        self.request.response.headerlist.extend(headers)
+
+    def __call__(self):
+        d=View.__call__(self)
+        #
+        if 'answer' in d:
+            return d['answer']
+        return d
 
 @view_config(route_name="register",renderer="templates/loginLTE.pt",
              title=_("Register"))
 class RegisterView(LoginRegisterView):
     pass
+
+@view_config(route_name="logout",renderer="templates/loginLTE.pt",
+             title=_("Logout"))
+class LogoutView(LoginRegisterView):
+    def action(self):
+        self.unregister()
 
 @view_config(route_name='maintain',renderer='templates/maintain.pt',
              title=_("Maintainance View"))
@@ -630,18 +694,24 @@ class UploadDocView(View):
 
         return things
 
+@view_config(route_name="profile")
+class ProfileView(View):
+    pass
+
 def includeme(config):
     #config.scan("icc.cellula.views")
     config.scan()
     config.add_route('dashboard', "/")
     config.add_route('archive', "/archive")
     config.add_route('email', "/mail")
+    config.add_route('profile', "/profile")
     config.add_route('upload', "/file_upload")
     config.add_route('get_docs', "/docs")
     config.add_route('get_doc', "/doc")
 
     config.add_route('login', "/login")
     config.add_route('register', "/register")
+    config.add_route('logout', "/logout")
 
     config.add_route('debug_graph', "/archive_debug")
     config.add_route('debug_search', "/search")
