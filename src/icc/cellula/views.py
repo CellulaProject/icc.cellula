@@ -570,6 +570,8 @@ class LoginRegisterView(View):
                 logger.error("Wrong Sign_In parameters")
                 return
         email=email.strip()
+        if not email.startswith("mailto:"):
+            email="mailto:"+email
         # check or register user
         if sign_in!=None:
             if stay == 'on':
@@ -640,6 +642,8 @@ class UploadDocView(View):
 
         things={}
         things.update(headers)
+        things['user_id']=self.auth_user
+        logger.debug("USER_ID={}".format(self.auth_user))
 
         fs=request.POST.get('file', None)
 
