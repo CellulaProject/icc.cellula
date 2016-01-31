@@ -526,6 +526,15 @@ class ShowDocView(SendDocView):
 @view_config(route_name="login",renderer="templates/loginLTE.pt",
              title=_("Login"), request_method=("GET","POST"))
 class LoginRegisterView(View):
+    LOGIN="""
+    SELECT DISTINCT ?hash ?name
+    WHERE {{
+      ?user nie:identifier "{ID}" .
+      ?user a foaf:Person .
+      ?user foaf:name ?name .
+    OPTIONAL {{ ?user cll:password ?hash }} .
+    }}
+    """
 
     @property
     def register(self):
@@ -572,6 +581,11 @@ class LoginRegisterView(View):
         email=email.strip()
         if not email.startswith("mailto:"):
             email="mailto:"+email
+        agents=getUtility(IRDFStorage, name="documents")
+        if self.login:
+            q=self.__class__.LOGIN.format(ID=email)
+            for passwd_hash, user_name in agents.sparql(q):
+                print ("----->", passwd_hash, user_name)
         # check or register user
         if sign_in!=None:
             if stay == 'on':
