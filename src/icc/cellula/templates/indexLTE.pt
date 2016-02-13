@@ -73,14 +73,17 @@
         <ul class="nav navbar-nav">
           <li class="topbar-search-left">
             <!-- search form -->
-            <form action="#" method="get" class="sidebar-form topbar-form"
+            <form action="#" method="get" class="navbar-form
+                                                 navbar-left"
+                  role="search"
                   tal:attributes="action request.route_url('debug_search')"
                   >
               <div class="input-group topbar-input-group">
-                <input type="text" name="q" class="form-control topbar-small" placeholder="Search...">
-                <span class="input-group-btn topbar-small">
+                <input type="text" name="q" class="form-control"
+                       placeholder="Search...">
+                <span class="input-group-btn">
                   <button type="submit" name="search"
-                          id="search-btn" class="btn btn-flat topbar-small"><i class="fa fa-search"></i>
+                          id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                   </button>
                 </span>
               </div>

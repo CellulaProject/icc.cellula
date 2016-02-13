@@ -103,7 +103,9 @@
        i18n:translate=''
        tal:condition="not: view.register">Register a new membership</a>
     <br>
-    <a href="#" i18n:translate=''>I forgot my password</a><br>
+    <a href="#" i18n:translate=''
+       tal:attributes="href request.route_url('restore_password')"
+       >I forgot my password</a><br>
 
     <div class="social-auth-links text-center"
          tal:condition="not: view.logout">

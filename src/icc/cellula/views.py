@@ -622,6 +622,11 @@ class LogoutView(LoginRegisterView):
     def action(self):
         self.unregister()
 
+@view_config(route_name="restore_password",renderer="templates/restore_login.pt",
+             title=_("Restore password"))
+class RestoreLoginView(View):
+    pass
+
 @view_config(route_name='maintain',renderer='templates/maintain.pt',
              title=_("Maintainance View"))
 class MaintainanceView(View):
@@ -730,6 +735,7 @@ def includeme(config):
     config.add_route('login', "/login")
     config.add_route('register', "/register")
     config.add_route('logout', "/logout")
+    config.add_route('restore_password', "/restore")
 
     config.add_route('debug_graph', "/archive_debug")
     config.add_route('debug_search', "/search")
