@@ -9,7 +9,7 @@ pyramid.debug_templates = true
 # pyramid.default_locale_name = en
 pyramid.default_locale_name = ru
 
-pyramid.includes = pyramid_debugtoolbar pyramid_mailer
+pyramid.includes = pyramid_debugtoolbar pyramid_mailer pyramid_chameleon cornice
 debugtoolbar.hosts = 192.168.0.0/16 2001:470:dfda::/48 2001:470:18fb::/48 127.0.0.1/8 ::1/128
 
 mail.host = smtp.gmail.com

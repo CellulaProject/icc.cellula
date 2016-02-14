@@ -8,6 +8,7 @@ from icc.cellula.interfaces import ILock, ISingletonTask, IQueue, IWorker
 from zope.component import getUtility, queryUtility
 from zope.interface import implementer, Interface
 from string import Template
+import pyramid_mailer.interfaces
 import time
 import logging
 logger=logging.getLogger('icc.cellula')
@@ -279,18 +280,18 @@ class ContentIndexTask(Task):
             time.sleep(self.delay)
             self.enqueue(ContentIndexTask())
 
-class MailSendTask(Task):
+class EmailSendTask(Task):
     def __init__(self,
-                 message=None,
-                 subject="hello world",
-                 sender="admin@mysite.com",
-                 recipients=["arthur.dent@gmail.com"],
-                 body="hello, arthur",
-                 attachments=None
+                 message=None
                  ):
 
-        self.maler=
-
+        Task.__init__(self)
+        self.maler=getUtility(pyramid_mailer.interfaces.IMailer, name="mailer")
+        self.message=message
 
     def run(self):
-        self.mailer.send_immediately(message, fail_silently=False)
+        print ("Action!")
+        if self.message():
+            self.mailer.send_immediately(message, fail_silently=False)
+        else:
+            debug.error("Couldn't send message {}".format(self.message))

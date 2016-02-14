@@ -63,7 +63,6 @@ def main(global_config, **settings):
     config.add_static_view('test', 'icc.cellula:static/test', cache_max_age=3600)
     config.add_static_view('LTE', 'icc.cellula:static/AdminLTE', cache_max_age=3600)
     config.include("cornice")
-    config.include('pyramid_chameleon')
 
     config.add_translation_dirs('icc.cellula:locales')
     config.add_subscriber('icc.cellula.i18n.add_renderer_globals',

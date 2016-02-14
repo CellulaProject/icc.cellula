@@ -28,7 +28,10 @@ import icc.cellula.mailing as mailing
 import pyramid_mailer.interfaces
 
 import cgi
-from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask
+from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask, EmailSendTask
+import random
+
+
 import logging
 logger=logging.getLogger('icc.cellula')
 
@@ -628,11 +631,15 @@ class LogoutView(LoginRegisterView):
 
 @view_config(route_name="restore_password",renderer="templates/restore_login.pt",
              title=_("Restore password"))
-class RestoreLoginView(View):
+class RestorePasswordView(View):
     def action(self):
-        print ("Action!")
-        mailer=getUtility(pyramid_mailer.interfaces.IMail,name="mailer")
-
+        p=self.request.POST
+        restore=p.get("restore",None)
+        if restore != None:
+            code=hex(random.getrandbits(128))[2:] # Chop "0x", we need only a string
+            msg=mailing.RestorePasswordMessage(view=self, code=code)
+            task=EmailSendTask(msg)
+            task.enqueue()
 
 @view_config(route_name='maintain',renderer='templates/maintain.pt',
              title=_("Maintainance View"))

@@ -410,7 +410,13 @@
                 <td>
                   <table class="soapbox">
                     <tr>
-                      <td class="soapbox-title">Your account settings have been updated</td>
+                      <td class="soapbox-title" i18n:translate=''>
+                        <metal:block metal:define-slot="message">
+                        <span i18n:translate="">
+                          Your account settings have been updated
+                        </span>
+                        </metal:block>
+                      </td>
                     </tr>
                   </table>
                   <table class="body">
@@ -420,8 +426,12 @@
                         <div class="body-title">Hi <span tal:replace="view.name">{{ first_name }}</span>,</div>
                         <table class="body-text">
                           <tr>
-                            <td class="body-text-cell" i18n:translate="">
+                            <td class="body-text-cell">
+                            <metal:block metal:define-slot="content">
+                              <span i18n:translate="">
                               Your account settings have been updated. If you did not update your settings, please <a href="#">contact support</a>.
+                              </span>
+                            </metal:block>
                             </td>
                           </tr>
                         </table>

@@ -1,5 +1,6 @@
 import pyramid_mailer.message
-from pyramid.renderers import render
+# import pyramid_chameleon
+from pyramid.renderers import render_to_response
 
 import logging
 logger=logging.getLogger('icc.cellula')
@@ -16,15 +17,21 @@ class Message(pyramid_mailer.message.Message):
                  view=None,
                  request=None,
                  response=None,
-                 *args, **kwargs):
-        Message.__init__(self,
-                         *args, **kwargs)
+                 **kwargs):
+        pyramid_mailer.message.Message.__init__(self, **kwargs)
         if view == None:
             raise ValueError("no view given as argument")
         self._setup=None
-        self.request=request
         self.view=view
+        if request==None:
+            request=view.request
+        if response==None:
+            response=request.response
+        if model==None:
+            model=view.traverse
+        self.request=request
         self.response=response
+        self.model=model
         self.extra_args=kwargs
 
     def __call__(self):
@@ -52,24 +59,29 @@ class Message(pyramid_mailer.message.Message):
             'view':self.view,
             'response':self.response,
             'model':self.model,
-            'subject':self.subject,
-            'recipients':self.recipients,
-            'body':self.body,
-            'html':self.html,
-            'sender':self.sender,
-            'cc':self.cc,
-            'bcc':self.bcc,
-            'extra_headers':self.extra_headers,
-            'attachments':self.attachments,
+            # 'subject':self.subject,
+            # 'recipients':self.recipients,
+            # 'body':self.body,
+            # 'html':self.html,
+            # 'sender':self.sender,
+            # 'cc':self.cc,
+            # 'bcc':self.bcc,
+            # 'extra_headers':self.extra_headers,
+            # 'attachments':self.attachments,
             'template':template,
+            'email':self,
             }
         for k,v in self.extra_args.items():
             if not k in d:
                 d[k]=v
 
-        self.html=render(template, d, request=self.request)
+        self.html=render_to_response(template, d, request=self.request)
+        print (self.html)
         return True
 
 
 class RestorePasswordMessage(Message):
-    def setup(self):
+    template="templates/email/restore-password.pt"
+    def __init__(self, code, **kwargs):
+        Message.__init__(self, **kwargs)
+        self.code=code

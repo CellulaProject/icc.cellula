@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2016-02-14 09:49+0800\n"
+"POT-Creation-Date: 2016-02-15 00:51+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -18,83 +18,83 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
 
-#: ./src/icc/cellula/views.py:40
+#: ./src/icc/cellula/views.py:46
 msgid "====TITLE====="
 msgstr "====Заголовок страницы===="
 
-#: ./src/icc/cellula/views.py:63 ./src/icc/cellula/views.py:649
+#: ./src/icc/cellula/views.py:69 ./src/icc/cellula/views.py:663
 msgid "Dashboard"
 msgstr "Информационная панель"
 
-#: ./src/icc/cellula/views.py:64
+#: ./src/icc/cellula/views.py:70
 msgid "Archive"
 msgstr "Архив"
 
-#: ./src/icc/cellula/views.py:65
+#: ./src/icc/cellula/views.py:71
 msgid "Metal"
 msgstr "Металл"
 
-#: ./src/icc/cellula/views.py:66
+#: ./src/icc/cellula/views.py:72
 msgid "Maintain"
 msgstr "Обслуживание"
 
-#: ./src/icc/cellula/views.py:67
+#: ./src/icc/cellula/views.py:73
 msgid "Debug"
 msgstr "Отладка"
 
-#: ./src/icc/cellula/views.py:194 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/views.py:201 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
 msgstr "Архив документов"
 
-#: ./src/icc/cellula/views.py:204
+#: ./src/icc/cellula/views.py:211
 msgid "Drag & Drop Files Here"
 msgstr "Кидайте ваши документы сюда"
 
-#: ./src/icc/cellula/views.py:317
+#: ./src/icc/cellula/views.py:324
 msgid "Debug graph"
 msgstr "Отладка графа"
 
-#: ./src/icc/cellula/views.py:345
+#: ./src/icc/cellula/views.py:352
 msgid "Debug search"
 msgstr "Отладка поиска"
 
-#: ./src/icc/cellula/views.py:527 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/views.py:534 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
 msgstr "Вход"
 
-#: ./src/icc/cellula/views.py:555
+#: ./src/icc/cellula/views.py:562
 msgid "Register new user"
 msgstr "Зарегистрировать нового пользователя"
 
-#: ./src/icc/cellula/views.py:557
+#: ./src/icc/cellula/views.py:564
 msgid "Enter Your account data"
 msgstr "Данные вашей учетной записи"
 
-#: ./src/icc/cellula/views.py:562
+#: ./src/icc/cellula/views.py:569
 msgid "Cellula"
 msgstr "ЭКлетка"
 
-#: ./src/icc/cellula/views.py:615
+#: ./src/icc/cellula/views.py:622
 msgid "Register"
 msgstr "Регистрация"
 
-#: ./src/icc/cellula/views.py:620
+#: ./src/icc/cellula/views.py:627
 msgid "Logout"
 msgstr "Выход"
 
-#: ./src/icc/cellula/views.py:626
+#: ./src/icc/cellula/views.py:633
 msgid "Restore password"
 msgstr "Восстановление пароля"
 
-#: ./src/icc/cellula/views.py:631
+#: ./src/icc/cellula/views.py:645
 msgid "Maintainance View"
 msgstr "Обслуживание"
 
-#: ./src/icc/cellula/views.py:639
+#: ./src/icc/cellula/views.py:653
 msgid "Test View"
 msgstr "Тестовый вид"
 
-#: ./src/icc/cellula/views.py:644
+#: ./src/icc/cellula/views.py:658
 msgid "E-Mail"
 msgstr "Почта"
 
@@ -212,7 +212,7 @@ msgid "Log in"
 msgstr "Вход"
 
 #: ./src/icc/cellula/templates/loginLTE.pt:50
-#: ./src/icc/cellula/templates/restore_login.pt:21
+#: ./src/icc/cellula/templates/restore_login.pt:23
 msgid "Email"
 msgstr "Email-адрес"
 
@@ -265,7 +265,6 @@ msgid "Sign in using Google+"
 msgstr "Войти учетной записью Google+"
 
 #: ./src/icc/cellula/templates/restore_login.pt:9
-#, fuzzy
 msgid ""
 "To restore your password enter your e-mail used for registering. <dynamic"
 " element>"
@@ -277,20 +276,34 @@ msgstr ""
 msgid "Account data"
 msgstr "Данные вашей учетной записи"
 
-#: ./src/icc/cellula/templates/restore_login.pt:23
+#: ./src/icc/cellula/templates/restore_login.pt:25
 msgid "To restore your password enter your e-mail used for registering."
 msgstr ""
 "Для восстановления пароля введите email-адрес, использованный при "
 "регистрации."
 
-#: ./src/icc/cellula/templates/restore_login.pt:27
+#: ./src/icc/cellula/templates/restore_login.pt:29
 msgid "An e-mail address used in registration."
 msgstr "Email, использованный при регистрации."
 
 #. Default: Submit
-#: ./src/icc/cellula/templates/restore_login.pt:38
+#: ./src/icc/cellula/templates/restore_login.pt:40
 msgid "submit-restore-password"
 msgstr "Восстановить пароль"
+
+#: ./src/icc/cellula/templates/email/main.pt:415
+msgid "Your account settings have been updated"
+msgstr "Настройки вашей учетной записи обновлены"
+
+#: ./src/icc/cellula/templates/email/main.pt:413
+msgid "<dynamic element>"
+msgstr ""
+
+#: ./src/icc/cellula/templates/email/main.pt:431
+msgid ""
+"Your account settings have been updated. If you did not update your "
+"settings, please <dynamic element>."
+msgstr ""
 
 #~ msgid "title_dashboard"
 #~ msgstr "Информационная панель"

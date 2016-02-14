@@ -134,8 +134,10 @@ class Task(object):
         # foreign !!!
         return apply(self.procedure, args=a, keywords=k)
 
-    def enqueue(self, task):
-        if self.processing=="process" and self.phase=="run":
+    def enqueue(self, task=None):
+        if task==None: # Means enqueue itself
+            task=self
+        if self.processing=="process" and self.phase=="run": # FIXME I do not unserstand what for is this line.
             raise RuntimeError ("cannot enqueue new task in foreign process")
         q=GetQueue("tasks")
         return q.put(task, block=False)

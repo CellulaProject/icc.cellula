@@ -15,7 +15,9 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form">
+            <form role="form" action="#" method="POST"
+                  tal:attributes="action request.url"
+                  >
               <div class="box-body">
                 <div class="form-group has-feedback">
                   <input type="email" class="form-control" placeholder="Email" name="email"
@@ -35,7 +37,7 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary" i18n:translate="submit-restore-password">Submit</button>
+                <button type="submit" class="btn btn-primary" name="restore" i18n:translate="submit-restore-password">Submit</button>
               </div>
             </form>
           </div>
