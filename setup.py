@@ -39,6 +39,7 @@ setup(name='icc.cellula',
 	'lingua',
 	'passlib',
 	'bcrypt',
+    'pyramid_mailer',
         ],
       dependency_links = [
         'https://github.com/eugeneai/rdflib-kyotocabinet/archive/master.zip#egg=rdflib-kyotocabinet-0.1',
@@ -60,4 +61,3 @@ setup(name='icc.cellula',
 #        ],
 #    },
 )
-

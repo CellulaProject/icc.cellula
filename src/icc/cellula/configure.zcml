@@ -96,6 +96,12 @@
       provides="icc.cellula.interfaces.ILock"
       name="indexing"
       />
+
+  <utility
+      factory="pyramid_mailer.mailer.Mailer"
+      provides="pyramid_mailer.interfaces.IMailer"
+      name="mailer"
+      />
 <!--
   <utility
       factory="queue.Queue"

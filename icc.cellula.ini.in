@@ -9,8 +9,16 @@ pyramid.debug_templates = true
 # pyramid.default_locale_name = en
 pyramid.default_locale_name = ru
 
-pyramid.includes = pyramid_debugtoolbar
+pyramid.includes = pyramid_debugtoolbar pyramid_mailer
 debugtoolbar.hosts = 192.168.0.0/16 2001:470:dfda::/48 2001:470:18fb::/48 127.0.0.1/8 ::1/128
+
+mail.host = smtp.gmail.com
+mail.port = 587
+mail.ssl  = True
+mail.username = celulla-admin@irnok.net
+mail.password = CLL-32767
+mail.default_sender = celulla-admin@irnok.net
+
 
 [content_storage]
 # Lookout! configurator sets 'file' as "<string>", i.e. with "'s!!!!

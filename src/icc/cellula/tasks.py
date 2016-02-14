@@ -278,3 +278,19 @@ class ContentIndexTask(Task):
             logger.debug ("Restart Indexing")
             time.sleep(self.delay)
             self.enqueue(ContentIndexTask())
+
+class MailSendTask(Task):
+    def __init__(self,
+                 message=None,
+                 subject="hello world",
+                 sender="admin@mysite.com",
+                 recipients=["arthur.dent@gmail.com"],
+                 body="hello, arthur",
+                 attachments=None
+                 ):
+
+        self.maler=
+
+
+    def run(self):
+        self.mailer.send_immediately(message, fail_silently=False)

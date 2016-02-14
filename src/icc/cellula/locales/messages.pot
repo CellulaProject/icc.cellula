@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2016-01-24 22:33+0800\n"
+"POT-Creation-Date: 2016-02-14 09:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:63 ./src/icc/cellula/views.py:628
+#: ./src/icc/cellula/views.py:63 ./src/icc/cellula/views.py:649
 msgid "Dashboard"
 msgstr ""
 
@@ -60,35 +60,39 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:546
+#: ./src/icc/cellula/views.py:555
 msgid "Register new user"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:548
+#: ./src/icc/cellula/views.py:557
 msgid "Enter Your account data"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:553
+#: ./src/icc/cellula/views.py:562
 msgid "Cellula"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:599
+#: ./src/icc/cellula/views.py:615
 msgid "Register"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:604
+#: ./src/icc/cellula/views.py:620
 msgid "Logout"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:610
+#: ./src/icc/cellula/views.py:626
+msgid "Restore password"
+msgstr ""
+
+#: ./src/icc/cellula/views.py:631
 msgid "Maintainance View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:618
+#: ./src/icc/cellula/views.py:639
 msgid "Test View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:623
+#: ./src/icc/cellula/views.py:644
 msgid "E-Mail"
 msgstr ""
 
@@ -185,15 +189,19 @@ msgstr ""
 msgid "Incoming #"
 msgstr ""
 
-#: ./src/icc/cellula/templates/indexLTE.pt:339
+#: ./src/icc/cellula/templates/indexLTE.pt:83
+msgid "Search..."
+msgstr ""
+
+#: ./src/icc/cellula/templates/indexLTE.pt:348
 msgid "Profile"
 msgstr ""
 
-#: ./src/icc/cellula/templates/indexLTE.pt:345
+#: ./src/icc/cellula/templates/indexLTE.pt:354
 msgid "Sign out"
 msgstr ""
 
-#: ./src/icc/cellula/templates/indexLTE.pt:354
+#: ./src/icc/cellula/templates/indexLTE.pt:363
 msgid "Login or register new user"
 msgstr ""
 
@@ -202,6 +210,7 @@ msgid "Log in"
 msgstr ""
 
 #: ./src/icc/cellula/templates/loginLTE.pt:50
+#: ./src/icc/cellula/templates/restore_login.pt:21
 msgid "Email"
 msgstr ""
 
@@ -237,18 +246,41 @@ msgstr ""
 msgid "Register a new membership"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:106
+#: ./src/icc/cellula/templates/loginLTE.pt:108
 msgid "I forgot my password"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:110
+#: ./src/icc/cellula/templates/loginLTE.pt:112
 msgid "- OR -"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:113
+#: ./src/icc/cellula/templates/loginLTE.pt:115
 msgid "Sign in using Facebook"
 msgstr ""
 
-#: ./src/icc/cellula/templates/loginLTE.pt:117
+#: ./src/icc/cellula/templates/loginLTE.pt:119
 msgid "Sign in using Google+"
+msgstr ""
+
+#: ./src/icc/cellula/templates/restore_login.pt:9
+msgid ""
+"To restore your password enter your e-mail used for registering. <dynamic "
+"element>"
+msgstr ""
+
+#: ./src/icc/cellula/templates/restore_login.pt:14
+msgid "Account data"
+msgstr ""
+
+#: ./src/icc/cellula/templates/restore_login.pt:23
+msgid "To restore your password enter your e-mail used for registering."
+msgstr ""
+
+#: ./src/icc/cellula/templates/restore_login.pt:27
+msgid "An e-mail address used in registration."
+msgstr ""
+
+#. Default: Submit
+#: ./src/icc/cellula/templates/restore_login.pt:38
+msgid "submit-restore-password"
 msgstr ""

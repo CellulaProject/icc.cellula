@@ -1,19 +1,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="icc.cellula"
       metal:use-macro="main.macros['page']">
   <tal:block metal:fill-slot="content">
-    To resore you login password enter your e-mail used for registering. <br/>
-    <a href="#" tal:attributes="href request.route_url('maintain')"
-       class="btn btn-primary" role="button">Maintain Again!</a><br/><br/>
-    <ul>
-      <li><a href="Animation.html" class="btn btn-primary"
-             tal:attributes="href string:http://127.0.0.1:3020/browse/list_triples?graph=document">
-          <i class="fa fa-medkit fa-fw">
-            <div class="icon-bg bg-green"></div>
-          </i><span class="menu-title"
-                    i18n:translate=''>Metadata Storage</span></a>
-      </li>
-    </ul>
+    <div class="callout callout-info" tal:condition="False" i18n:translate="">
+    To restore your password enter your e-mail used for registering. <br/>
+    </div>
+<div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title" i18n:translate="">Account data</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form">
+              <div class="box-body">
+                <div class="form-group has-feedback">
+                  <input type="email" class="form-control" placeholder="Email" name="email"
+                         i18n:attributes="placeholder; title"
+                         title="To restore your password enter your e-mail used for registering."
+                         >
+                  <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                  <p class="help-block"
+                     i18n:translate=''>An e-mail address used in registration.</p>
+                </div>
+                <div class="checkbox" tal:condition="False">
+                  <label>
+                    <input type="checkbox"> Check me out
+                  </label>
+                </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary" i18n:translate="submit-restore-password">Submit</button>
+              </div>
+            </form>
+          </div>
   </tal:block>
 </html>

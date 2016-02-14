@@ -24,6 +24,9 @@ from pyramid.security import Everyone, Authenticated
 from pyramid.security import remember, forget
 from pyramid.httpexceptions import HTTPFound
 
+import icc.cellula.mailing as mailing
+import pyramid_mailer.interfaces
+
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask
 import logging
@@ -80,6 +83,7 @@ class View(object):
         self._=_
         kw=kwargs
         #self.context=kw.get('context', kw.get('ob',None))
+
         self.title=_T(kw.get('title', _vp.get('title')))
         self.exception=None
 
@@ -342,7 +346,7 @@ class GraphView(View):
     '''
 
 @view_config(route_name="debug_search", renderer='templates/search.pt',
-             title=_("Debug search"), permission='view')
+             title=_("Debug search")) #, permission='view' )
 class SearchView(View):
 
     @property
@@ -625,7 +629,10 @@ class LogoutView(LoginRegisterView):
 @view_config(route_name="restore_password",renderer="templates/restore_login.pt",
              title=_("Restore password"))
 class RestoreLoginView(View):
-    pass
+    def action(self):
+        print ("Action!")
+        mailer=getUtility(pyramid_mailer.interfaces.IMail,name="mailer")
+
 
 @view_config(route_name='maintain',renderer='templates/maintain.pt',
              title=_("Maintainance View"))

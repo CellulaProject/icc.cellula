@@ -8,4 +8,5 @@ def add_base_template(event):
 
     main = get_renderer('templates/indexLTE.pt').implementation()
     test = get_renderer('templates/main.pt').implementation()
-    event.update({'main': main, 'test':test})
+    email = get_renderer('templates/email/main.pt').implementation()
+    event.update({'main': main, 'test':test, 'email':email})
