@@ -1,6 +1,6 @@
 import pyramid_mailer.message
 # import pyramid_chameleon
-from pyramid.renderers import render_to_response
+from pyramid.renderers import render
 
 import logging
 logger=logging.getLogger('icc.cellula')
@@ -75,7 +75,7 @@ class Message(pyramid_mailer.message.Message):
             if not k in d:
                 d[k]=v
 
-        self.html=render_to_response(template, d, request=self.request)
+        self.html=render(template, d, request=self.request)
         print (self.html)
         return True
 

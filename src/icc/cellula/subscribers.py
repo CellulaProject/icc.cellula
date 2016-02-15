@@ -3,9 +3,8 @@ from pyramid.renderers import get_renderer
 
 #@subscriber(BeforeRender)
 def add_base_template(event):
-    """Add base template.
+    """Add base templates.
     """
-
     main = get_renderer('templates/indexLTE.pt').implementation()
     test = get_renderer('templates/main.pt').implementation()
     email = get_renderer('templates/email/main.pt').implementation()
