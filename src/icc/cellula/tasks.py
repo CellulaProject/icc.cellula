@@ -286,12 +286,13 @@ class EmailSendTask(Task):
                  ):
 
         Task.__init__(self)
-        self.maler=getUtility(pyramid_mailer.interfaces.IMailer, name="mailer")
+
+        self.mailer=getUtility(pyramid_mailer.interfaces.IMailer, name="mailer")
         self.message=message
 
     def run(self):
         print ("Action!")
         if self.message():
-            self.mailer.send_immediately(message, fail_silently=False)
+            self.mailer.send_immediately(self.message, fail_silently=False)
         else:
             debug.error("Couldn't send message {}".format(self.message))

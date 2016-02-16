@@ -6,6 +6,7 @@ import threading
 import logging
 import os, io, traceback
 import time
+from pyramid.threadlocal import manager
 
 logger=logging.getLogger('icc.cellula')
 
@@ -26,6 +27,7 @@ class ThreadWorker(object):
         logger.debug("Started thread worker.")
         tasks=GetQueue('tasks')
         results=GetQueue('results', query=True)
+        manager_pop=0
         while True:
             self.waiting=True
             self.task=None
@@ -39,6 +41,25 @@ class ThreadWorker(object):
             del wrk
             self.task=task=tasks.get()
             task.locks=[]
+
+            # Setup a context (request and registry)
+            for _ in range(manager_pop):
+                manager.pop()
+            manager_pop=0
+            print ("""
+
+                       1: {}
+
+                       """.format(task.context_thread_data))
+            if task.context_thread_data:
+                print ("""
+
+                       2: {}
+
+                       """.format(task.context_thread_data))
+                manager.push(task.context_thread_data)
+                manager_pop+=1
+
             self.waiting=False
             logger.info("got a task %s" % task)
             if ITerminationTask.providedBy(task):
@@ -112,9 +133,13 @@ class Task(object):
         self.args=args
         self.kwargs=kwargs
         self.phase=None
+        self.context_thread_data=None
 
     def set_queue(self, name):
         self.queue=name
+
+    def set_context(self, context):
+        self.context_thread_data=context
 
     def run(self):
         if procedure == None:
@@ -134,13 +159,17 @@ class Task(object):
         # foreign !!!
         return apply(self.procedure, args=a, keywords=k)
 
-    def enqueue(self, task=None):
+    def enqueue(self, task=None, context=None, view=None, block=False):
         if task==None: # Means enqueue itself
             task=self
+        else:
+            ctx=self.context_thread_data
+            if context==None:
+                context=ctx
         if self.processing=="process" and self.phase=="run": # FIXME I do not unserstand what for is this line.
             raise RuntimeError ("cannot enqueue new task in foreign process")
         q=GetQueue("tasks")
-        return q.put(task, block=False)
+        return q.put(task, block=block, context=context, view=view)
 
     def prepare(self):
         pass
@@ -264,7 +293,7 @@ class PriorityQueue(queue.PriorityQueue):
         self.singletons={}
         self.singleton_lock=getUtility(ILock, name='singleton')
 
-    def put(self, task, *args, **kwargs):
+    def put(self, task, context=None, view=None, *args, **kwargs):
         logger.debug("Q. Put: " + str(task))
         if ISingletonTask.providedBy(task):
             self.singleton_lock.acquire()
@@ -274,6 +303,12 @@ class PriorityQueue(queue.PriorityQueue):
             self.singleton_lock.release()
             if task_existed:
                 return True
+        ctx=None
+        if view!=None:
+            ctx={"request":view.request, 'registry':view.request.registry}
+        if context!=None:
+            ctx=context
+        task.set_context(ctx)
         return queue.PriorityQueue.put(self, task, *args, **kwargs)
 
     def get(self, *args, **kwargs):

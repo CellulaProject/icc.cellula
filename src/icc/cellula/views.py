@@ -635,19 +635,27 @@ class RestorePasswordView(View):
     def action(self):
         p=self.request.POST
         restore=p.get("restore",None)
+        self.name="John Doe" # FIXME
         if restore != None:
+            recipient=p.get("email",'').strip()
+            if not recipient:
+                return # FIXME Message
+
             code=hex(random.getrandbits(128))[2:] # Chop "0x", we need only a string
-            msg=mailing.RestorePasswordMessage(view=self, code=code)
+            msg=mailing.RestorePasswordMessage(view=self, code=code,
+                                               recipients=[recipient],
+                                               sender="celulla-admin@irnok.net",
+                                               subject=_("Restore password"),
+            )
             task=EmailSendTask(msg)
-            task.enqueue()
+            task.enqueue(view=self)
 
 @view_config(route_name='maintain',renderer='templates/maintain.pt',
              title=_("Maintainance View"))
 class MaintainanceView(View):
     def answer(self):
-        tasks=GetQueue('tasks')
-        tasks.put(MetadataRestoreTask(), block=False)
-        tasks.put(ContentIndexTask(), block=False)
+        MetadataRestoreTask().enqueue(block=False, view=self)
+        ContentIndexTask().enqueue(block=False, view=self)
 
 @view_config(route_name='metal_test',renderer='templates/test.pt',
              title=_("Test View"))
@@ -715,10 +723,8 @@ class UploadDocView(View):
             return { 'error':'already exists', 'explanation':'the file is already stored' }
 
         headers=things
-        tasks=GetQueue('tasks')
 
-        tasks.put(DocumentAcceptingTask(content, headers), block=False)
-        logger.info("Task Queue has %d tasks undone" % tasks.qsize())
+        DocumentAcceptingTask(content, headers).enqueue(block=False, view=self)
 
         request.response.status_code=201
 
