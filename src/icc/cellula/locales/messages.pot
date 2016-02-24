@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2016-02-15 00:51+0800\n"
+"POT-Creation-Date: 2016-02-17 11:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,13 +14,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
-"Generated-By: Lingua 4.6\n"
+"Generated-By: Lingua 4.7\n"
 
 #: ./src/icc/cellula/views.py:46
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:69 ./src/icc/cellula/views.py:663
+#: ./src/icc/cellula/views.py:69 ./src/icc/cellula/views.py:671
 msgid "Dashboard"
 msgstr ""
 
@@ -80,51 +80,99 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:633
+#: ./src/icc/cellula/views.py:633 ./src/icc/cellula/views.py:648
 msgid "Restore password"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:645
+#: ./src/icc/cellula/views.py:654
 msgid "Maintainance View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:653
+#: ./src/icc/cellula/views.py:661
 msgid "Test View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:658
+#: ./src/icc/cellula/views.py:666
 msgid "E-Mail"
 msgstr ""
 
-#: ./src/icc/cellula/templates/login.pt:49
-msgid "Username:"
+#: ./src/icc/cellula/templates/indexLTE.pt:83
+msgid "Search..."
 msgstr ""
 
-#: ./src/icc/cellula/templates/login.pt:60
-msgid "Password:"
+#: ./src/icc/cellula/templates/indexLTE.pt:348
+msgid "Profile"
 msgstr ""
 
-#: ./src/icc/cellula/templates/login.pt:74
-msgid "Confirm Password:"
+#: ./src/icc/cellula/templates/indexLTE.pt:354
+msgid "Sign out"
 msgstr ""
 
-#: ./src/icc/cellula/templates/login.pt:94
-msgid "Go back"
+#: ./src/icc/cellula/templates/indexLTE.pt:363
+msgid "Login or register new user"
 msgstr ""
 
+#: ./src/icc/cellula/templates/loginLTE.pt:12
+msgid "Log in"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:50
+#: ./src/icc/cellula/templates/restore_login.pt:23
+msgid "Email"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:56
+msgid "Password"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:63
+msgid "Confirm password"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:72
+msgid "Remember Me"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:79
 #: ./src/icc/cellula/templates/login.pt:99
 #: ./src/icc/cellula/templates/login.pt:104
-#: ./src/icc/cellula/templates/loginLTE.pt:79
 msgid "Sign In"
 msgstr ""
 
-#: ./src/icc/cellula/templates/login.pt:111
-#: ./src/icc/cellula/templates/login.pt:116
-msgid "Sign Up"
+#: ./src/icc/cellula/templates/loginLTE.pt:82
+msgid "Sign up"
 msgstr ""
 
-#: ./src/icc/cellula/templates/login.pt:127
-msgid "Forgot Something ?"
+#: ./src/icc/cellula/templates/loginLTE.pt:89
+msgid "You logged out!"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:91
+msgid "You can login again with a link below."
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:98
+msgid "Login to an existing account"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:104
+msgid "Register a new membership"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:108
+msgid "I forgot my password"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:112
+msgid "- OR -"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:115
+msgid "Sign in using Facebook"
+msgstr ""
+
+#: ./src/icc/cellula/templates/loginLTE.pt:119
+msgid "Sign in using Google+"
 msgstr ""
 
 #. Default: Cellula
@@ -189,79 +237,6 @@ msgstr ""
 msgid "Incoming #"
 msgstr ""
 
-#: ./src/icc/cellula/templates/indexLTE.pt:83
-msgid "Search..."
-msgstr ""
-
-#: ./src/icc/cellula/templates/indexLTE.pt:348
-msgid "Profile"
-msgstr ""
-
-#: ./src/icc/cellula/templates/indexLTE.pt:354
-msgid "Sign out"
-msgstr ""
-
-#: ./src/icc/cellula/templates/indexLTE.pt:363
-msgid "Login or register new user"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:12
-msgid "Log in"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:50
-#: ./src/icc/cellula/templates/restore_login.pt:23
-msgid "Email"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:56
-msgid "Password"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:63
-msgid "Confirm password"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:72
-msgid "Remember Me"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:82
-msgid "Sign up"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:89
-msgid "You logged out!"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:91
-msgid "You can login again with a link below."
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:98
-msgid "Login to an existing account"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:104
-msgid "Register a new membership"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:108
-msgid "I forgot my password"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:112
-msgid "- OR -"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:115
-msgid "Sign in using Facebook"
-msgstr ""
-
-#: ./src/icc/cellula/templates/loginLTE.pt:119
-msgid "Sign in using Google+"
-msgstr ""
-
 #: ./src/icc/cellula/templates/restore_login.pt:9
 msgid ""
 "To restore your password enter your e-mail used for registering. <dynamic "
@@ -283,6 +258,31 @@ msgstr ""
 #. Default: Submit
 #: ./src/icc/cellula/templates/restore_login.pt:40
 msgid "submit-restore-password"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:49
+msgid "Username:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:60
+msgid "Password:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:74
+msgid "Confirm Password:"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:94
+msgid "Go back"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:111
+#: ./src/icc/cellula/templates/login.pt:116
+msgid "Sign Up"
+msgstr ""
+
+#: ./src/icc/cellula/templates/login.pt:127
+msgid "Forgot Something ?"
 msgstr ""
 
 #: ./src/icc/cellula/templates/email/main.pt:415
