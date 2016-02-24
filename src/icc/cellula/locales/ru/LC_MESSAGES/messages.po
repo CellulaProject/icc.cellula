@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2016-02-17 11:35+0800\n"
+"POT-Creation-Date: 2016-02-24 19:23+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -98,84 +98,36 @@ msgstr "Тестовый вид"
 msgid "E-Mail"
 msgstr "Почта"
 
-#: ./src/icc/cellula/templates/indexLTE.pt:83
-msgid "Search..."
-msgstr "Найти..."
+#: ./src/icc/cellula/templates/login.pt:49
+msgid "Username:"
+msgstr "Псевдоним:"
 
-#: ./src/icc/cellula/templates/indexLTE.pt:348
-msgid "Profile"
-msgstr "Профиль"
+#: ./src/icc/cellula/templates/login.pt:60
+msgid "Password:"
+msgstr "Пароль:"
 
-#: ./src/icc/cellula/templates/indexLTE.pt:354
-msgid "Sign out"
-msgstr "Выйти"
+#: ./src/icc/cellula/templates/login.pt:74
+msgid "Confirm Password:"
+msgstr "Подтверждение пароля:"
 
-#: ./src/icc/cellula/templates/indexLTE.pt:363
-msgid "Login or register new user"
-msgstr "Выйти в систему или зарегистрировать пользователя"
+#: ./src/icc/cellula/templates/login.pt:94
+msgid "Go back"
+msgstr "Вернуться"
 
-#: ./src/icc/cellula/templates/loginLTE.pt:12
-msgid "Log in"
-msgstr "Вход"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:50
-#: ./src/icc/cellula/templates/restore_login.pt:23
-msgid "Email"
-msgstr "Email-адрес"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:56
-msgid "Password"
-msgstr "Пароль"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:63
-msgid "Confirm password"
-msgstr "Подтверждение пароля"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:72
-msgid "Remember Me"
-msgstr "Запомнить меня"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:79
 #: ./src/icc/cellula/templates/login.pt:99
 #: ./src/icc/cellula/templates/login.pt:104
+#: ./src/icc/cellula/templates/loginLTE.pt:79
 msgid "Sign In"
 msgstr "Войти"
 
-#: ./src/icc/cellula/templates/loginLTE.pt:82
-msgid "Sign up"
-msgstr "Зарегистрироваться"
+#: ./src/icc/cellula/templates/login.pt:111
+#: ./src/icc/cellula/templates/login.pt:116
+msgid "Sign Up"
+msgstr "Регистрировать"
 
-#: ./src/icc/cellula/templates/loginLTE.pt:89
-msgid "You logged out!"
-msgstr "Вы вышли из системы!"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:91
-msgid "You can login again with a link below."
-msgstr "Но вы можете вернуться при помощи одной из ссылок ниже."
-
-#: ./src/icc/cellula/templates/loginLTE.pt:98
-msgid "Login to an existing account"
-msgstr "Войти в существующую учетную запись"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:104
-msgid "Register a new membership"
-msgstr "Зарегистрировать нового пользователя"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:108
-msgid "I forgot my password"
-msgstr "Забыли свой пароль"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:112
-msgid "- OR -"
-msgstr "- ИЛИ -"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:115
-msgid "Sign in using Facebook"
-msgstr "Войти учетной записью Facebook"
-
-#: ./src/icc/cellula/templates/loginLTE.pt:119
-msgid "Sign in using Google+"
-msgstr "Войти учетной записью Google+"
+#: ./src/icc/cellula/templates/login.pt:127
+msgid "Forgot Something ?"
+msgstr "Забыли что-то ?"
 
 #. Default: Cellula
 #: ./src/icc/cellula/templates/index.pt:91
@@ -239,6 +191,79 @@ msgstr "Файл"
 msgid "Incoming #"
 msgstr "Входящий №"
 
+#: ./src/icc/cellula/templates/indexLTE.pt:83
+msgid "Search..."
+msgstr "Найти..."
+
+#: ./src/icc/cellula/templates/indexLTE.pt:348
+msgid "Profile"
+msgstr "Профиль"
+
+#: ./src/icc/cellula/templates/indexLTE.pt:354
+msgid "Sign out"
+msgstr "Выйти"
+
+#: ./src/icc/cellula/templates/indexLTE.pt:363
+msgid "Login or register new user"
+msgstr "Выйти в систему или зарегистрировать пользователя"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:12
+msgid "Log in"
+msgstr "Вход"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:50
+#: ./src/icc/cellula/templates/restore_login.pt:23
+msgid "Email"
+msgstr "Email-адрес"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:56
+msgid "Password"
+msgstr "Пароль"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:63
+msgid "Confirm password"
+msgstr "Подтверждение пароля"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:72
+msgid "Remember Me"
+msgstr "Запомнить меня"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:82
+msgid "Sign up"
+msgstr "Зарегистрироваться"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:89
+msgid "You logged out!"
+msgstr "Вы вышли из системы!"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:91
+msgid "You can login again with a link below."
+msgstr "Но вы можете вернуться при помощи одной из ссылок ниже."
+
+#: ./src/icc/cellula/templates/loginLTE.pt:98
+msgid "Login to an existing account"
+msgstr "Войти в существующую учетную запись"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:104
+msgid "Register a new membership"
+msgstr "Зарегистрировать нового пользователя"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:108
+msgid "I forgot my password"
+msgstr "Забыли свой пароль"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:112
+msgid "- OR -"
+msgstr "- ИЛИ -"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:115
+msgid "Sign in using Facebook"
+msgstr "Войти учетной записью Facebook"
+
+#: ./src/icc/cellula/templates/loginLTE.pt:119
+msgid "Sign in using Google+"
+msgstr "Войти учетной записью Google+"
+
 #: ./src/icc/cellula/templates/restore_login.pt:9
 msgid ""
 "To restore your password enter your e-mail used for registering. <dynamic"
@@ -265,31 +290,6 @@ msgstr "Email, использованный при регистрации."
 #: ./src/icc/cellula/templates/restore_login.pt:40
 msgid "submit-restore-password"
 msgstr "Восстановить пароль"
-
-#: ./src/icc/cellula/templates/login.pt:49
-msgid "Username:"
-msgstr "Псевдоним:"
-
-#: ./src/icc/cellula/templates/login.pt:60
-msgid "Password:"
-msgstr "Пароль:"
-
-#: ./src/icc/cellula/templates/login.pt:74
-msgid "Confirm Password:"
-msgstr "Подтверждение пароля:"
-
-#: ./src/icc/cellula/templates/login.pt:94
-msgid "Go back"
-msgstr "Вернуться"
-
-#: ./src/icc/cellula/templates/login.pt:111
-#: ./src/icc/cellula/templates/login.pt:116
-msgid "Sign Up"
-msgstr "Регистрировать"
-
-#: ./src/icc/cellula/templates/login.pt:127
-msgid "Forgot Something ?"
-msgstr "Забыли что-то ?"
 
 #: ./src/icc/cellula/templates/email/main.pt:415
 msgid "Your account settings have been updated"
