@@ -60,3 +60,7 @@ class ITerminationTask(Interface):
 
 class ILock(Interface):
     """Marker lock interface."""
+
+class IMailer(Interface):
+    """MArk a component to be mailer
+    """

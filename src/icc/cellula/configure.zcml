@@ -98,8 +98,8 @@
       />
 
   <utility
-      factory="pyramid_mailer.mailer.Mailer"
-      provides="pyramid_mailer.interfaces.IMailer"
+      factory="icc.cellula.mailing.Mailer"
+      provides="icc.cellula.interfaces.IMailer"
       name="mailer"
       />
 <!--

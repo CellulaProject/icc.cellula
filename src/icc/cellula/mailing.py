@@ -1,12 +1,35 @@
-import pyramid_mailer.message
-# import pyramid_chameleon
+import sendgrid
 from pyramid.renderers import render
+from zope.component import getUtility
+from zope.interface import Interface
+from icc.cellula.interfaces import IMailer
+
 
 import logging
 logger=logging.getLogger('icc.cellula')
 
+class Mailer(sendgrid.SendGridClient):
+    """Mailer to send messages.
+    """
 
-class Message(pyramid_mailer.message.Message):
+    def __init__(self):
+        """
+        """
+        config=getUtility(Interface, name='configuration')
+        self.config=config['sendgrid']
+        self.api_key = self.config["api_key"].strip()
+        self.default_sender = self.config["default_sender"].strip()
+
+        sendgrid.SendGridClient.__init__(self, self.api_key, None, raise_errors=True)
+        print ("""
+
+
+               {}
+
+
+               """.format(self._raise_errors))
+
+class Message(sendgrid.Mail):
     """Contain common behavior of descendants
     message variants"""
 
@@ -18,7 +41,12 @@ class Message(pyramid_mailer.message.Message):
                  request=None,
                  response=None,
                  **kwargs):
-        pyramid_mailer.message.Message.__init__(self, **kwargs)
+        # to='john@email.com', subject='Example', html='Body', text='Body', from_email='doe@email.com'
+        if not "from_email" in kwargs:
+            mailer=getUtility(IMailer, name="mailer")
+            kwargs["from_email"]=mailer.default_sender
+
+        sendgrid.Mail.__init__(self, **kwargs)
         if view == None:
             raise ValueError("no view given as argument")
         self._setup=None

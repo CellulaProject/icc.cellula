@@ -25,7 +25,6 @@ from pyramid.security import remember, forget
 from pyramid.httpexceptions import HTTPFound
 
 import icc.cellula.mailing as mailing
-import pyramid_mailer.interfaces
 
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask, EmailSendTask
@@ -643,8 +642,7 @@ class RestorePasswordView(View):
 
             code=hex(random.getrandbits(128))[2:] # Chop "0x", we need only a string
             msg=mailing.RestorePasswordMessage(view=self, code=code,
-                                               recipients=[recipient],
-                                               sender="celulla-admin@irnok.net",
+                                               to=recipient,
                                                subject=_("Restore password"),
             )
             task=EmailSendTask(msg)

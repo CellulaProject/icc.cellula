@@ -4,11 +4,10 @@ from icc.cellula.extractor.interfaces import IExtractor
 from icc.cellula.indexer.interfaces import IIndexer
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
 from icc.contentstorage.interfaces import IContentStorage
-from icc.cellula.interfaces import ILock, ISingletonTask, IQueue, IWorker
+from icc.cellula.interfaces import ILock, ISingletonTask, IQueue, IWorker, IMailer
 from zope.component import getUtility, queryUtility
 from zope.interface import implementer, Interface
 from string import Template
-import pyramid_mailer.interfaces
 import time
 import logging
 logger=logging.getLogger('icc.cellula')
@@ -281,18 +280,19 @@ class ContentIndexTask(Task):
             self.enqueue(ContentIndexTask())
 
 class EmailSendTask(Task):
+    # https://github.com/sendgrid/sendgrid-python
     def __init__(self,
                  message=None
                  ):
 
         Task.__init__(self)
 
-        self.mailer=getUtility(pyramid_mailer.interfaces.IMailer, name="mailer")
+        self.mailer=getUtility(IMailer, name="mailer")
         self.message=message
 
     def run(self):
         print ("Action!")
         if self.message():
-            self.mailer.send_immediately(self.message, fail_silently=False)
+            self.mailer.send(self.message)
         else:
             debug.error("Couldn't send message {}".format(self.message))
