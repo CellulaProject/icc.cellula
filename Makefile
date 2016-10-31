@@ -1,6 +1,6 @@
 .PHONY: env dev install test edit dev-icc.rdfservice \
     dev-icc.restfuldocs py pot init-ru update-ru comp-cat \
-    upd-cat
+    upd-cat adjust-ini
 
 LPYTHON=python3
 V=$(PWD)/../$(LPYTHON)
@@ -62,4 +62,4 @@ comp-cat:
 upd-cat: pot update-ru comp-cat
 
 adjust-ini:
-	sed 's/HOME/\/home\/$(USER)/' icc.cellula.ini.in > icc.cellula.ini
+  #	sed 's/HOME/\/home\/$(USER)/' icc.cellula.ini.in > icc.cellula.ini
