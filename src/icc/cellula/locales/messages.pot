@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2016-02-24 19:23+0800\n"
+"POT-Creation-Date: 2016-08-15 22:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,85 +14,85 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
-"Generated-By: Lingua 4.8.1\n"
+"Generated-By: Lingua 4.9\n"
 
-#: ./src/icc/cellula/views.py:46
+#: ./src/icc/cellula/views.py:45
 msgid "====TITLE====="
 msgstr ""
 
-#: ./src/icc/cellula/views.py:69 ./src/icc/cellula/views.py:671
+#: ./src/icc/cellula/views.py:68 ./src/icc/cellula/views.py:669
 msgid "Dashboard"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:70
+#: ./src/icc/cellula/views.py:69
 msgid "Archive"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:71
+#: ./src/icc/cellula/views.py:70
 msgid "Metal"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:72
+#: ./src/icc/cellula/views.py:71
 msgid "Maintain"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:73
+#: ./src/icc/cellula/views.py:72
 msgid "Debug"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:201 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/views.py:200 ./src/icc/cellula/templates/index.pt:189
 msgid "Document Archive"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:211
+#: ./src/icc/cellula/views.py:210
 msgid "Drag & Drop Files Here"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:324
+#: ./src/icc/cellula/views.py:323
 msgid "Debug graph"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:352
+#: ./src/icc/cellula/views.py:351
 msgid "Debug search"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:534 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/views.py:533 ./src/icc/cellula/templates/login.pt:9
 msgid "Login"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:562
+#: ./src/icc/cellula/views.py:561
 msgid "Register new user"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:564
+#: ./src/icc/cellula/views.py:563
 msgid "Enter Your account data"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:569
+#: ./src/icc/cellula/views.py:568
 msgid "Cellula"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:622
+#: ./src/icc/cellula/views.py:621
 msgid "Register"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:627
+#: ./src/icc/cellula/views.py:626
 msgid "Logout"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:633 ./src/icc/cellula/views.py:648
+#: ./src/icc/cellula/views.py:632 ./src/icc/cellula/views.py:646
 msgid "Restore password"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:654
+#: ./src/icc/cellula/views.py:652
 msgid "Maintainance View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:661
+#: ./src/icc/cellula/views.py:659
 msgid "Test View"
 msgstr ""
 
-#: ./src/icc/cellula/views.py:666
+#: ./src/icc/cellula/views.py:664
 msgid "E-Mail"
 msgstr ""
 

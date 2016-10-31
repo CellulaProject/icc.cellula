@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cellula 1.0\n"
 "Report-Msgid-Bugs-To: eugeneai@irnok.net\n"
-"POT-Creation-Date: 2016-02-24 19:23+0800\n"
+"POT-Creation-Date: 2016-08-15 22:27+0800\n"
 "PO-Revision-Date: 2015-10-26 13:14+0000\n"
 "Last-Translator: Evgeny Cherkashin <eugeneai@irnok.net\n"
 "Language: ru\n"
@@ -16,85 +16,85 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.2.0\n"
+"Generated-By: Babel 2.3.4\n"
 
-#: ./src/icc/cellula/views.py:46
+#: ./src/icc/cellula/views.py:45
 msgid "====TITLE====="
 msgstr "====Заголовок страницы===="
 
-#: ./src/icc/cellula/views.py:69 ./src/icc/cellula/views.py:671
+#: ./src/icc/cellula/views.py:68 ./src/icc/cellula/views.py:669
 msgid "Dashboard"
 msgstr "Информационная панель"
 
-#: ./src/icc/cellula/views.py:70
+#: ./src/icc/cellula/views.py:69
 msgid "Archive"
 msgstr "Архив"
 
-#: ./src/icc/cellula/views.py:71
+#: ./src/icc/cellula/views.py:70
 msgid "Metal"
 msgstr "Металл"
 
-#: ./src/icc/cellula/views.py:72
+#: ./src/icc/cellula/views.py:71
 msgid "Maintain"
 msgstr "Обслуживание"
 
-#: ./src/icc/cellula/views.py:73
+#: ./src/icc/cellula/views.py:72
 msgid "Debug"
 msgstr "Отладка"
 
-#: ./src/icc/cellula/views.py:201 ./src/icc/cellula/templates/index.pt:189
+#: ./src/icc/cellula/templates/index.pt:189 ./src/icc/cellula/views.py:200
 msgid "Document Archive"
 msgstr "Архив документов"
 
-#: ./src/icc/cellula/views.py:211
+#: ./src/icc/cellula/views.py:210
 msgid "Drag & Drop Files Here"
 msgstr "Кидайте ваши документы сюда"
 
-#: ./src/icc/cellula/views.py:324
+#: ./src/icc/cellula/views.py:323
 msgid "Debug graph"
 msgstr "Отладка графа"
 
-#: ./src/icc/cellula/views.py:352
+#: ./src/icc/cellula/views.py:351
 msgid "Debug search"
 msgstr "Отладка поиска"
 
-#: ./src/icc/cellula/views.py:534 ./src/icc/cellula/templates/login.pt:9
+#: ./src/icc/cellula/templates/login.pt:9 ./src/icc/cellula/views.py:533
 msgid "Login"
 msgstr "Вход"
 
-#: ./src/icc/cellula/views.py:562
+#: ./src/icc/cellula/views.py:561
 msgid "Register new user"
 msgstr "Зарегистрировать нового пользователя"
 
-#: ./src/icc/cellula/views.py:564
+#: ./src/icc/cellula/views.py:563
 msgid "Enter Your account data"
 msgstr "Данные вашей учетной записи"
 
-#: ./src/icc/cellula/views.py:569
+#: ./src/icc/cellula/views.py:568
 msgid "Cellula"
 msgstr "ЭКлетка"
 
-#: ./src/icc/cellula/views.py:622
+#: ./src/icc/cellula/views.py:621
 msgid "Register"
 msgstr "Регистрация"
 
-#: ./src/icc/cellula/views.py:627
+#: ./src/icc/cellula/views.py:626
 msgid "Logout"
 msgstr "Выход"
 
-#: ./src/icc/cellula/views.py:633 ./src/icc/cellula/views.py:648
+#: ./src/icc/cellula/views.py:632 ./src/icc/cellula/views.py:646
 msgid "Restore password"
 msgstr "Восстановление пароля"
 
-#: ./src/icc/cellula/views.py:654
+#: ./src/icc/cellula/views.py:652
 msgid "Maintainance View"
 msgstr "Обслуживание"
 
-#: ./src/icc/cellula/views.py:661
+#: ./src/icc/cellula/views.py:659
 msgid "Test View"
 msgstr "Тестовый вид"
 
-#: ./src/icc/cellula/views.py:666
+#: ./src/icc/cellula/views.py:664
 msgid "E-Mail"
 msgstr "Почта"
 

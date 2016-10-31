@@ -3,12 +3,13 @@ from pyramid.renderers import render
 from zope.component import getUtility
 from zope.interface import Interface
 from icc.cellula.interfaces import IMailer
+import sendgrid.helpers.mail
 
 
 import logging
 logger=logging.getLogger('icc.cellula')
 
-class Mailer(sendgrid.SendGridClient):
+class Mailer(sendgrid.SendGridAPIClient):
     """Mailer to send messages.
     """
 
@@ -20,16 +21,9 @@ class Mailer(sendgrid.SendGridClient):
         self.api_key = self.config["api_key"].strip()
         self.default_sender = self.config["default_sender"].strip()
 
-        sendgrid.SendGridClient.__init__(self, self.api_key, None, raise_errors=True)
-        print ("""
+        sendgrid.SendGridAPIClient.__init__(self, apikey=self.api_key) #, raise_errors=True)
 
-
-               {}
-
-
-               """.format(self._raise_errors))
-
-class Message(sendgrid.Mail):
+class Message(sendgrid.helpers.mail.Mail):
     """Contain common behavior of descendants
     message variants"""
 
