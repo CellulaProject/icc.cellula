@@ -1,3 +1,6 @@
 [submodule "src/icc/cellula/templates/email/email-templates"]
 	path = src/icc/cellula/templates/email/email-templates
 	url = https://github.com/CellulaProject/email-templates.git
+[submodule "src/icc/cellula/static/AdminLTE"]
+	path = src/icc/cellula/static/AdminLTE
+	url = https://github.com/eugeneai/AdminLTE.git
