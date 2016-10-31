@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 # Tar-file filter for Recoll
 # Thanks to Recoll user Martin Ziegler
@@ -6,12 +6,14 @@
 # It works not only for tar-files, but automatically for gzipped and
 # bzipped tar-files at well.
 
+from __future__ import print_function
+
 import rclexecm
 
 try:
     import tarfile
 except:
-    print "RECFILTERROR HELPERNOTFOUND python:tarfile"
+    print("RECFILTERROR HELPERNOTFOUND python:tarfile")
     sys.exit(1);
 
 class TarExtractor:
@@ -21,32 +23,32 @@ class TarExtractor:
         self.namen = []
 
     def extractone(self, ipath):
-        docdata = ""
+        docdata = b''
         try:
             info = self.tar.getmember(ipath)
             if info.size > self.em.maxmembersize:
                 # skip
-                docdata = ""
+                docdata = b''
                 self.em.rclog("extractone: entry %s size %d too big" %
                               (ipath, info.size))
-                docdata = "" # raise TarError("Member too big")
+                docdata = b'' # raise TarError("Member too big")
             else:
                 docdata = self.tar.extractfile(ipath).read()
             ok = True
-        except Exception, err:
+        except Exception as err:
             ok = False
         iseof = rclexecm.RclExecM.noteof
         if self.currentindex >= len(self.namen) -1:
             iseof = rclexecm.RclExecM.eofnext
-        if isinstance(ipath, unicode):
-            ipath = ipath.encode("utf-8")
-        return (ok, docdata, ipath, iseof)
+        return (ok, docdata, rclexecm.makebytes(ipath), iseof)
 
     def openfile(self, params):
         self.currentindex = -1
         try:
-            self.tar = tarfile.open(name=params["filename:"],mode='r')
-            self.namen = [ y.name for y in filter(lambda z:z.isfile(),self.tar.getmembers())]
+            self.tar = tarfile.open(name=params["filename:"], mode='r')
+            #self.namen = [ y.name for y in filter(lambda z:z.isfile(),self.tar.getmembers())]
+            self.namen = [ y.name for y in [z for z in self.tar.getmembers() if z.isfile()]]
+
             return True
         except:
             return False
@@ -59,7 +61,7 @@ class TarExtractor:
         try:
             ipath = ipath.decode("utf-8")
             return self.extractone(ipath)
-        except Exception, err:
+        except Exception as err:
             return (ok, data, ipath, eof)
 
     def getnext(self, params):

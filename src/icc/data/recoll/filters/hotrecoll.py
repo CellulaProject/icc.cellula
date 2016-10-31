@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 #
 # This script should be linked to a keyboard shortcut. Under gnome,
 # you can do this from the main preferences menu, or directly execute

@@ -1,6 +1,8 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 # WAR web archive filter for recoll. War file are gzipped tar files
+
+from __future__ import print_function
 
 import rclexecm
 import tarfile
@@ -15,7 +17,7 @@ class WarExtractor:
             member = self.tar.extractfile(tarinfo)
             docdata = member.read()
             ok = True
-        except Exception, err:
+        except Exception as err:
             self.em.rclog("extractone: failed: [%s]" % err)
             ok = False
         return (ok, docdata, tarinfo.name, rclexecm.RclExecM.noteof)
@@ -26,7 +28,7 @@ class WarExtractor:
         try:
             self.tar = tarfile.open(params["filename:"])
             return True
-        except Exception, err:
+        except Exception as err:
             self.em.rclog(str(err))
             return False
 
@@ -34,7 +36,7 @@ class WarExtractor:
         ipath = params["ipath:"]
         try:
             tarinfo = self.tar.getmember(ipath)
-        except Exception, err:
+        except Exception as err:
             self.em.rclog(str(err))
             return (False, "", ipath, rclexecm.RclExecM.noteof)
         return self.extractone(tarinfo)

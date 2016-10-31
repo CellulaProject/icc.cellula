@@ -5,6 +5,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+# mso-dumper is not compatible with python3
+
+from __future__ import print_function
+
 import sys, os.path, getopt
 sys.path.append(sys.path[0]+"/msodump.zip")
 from msodumper import ole, pptstream, globals, olestream
@@ -21,7 +25,7 @@ Options:
   --no-raw-dumps suppress raw hex dumps of uninterpreted areas
   --id-select=id1[,id2 ...] limit output to selected record Ids
 """ % exname
-    print msg
+    print(msg)
 
 
 class PPTDumper(object):
@@ -52,7 +56,7 @@ class PPTDumper(object):
 
             try:
                 dirstrm = strm.getDirectoryStreamByName(dirname)
-            except Exception, err:
+            except Exception as err:
                 error("getDirectoryStreamByName(%s): %s - %s\n" % (dirname,str(err),self.filepath))
                 # The previous version was killed by the exception
                 # here, so the equivalent is to break, but maybe there

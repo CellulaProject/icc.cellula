@@ -51,7 +51,7 @@ application/javascript = internal text/plain
 #  - with unrtf: rtf files disguising as doc files.
 # The default is now again to use rcldoc. Use raw antiword if speed is more
 # important for you than catching all data, 
-application/msword = exec rcldoc
+application/msword = execm rcldoc.py
 #application/msword = exec antiword -t -i 1 -m UTF-8;mimetype=text/plain
 # You can also use wvware directly but it's much slower.
 # application/msword = exec wvWare --charset=utf-8 --nographics
@@ -59,41 +59,41 @@ application/msword = exec rcldoc
 # Also Handle the mime type returned by "file -i" for a suffix-less word
 # file. This could probably just as well be an excel file, but we have to
 # chose one.
-application/vnd.ms-office = exec rcldoc
+application/vnd.ms-office = execm rcldoc.py
 
 application/ogg = execm rclaudio
-application/pdf = exec rclpdf
-# application/pdf = execm rclmpdf
+application/pdf = execm rclpdf.py
 application/postscript = exec pstotext;charset=iso-8859-1;mimetype=text/plain
-application/vnd.ms-excel = exec rclxls
-application/vnd.ms-powerpoint = exec rclppt
-application/vnd.oasis.opendocument.text = exec rclsoff
-application/vnd.oasis.opendocument.text-template = exec rclsoff
-application/vnd.oasis.opendocument.presentation = exec rclsoff 
-application/vnd.oasis.opendocument.spreadsheet = exec rclsoff
-application/vnd.oasis.opendocument.graphics = exec rclsoff
+application/sql = internal text/plain
+application/vnd.ms-excel = execm rclxls.py
+application/vnd.ms-powerpoint = execm rclppt.py
+application/vnd.oasis.opendocument.text = execm rclsoff.py
+application/vnd.oasis.opendocument.text-template = execm rclsoff.py
+application/vnd.oasis.opendocument.presentation = execm rclsoff.py 
+application/vnd.oasis.opendocument.spreadsheet = execm rclsoff.py
+application/vnd.oasis.opendocument.graphics = execm rclsoff.py
 application/vnd.openxmlformats-officedocument.wordprocessingml.document = \
- exec rclopxml
+ execm rclopxml.py
 application/vnd.openxmlformats-officedocument.wordprocessingml.template = \
- exec rclopxml
+ execm rclopxml.py
 application/vnd.openxmlformats-officedocument.presentationml.template = \
- exec rclopxml
+ execm rclopxml.py
 application/vnd.openxmlformats-officedocument.presentationml.presentation = \
- exec rclopxml
+ execm rclopxml.py
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet = \
- exec rclopxml
+ execm rclopxml.py
 application/vnd.openxmlformats-officedocument.spreadsheetml.template =\
- exec rclopxml
-application/vnd.sun.xml.calc = exec rclsoff
-application/vnd.sun.xml.calc.template = exec rclsoff
-application/vnd.sun.xml.draw = exec rclsoff
-application/vnd.sun.xml.draw.template = exec rclsoff
-application/vnd.sun.xml.impress = exec rclsoff
-application/vnd.sun.xml.impress.template = exec rclsoff
-application/vnd.sun.xml.math = exec rclsoff
-application/vnd.sun.xml.writer = exec rclsoff
-application/vnd.sun.xml.writer.global = exec rclsoff
-application/vnd.sun.xml.writer.template = exec rclsoff
+ execm rclopxml.py
+application/vnd.sun.xml.calc = execm rclsoff.py
+application/vnd.sun.xml.calc.template = execm rclsoff.py
+application/vnd.sun.xml.draw = execm rclsoff.py
+application/vnd.sun.xml.draw.template = execm rclsoff.py
+application/vnd.sun.xml.impress = execm rclsoff.py
+application/vnd.sun.xml.impress.template = execm rclsoff.py
+application/vnd.sun.xml.math = execm rclsoff.py
+application/vnd.sun.xml.writer = execm rclsoff.py
+application/vnd.sun.xml.writer.global = execm rclsoff.py
+application/vnd.sun.xml.writer.template = execm rclsoff.py
 application/vnd.wordperfect = exec wpd2html;mimetype=text/html
 application/x-abiword = exec rclabw
 application/x-awk = internal text/plain
@@ -101,7 +101,7 @@ application/x-chm = execm rclchm
 application/x-dia-diagram = execm rcldia;mimetype=text/plain
 application/x-dvi = exec rcldvi
 application/x-flac = execm rclaudio
-application/x-gnote = exec rclxml
+application/x-gnote = execm rclxml.py
 application/x-gnuinfo = execm rclinfo
 application/x-gnumeric = exec rclgnm
 application/x-kword = exec rclkwd
@@ -129,11 +129,12 @@ image/jp2 = execm rclimg
 image/jpeg = execm rclimg
 image/png = execm rclimg
 image/tiff = execm rclimg
-image/vnd.djvu = exec rcldjvu
-image/svg+xml = exec rclsvg
+image/vnd.djvu = execm rcldjvu.py
+image/svg+xml = execm rclsvg.py
 image/x-xcf = execm rclimg
 inode/symlink = internal
-inode/x-empty = exec rclnull
+application/x-zerosize = internal
+inode/x-empty = internal application/x-zerosize
 message/rfc822 = internal
 text/calendar = execm rclics;mimetype=text/plain
 text/html  = internal 
@@ -142,6 +143,9 @@ text/rtf = exec unrtf --nopict --html;mimetype=text/html
 text/x-c = internal
 text/x-c++ = internal
 text/x-c+ = internal
+text/x-csharp = internal text/plain
+text/css = internal text/plain
+application/javascript = internal text/plain
 text/x-csv = internal text/plain
 text/x-fictionbook = exec rclfb2
 text/x-gaim-log = exec rclgaim
@@ -149,6 +153,7 @@ text/x-html-sidux-man = exec rclsiduxman
 text/x-html-aptosid-man = exec rclaptosidman
 text/x-chm-html = internal text/html
 text/x-ini = internal text/plain
+text/x-java = internal text/plain
 text/x-mail = internal
 text/x-man = exec rclman
 text/x-perl = internal text/plain
@@ -156,14 +161,18 @@ text/x-purple-log = exec rclpurple
 text/x-purple-html-log = internal text/html
 text/x-python = exec rclpython
 text/x-shellscript = internal text/plain
+text/x-srt = internal text/plain
 text/x-tex = exec rcltex
 
-application/xml = exec rclxml
-text/xml = exec rclxml
-# Using these instead of the two above would index all parameter and tag
-# names, attribute values etc, instead of just the text content.
-#application/xml = internal text/plain
-#text/xml = internal text/plain
+
+# Generic XML is best indexed as text, else it generates too many errors
+# All parameter and tag names, attribute values etc, are indexed as
+# text. rclxml.py tries to just index the text content.
+#application/xml = execm rclxml.py
+#text/xml = execm rclxml.py
+application/xml = internal text/plain
+text/xml = internal text/plain
+
 
 ## #############################################
 # Icons to be used in the result list if required by gui config
@@ -174,6 +183,7 @@ application/msword = wordprocessing
 application/ogg = sownd
 application/pdf = pdf
 application/postscript = postscript
+application/sql = source
 application/vnd.ms-excel = spreadsheet
 application/vnd.ms-powerpoint = presentation
 application/vnd.oasis.opendocument.presentation = presentation
@@ -252,6 +262,7 @@ text/x-fictionbook = document
 text/x-html-aptosid-man = aptosid-book
 text/x-html-sidux-man = sidux-book
 text/x-ini = txt
+text/x-java = source
 text/x-mail = message
 text/x-man = document
 text/x-perl = source
@@ -283,6 +294,7 @@ text = \
       application/msword \
       application/pdf \
       application/postscript \
+      application/sql \
       application/vnd.oasis.opendocument.text \
       application/vnd.openxmlformats-officedocument.wordprocessingml.document \
       application/vnd.openxmlformats-officedocument.wordprocessingml.template \
@@ -320,6 +332,7 @@ text = \
       text/x-html-aptosid-man \
       text/x-html-sidux-man \
       text/x-ini \
+      text/x-java \
       text/x-man \
       text/x-perl \
       text/x-python \
