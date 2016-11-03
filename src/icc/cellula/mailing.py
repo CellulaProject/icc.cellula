@@ -4,7 +4,8 @@ from zope.component import getUtility
 from zope.interface import Interface
 from icc.cellula.interfaces import IMailer
 import sendgrid.helpers.mail
-
+from cryptography.fernet import Fernet
+import base64
 
 import logging
 logger=logging.getLogger('icc.cellula')
@@ -17,11 +18,13 @@ class Mailer(sendgrid.SendGridAPIClient):
         """
         """
         config=getUtility(Interface, name='configuration')
-        self.config=config['sendgrid']
-        self.api_key = self.config["api_key"].strip()
+        self.config=config['mailer']
+        setup = self.config["setup"].strip()
+        f = Fernet(b'o8TAqYvniGYdfaP_2onUzCPn9pEERlSYroibsagpeLc=')
+        setup = f.decrypt(setup.encode('utf-8')).decode('utf-8')
         self.default_sender = self.config["default_sender"].strip()
 
-        sendgrid.SendGridAPIClient.__init__(self, apikey=self.api_key) #, raise_errors=True)
+        sendgrid.SendGridAPIClient.__init__(self, apikey=setup) #, raise_errors=True)
 
 class Message(sendgrid.helpers.mail.Mail):
     """Contain common behavior of descendants

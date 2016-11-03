@@ -1,6 +1,6 @@
 .PHONY: env dev install test edit dev-icc.rdfservice \
     dev-icc.restfuldocs py pot init-ru update-ru comp-cat \
-    upd-cat adjust-ini
+    upd-cat adjust-ini devel
 
 LPYTHON=python3
 V=$(PWD)/../$(LPYTHON)
@@ -17,6 +17,9 @@ env:
 pre-dev:env dev-icc.rdfservice dev-icc.restfuldocs
 	$(VB)/easy_install rdflib pip setuptools
 	$(PYTHON) setup.py develop
+
+devel:
+	python setup.py develop
 
 dev:	pre-dev upd-cat
 
