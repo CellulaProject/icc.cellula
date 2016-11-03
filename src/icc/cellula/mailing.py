@@ -15,7 +15,7 @@ class Mailer(sendgrid.SendGridAPIClient):
     """
 
     def __init__(self):
-        """
+        """Initialize mailer system.
         """
         config=getUtility(Interface, name='configuration')
         self.config=config['mailer']

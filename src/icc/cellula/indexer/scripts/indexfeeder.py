@@ -1,5 +1,5 @@
 
-from configparser import ConfigParser
+from configparser import ConfigParser, ExtendedInterpolation
 from zope.configuration.xmlconfig import xmlconfig
 from pkg_resources import resource_filename,resource_stream
 from zope.component import getGlobalSiteManager, getUtility
@@ -19,7 +19,7 @@ if ini_file == None:
     raise ValueError('.ini file not found')
 
 _config=ini_file
-config_utility=ConfigParser()
+config_utility=ConfigParser(defaults=os.environ, interpolation=ExtendedInterpolation())
 config_utility.read(_config)
 GSM=getGlobalSiteManager()
 GSM.registerUtility(config_utility, Interface, name="configuration")

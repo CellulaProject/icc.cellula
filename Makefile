@@ -35,7 +35,7 @@ test: adjust-ini
 	@echo "================================================================"
 	@echo "Point Your browser to http://[::1]:8080 or http://127.0.0.1:8080"
 	@echo "================================================================"
-	$(VB)/pserve $(INI).ini --reload
+	pserve $(INI).ini --reload
 	#cd src && $(PYTHON) app.py
 
 dev-icc.rdfservice:
