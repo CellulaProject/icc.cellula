@@ -6,6 +6,11 @@ from icc.contentstorage import intdigest, hexdigest
 import os.path, os, signal
 from icc.cellula.indexer.sphinxapi import *
 from pkg_resources import resource_filename
+import os
+import os.path
+
+
+
 import logging
 logger=logging.getLogger('icc.cellula')
 
@@ -359,7 +364,12 @@ class SphinxIndexer(object):
 
         config=getUtility(Interface, "configuration")
         ic=config['indexer']
-        self.data_dir=ic['data_dir']
+
+        data_dir = os.path.abspath(ic['data_dir'])
+        if not os.path.exists(data_dir):
+            os.makedirs(data_dir)
+
+        self.data_dir = data_dir
         self.pid_file=os.path.join(self.data_dir, "searchd.pid")
         self.conf_file=ic['conf_file']
         self.batch_amount=int(ic.get('batch_amount', 200))
@@ -415,7 +425,7 @@ class SphinxIndexer(object):
             'port':self.port,
             'index_name':self.index_name,
         }
-        self.filepath_conf=os.path.join(self.data_dir, self.conf_file)
+        self.filepath_conf = os.path.join(self.data_dir, self.conf_file)
         of=open(self.filepath_conf, "w")
         of.write(config)
         of.close()

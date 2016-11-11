@@ -40,7 +40,11 @@ class LibExtractorExtractor(object):
         if not self.test_working():
             raise RuntimeError('cannot determine operability of extract utility')
 
-        self.tmp_path=config[self.config_section].get('tmp_path', tempfile.gettempdir())
+        tmp_path=config[self.config_section].get('tmp_path', tempfile.gettempdir())
+        tmp_path=os.path.abspath(tmp_path)
+        if not os.path.exists(tmp_path):
+            os.makedirs(tmp_path)
+        self.tmp_path = tmp_path
 
 
     def test_working(self):
@@ -56,6 +60,7 @@ class LibExtractorExtractor(object):
         if executable == None:
             executable = self.extractor
 
+        print([executable]+list(params))
         cp=sp.run([executable]+list(params), stdout=sp.PIPE, stderr=sp.PIPE)
         if cp.stderr and not ignore_err:
             if len(cp.stderr)>0:
