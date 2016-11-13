@@ -87,3 +87,4 @@ docs/_build/
 # PyBuilder
 target/
 src/icc/cellula/static/test/kadmin-free-responsive-admin-dashboard-template.zip
+.python-version
