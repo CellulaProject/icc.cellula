@@ -1,0 +1,110 @@
+
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    >
+  <include package="zope.component" file="meta.zcml" />
+  <!--  <i18n:registerTranslations directory="locales" /> -->
+
+
+  <!--
+  <include package="icc.restfuldocs" />
+  <include package="icc.contentstorage" />
+  <include package="icc.rdfservice" />
+  <include package="icc.restfuldocs" />
+  -->
+
+  <!--
+  <utility
+      factory="icc.contentstorage.kyotocabinet.Storage"
+      name="content"
+      />
+  -->
+
+  <utility
+      factory="icc.cellula.extractor.LibExtractorExtractor"
+      name="extractor"
+      />
+
+  <utility
+      factory="icc.cellula.extractor.TrackerExtractor"
+      name="content"
+      />
+
+  <utility
+      factory="icc.cellula.extractor.RecollExtractor"
+      name="recoll"
+      />
+
+  <!--
+  <utility
+      factory="icc.cellula.indexer.SphinxIndexer"
+      name="indexer"
+      />
+
+  <utility
+      factory="icc.rdfservice.RDFService"
+      name="rdf_service"
+      />
+
+  <utility
+      factory="icc.rdfservice.DocMetadataStorage"
+      name="documents"
+      />
+
+  <utility
+      factory="icc.cellula.auth.AuthenticationPolicy"
+      provides="pyramid.interfaces.IAuthenticationPolicy"
+      name="authen_policy"
+      />
+
+  <utility
+      factory="icc.cellula.auth.AuthorizationPolicy"
+      provides="pyramid.interfaces.IAuthorizationPolicy"
+      name="author_policy"
+      />
+  -->
+
+<!--
+  <utility
+      factory="icc.rdfservice.OrgStorage"
+      name="norg"
+      />
+-->
+  <!--
+  <utility
+      factory="icc.cellula.workers.PriorityQueue"
+      provides="icc.cellula.interfaces.IQueue"
+      name="tasks"
+      />
+  <utility
+      factory="threading.Lock"
+      provides="icc.cellula.interfaces.ILock"
+      name="content"
+      />
+  <utility
+      factory="threading.Lock"
+      provides="icc.cellula.interfaces.ILock"
+      name="documents"
+      />
+  <utility
+      factory="threading.Lock"
+      provides="icc.cellula.interfaces.ILock"
+      name="indexing"
+      />
+
+  <utility
+      factory="icc.cellula.mailing.Mailer"
+      provides="icc.cellula.interfaces.IMailer"
+      name="mailer"
+      />
+  -->
+<!--
+  <utility
+      factory="queue.Queue"
+      provides="icc.cellula.interfaces.IQueue"
+      name="results"
+      />
+  -->
+
+</configure>
