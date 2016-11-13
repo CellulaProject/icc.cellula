@@ -33,9 +33,8 @@ storage = getUtility(IContentStorage, name="content")
 
 # g=doc=getUtility(IGraph, name="doc")
 
-DEBUG=int(os.environ.get("DEBUG", 0))
-SHORTEN=int(os.environ.get("SHORTEN", 0))
-
+DEBUG = int(os.environ.get("DEBUG", 0))
+SHORTEN = int(os.environ.get("SHORTEN", 0))
 
 
 def annotations():  # generator
