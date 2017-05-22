@@ -1,1 +1,6 @@
-#__import__('pkg_resources').declare_namespace(__name__)
+from __future__ import print_function
+
+
+def includeme(global_config, **settings):
+    from .app import main
+    return main(global_config, **settings)

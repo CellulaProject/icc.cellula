@@ -93,7 +93,7 @@ class DocumentProcessingTask(DocumentTask):
         content_extractor = getUtility(IExtractor, name='content')
         cont_data = content_extractor.extract(self.content, ext_things)
 
-        if not 'text-body' in cont_data:
+        if 'text-body' not in cont_data:
             recoll_extractor = getUtility(IExtractor, name='recoll')
             ext_things.update(cont_data)
             cont_data = recoll_extractor.extract(self.content, ext_things)

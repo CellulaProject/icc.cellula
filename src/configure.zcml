@@ -6,6 +6,7 @@
   <include package="icc.contentstorage" />
   <include package="icc.rdfservice" />
   <include package="icc.cellula" />
+  <include package="icc.elstorage" />
 
   <!--
   <include package="icc.rake.models" />
