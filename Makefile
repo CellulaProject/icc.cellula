@@ -10,6 +10,8 @@ ROOT=$(PWD)
 INI=icc.cellula
 LCAT=src/icc/cellula/locales/
 
+SERVER_PORT=8081
+
 env:
 	[ -d $(V) ] || virtualenv  $(V)
 	$(VB)/easy_install --upgrade pip
@@ -33,7 +35,7 @@ test: adjust-ini
 	@ip a | grep 2001 || true
 	@ip a | grep 172. || true
 	@echo "================================================================"
-	@echo "Point Your browser to http://[::1]:8080 or http://127.0.0.1:8080"
+	@echo "Point Your browser to http://[::1]:$(SERVER_PORT) or http://127.0.0.1:$(SERVER_PORT)"
 	@echo "================================================================"
 	pserve $(INI).ini --reload
 	#cd src && $(PYTHON) app.py

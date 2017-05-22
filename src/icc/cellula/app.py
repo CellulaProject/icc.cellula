@@ -2,36 +2,32 @@
 """
 from configparser import ConfigParser, ExtendedInterpolation
 from zope.configuration.xmlconfig import xmlconfig
-from pkg_resources import resource_filename,resource_stream
+from pkg_resources import resource_filename, resource_stream
 from zope.component import getGlobalSiteManager, getUtility
 from zope.interface import Interface
 from icc.cellula.interfaces import IWorker
 from pyramid.interfaces import IAuthorizationPolicy, IAuthenticationPolicy
-import sys,os
+import sys
+import os
 import logging
-logger=logging.getLogger("icc.cellula")
+logger = logging.getLogger("icc.cellula")
 
-package=__name__
-ini_file=None
+package = __name__
+ini_file = None
 for arg in sys.argv:
     if arg.lower().endswith('.ini'):
-        ini_file=arg
+        ini_file = arg
 if ini_file == None:
     raise ValueError('.ini file not found')
 #_config=resource_filename(package, ini_file) # FIXME how to determine?
-_config=ini_file
+_config = ini_file
 
-config_utility=ConfigParser(defaults=os.environ, interpolation=ExtendedInterpolation())
+config_utility = ConfigParser(
+    defaults=os.environ, interpolation=ExtendedInterpolation())
 
 config_utility.read(_config)
-GSM=getGlobalSiteManager()
+GSM = getGlobalSiteManager()
 GSM.registerUtility(config_utility, Interface, name="configuration")
-
-xmlconfig(resource_stream(package, "configure.zcml"))
-
-from pyramid.config import Configurator
-from pkg_resources import resource_stream, resource_string
-from icc.cellula.interfaces import IApplication
 
 """
 from pyramid.request import Request
@@ -53,44 +49,43 @@ def request_factory(environ):
 config.set_request_factory(request_factory)
 """
 
-def main(global_config, **settings):
-    config = Configurator(settings=settings,
-        authentication_policy=getUtility(IAuthenticationPolicy, "authen_policy"),
-        authorization_policy=getUtility(IAuthorizationPolicy,   "author_policy")
-    )
-    config.add_static_view('images', 'icc.cellula:static/images', cache_max_age=3600)
-    config.add_static_view('fonts', 'icc.cellula:static/fonts', cache_max_age=3600)
-    config.add_static_view('script', 'icc.cellula:static/script', cache_max_age=3600)
-    config.add_static_view('styles', 'icc.cellula:static/styles', cache_max_age=3600)
-    config.add_static_view('test', 'icc.cellula:static/test', cache_max_age=3600)
-    config.add_static_view('LTE', 'icc.cellula:static/AdminLTE', cache_max_age=3600)
-    config.include("cornice")
 
+def main(global_config, **settings):
+    # config = Configurator(settings=settings,
+    #     authentication_policy=getUtility(IAuthenticationPolicy, "authen_policy"),
+    #     authorization_policy=getUtility(IAuthorizationPolicy,   "author_policy")
+    # )
+    # config.add_static_view('images', 'icc.cellula:static/images', cache_max_age=3600)
+    # config.add_static_view('fonts', 'icc.cellula:static/fonts', cache_max_age=3600)
+    # config.add_static_view('script', 'icc.cellula:static/script', cache_max_age=3600)
+    # config.add_static_view('styles', 'icc.cellula:static/styles', cache_max_age=3600)
+    # config.add_static_view('test', 'icc.cellula:static/test', cache_max_age=3600)
+    # config.add_static_view('LTE', 'icc.cellula:static/AdminLTE', cache_max_age=3600)
+    # config.include("cornice")
+
+    config.load_zcml("configure.zcml")
     config.add_translation_dirs('icc.cellula:locales')
     config.add_subscriber('icc.cellula.i18n.add_renderer_globals',
                           'pyramid.events.BeforeRender')
     config.add_subscriber('icc.cellula.i18n.add_localizer',
                           'pyramid.events.NewRequest')
 
-
     config.include('icc.cellula.views')
-    config.include('pyramid_debugtoolbar')
-    config.include("icc.rdfservice.views")
+    # config.include("icc.rdfservice.views")
     config.scan("icc.restfuldocs.views")
 
-    app=config.make_wsgi_app()
-    GSM.registerUtility(app, IApplication, name='application')
+    # app=config.make_wsgi_app()
 
-    qeue=getUtility(IWorker, name="queue")
+    qeue = getUtility(IWorker, name="queue")
     qeue.start()
-    return app
+    # return app
 
-if __name__=="__main__":
+if __name__ == "__main__":
     from waitress import serve
     import logging
 
     logger = logging.getLogger('waitress')
     logger.setLevel(logging.INFO)
 
-    wsgiapp=main(None)
+    wsgiapp = main(None)
     serve(wsgiapp, host='::', port=8080)

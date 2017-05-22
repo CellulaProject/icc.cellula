@@ -25,38 +25,37 @@ setup(name='icc.cellula',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'setuptools',
-        'rdflib',
-        'rdflib-jsonld',
-	'pyramid',
-	'waitress',
-	'cornice',
-#	'icc.rdfservice',
-#	'icc.restfuldocs',
-	'pyramid_debugtoolbar',
-	'pyramid_chameleon',
-	'Babel',
-	'lingua',
-	'passlib',
-	'bcrypt',
-	'cryptography',
-    #'pyramid_mailer',
-    'sendgrid',
-        ],
-      dependency_links = [
-#        'https://github.com/eugeneai/rdflib-kyotocabinet/archive/master.zip#egg=rdflib-kyotocabinet-0.1',
-        'https://github.com/eugeneai/icc.restfuldocs/archive/master.zip#egg=icc.restfuldocs-0.0.1',
-        'https://github.com/eugeneai/icc.rdfservice/archive/master.zip#egg=icc.rdfservice-0.1',
-        ],
-      package_dir = {'': 'src'},
-      entry_points = """\
+          'setuptools',
+          'rdflib',
+          'rdflib-jsonld',
+          'pyramid',
+          # 'waitress',
+          #	'icc.rdfservice',
+          #	'icc.restfuldocs',
+          'pyramid_debugtoolbar',
+          'pyramid_chameleon',
+          'Babel',
+          'lingua',
+          'passlib',
+          'bcrypt',
+          'cryptography',
+          #'pyramid_mailer',
+          'sendgrid',
+      ],
+      dependency_links=[
+          #        'https://github.com/eugeneai/rdflib-kyotocabinet/archive/master.zip#egg=rdflib-kyotocabinet-0.1',
+          'https://github.com/eugeneai/icc.restfuldocs/archive/master.zip#egg=icc.restfuldocs-0.0.1',
+          'https://github.com/eugeneai/icc.rdfservice/archive/master.zip#egg=icc.rdfservice-0.1',
+      ],
+      package_dir={'': 'src'},
+      entry_points="""\
       [paste.app_factory]
-      main=icc.cellula.app:main
+      main=isu.webapp.app:main
       """,
-#    message_extractors = {
-#        'src/icc/cellula': [
-#            ('**.py',                'python', None),
-#            ('**/templates/**.pt',   'xml', None),
-#        ],
-#    },
-)
+      #    message_extractors = {
+      #        'src/icc/cellula': [
+      #            ('**.py',                'python', None),
+      #            ('**/templates/**.pt',   'xml', None),
+      #        ],
+      #    },
+      )
