@@ -751,6 +751,8 @@ class UploadDocView(View):
 class ProfileView(View):
     pass
 
+# FIXME: NOT NEEDED any more
+
 
 def includeme(config):
     # config.scan("icc.cellula.views")

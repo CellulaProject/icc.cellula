@@ -50,7 +50,7 @@ config.set_request_factory(request_factory)
 """
 
 
-def main(global_config, **settings):
+def configuration(global_config, **settings):
     # config = Configurator(settings=settings,
     #     authentication_policy=getUtility(IAuthenticationPolicy, "authen_policy"),
     #     authorization_policy=getUtility(IAuthorizationPolicy,   "author_policy")
@@ -64,18 +64,15 @@ def main(global_config, **settings):
     # config.include("cornice")
 
     config.load_zcml("configure.zcml")
-    config.add_translation_dirs('icc.cellula:locales')
-    config.add_subscriber('icc.cellula.i18n.add_renderer_globals',
-                          'pyramid.events.BeforeRender')
-    config.add_subscriber('icc.cellula.i18n.add_localizer',
-                          'pyramid.events.NewRequest')
+    config.load_zcml("webapp.zcml")
 
-    config.include('icc.cellula.views')
+    # config.include('icc.cellula.views')
     # config.include("icc.rdfservice.views")
-    config.scan("icc.restfuldocs.views")
+    # ???? config.scan("icc.restfuldocs.views")
 
     # app=config.make_wsgi_app()
 
+    # FIXME: Start queue upon "application ready" event !!! not here
     qeue = getUtility(IWorker, name="queue")
     qeue.start()
     # return app

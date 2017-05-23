@@ -1,0 +1,102 @@
+<configure xmlns="http://pylonshq.com/pyramid">
+
+  <include package="pyramid_zcml" />
+
+  <translationdir dir="icc.cellula:locales/"/>
+
+  <subscriber
+      for="pyramid.events.BeforeRender"
+      handler="icc.cellula.i18n.add_renderer_globals"
+      />
+
+  <subscriber
+      for="pyramid.events.NewRequest"
+      handler="icc.cellula.i18n.add_localizer"
+      />
+
+  <!-- icc.cellula.views -->
+
+  <route
+      name="dashboard"
+      pattern="/"
+      />
+
+  <route
+      name="archive"
+      pattern="/archive"
+      />
+
+  <route
+      name="email"
+      pattern="/mail"
+      />
+
+  <route
+      name="profile"
+      pattern="/profile"
+      />
+
+  <route
+      name="upload"
+      pattern="/file_upload"
+      />
+
+  <route
+      name="get_docs"
+      pattern="/docs"
+      />
+
+  <route
+      name="get_doc"
+      pattern="/doc"
+      />
+
+  <route
+      name="login"
+      pattern="/login"
+      />
+
+  <route
+      name="register"
+      pattern="/register"
+      />
+
+  <route
+      name="logout"
+      pattern="/logout"
+      />
+
+  <route
+      name="restore_password"
+      pattern="/restore"
+      />
+
+  <route
+      name="debug_graph"
+      pattern="/archive_debug"
+      />
+
+  <route
+      name="debug_search"
+      pattern="/search"
+      />
+
+  <route
+      name="metal_test"
+      pattern="/metal"
+      />
+
+  <route
+      name="maintain"
+      pattern="/maintain"
+      />
+
+  <!-- FIXME: ideally not needed -->
+  <subscriber
+      for="pyramid.events.BeforeRender"
+      handler="icc.cellula.subscribers.add_base_tempfile"
+      />
+
+  <!-- -->
+
+</configure>
