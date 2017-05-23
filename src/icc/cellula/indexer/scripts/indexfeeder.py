@@ -1,7 +1,7 @@
 from configparser import ConfigParser, ExtendedInterpolation
 from zope.configuration.xmlconfig import xmlconfig
 from pkg_resources import resource_filename, resource_stream
-from zope.component import getGlobalSiteManager, getUtility
+from zope.component import getSiteManager, getUtility
 from zope.interface import Interface
 from icc.contentstorage.interfaces import IContentStorage
 # from icc.rdfservice.interfaces import IGraph
@@ -24,7 +24,7 @@ _config = ini_file
 config_utility = ConfigParser(
     defaults=os.environ, interpolation=ExtendedInterpolation())
 config_utility.read(_config)
-GSM = getGlobalSiteManager()
+GSM = getSiteManager()
 GSM.registerUtility(config_utility, Interface, name="configuration")
 
 xmlconfig(resource_stream("icc.cellula", "indexfeeder.zcml"))

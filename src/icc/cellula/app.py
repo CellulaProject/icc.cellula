@@ -3,7 +3,7 @@
 from configparser import ConfigParser, ExtendedInterpolation
 from zope.configuration.xmlconfig import xmlconfig
 from pkg_resources import resource_filename, resource_stream
-from zope.component import getGlobalSiteManager, getUtility
+from zope.component import getSiteManager, getUtility
 from zope.interface import Interface
 from icc.cellula.interfaces import IWorker
 from pyramid.interfaces import IAuthorizationPolicy, IAuthenticationPolicy
@@ -26,7 +26,7 @@ config_utility = ConfigParser(
     defaults=os.environ, interpolation=ExtendedInterpolation())
 
 config_utility.read(_config)
-GSM = getGlobalSiteManager()
+GSM = getSiteManager()
 GSM.registerUtility(config_utility, Interface, name="configuration")
 
 """

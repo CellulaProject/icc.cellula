@@ -1,4 +1,3 @@
-
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
@@ -58,7 +57,7 @@
       factory="icc.rdfservice.DocMetadataStorage"
       name="documents"
       /> -->
-      
+
   <utility
       factory="icc.elstorage.ElasticRDFStorage"
       name="documents"
