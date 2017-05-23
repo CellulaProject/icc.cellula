@@ -55,34 +55,12 @@ def configuration(global_config, **settings):
     #     authentication_policy=getUtility(IAuthenticationPolicy, "authen_policy"),
     #     authorization_policy=getUtility(IAuthorizationPolicy,   "author_policy")
     # )
-    # config.add_static_view('images', 'icc.cellula:static/images', cache_max_age=3600)
-    # config.add_static_view('fonts', 'icc.cellula:static/fonts', cache_max_age=3600)
-    # config.add_static_view('script', 'icc.cellula:static/script', cache_max_age=3600)
-    # config.add_static_view('styles', 'icc.cellula:static/styles', cache_max_age=3600)
-    # config.add_static_view('test', 'icc.cellula:static/test', cache_max_age=3600)
-    # config.add_static_view('LTE', 'icc.cellula:static/AdminLTE', cache_max_age=3600)
-    # config.include("cornice")
 
     config.load_zcml("configure.zcml")
     config.load_zcml("webapp.zcml")
 
-    # config.include('icc.cellula.views')
-    # config.include("icc.rdfservice.views")
     # ???? config.scan("icc.restfuldocs.views")
-
-    # app=config.make_wsgi_app()
 
     # FIXME: Start queue upon "application ready" event !!! not here
     qeue = getUtility(IWorker, name="queue")
     qeue.start()
-    # return app
-
-if __name__ == "__main__":
-    from waitress import serve
-    import logging
-
-    logger = logging.getLogger('waitress')
-    logger.setLevel(logging.INFO)
-
-    wsgiapp = main(None)
-    serve(wsgiapp, host='::', port=8080)
