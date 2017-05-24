@@ -42,19 +42,22 @@ def _(x):
     return x
 
 
-class view_config(pyramid.view.view_config):
+class view_config(object):
     __view_properties__ = {
         'title': _('====TITLE====='),
         # 'context':None, # a clash with add_wiew
     }
 
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+
     def __call__(self, wrapped):
         props = wrapped.__view_properties__ = {}
         for prop, default in self.__class__.__view_properties__.items():
-            value = self.__dict__.pop(prop, default)
+            value = self.kwargs.pop(prop, default)
             props[prop] = value
 
-        return pyramid.view.view_config.__call__(self, wrapped)
+        return wrapped
 
 
 class View(object):
@@ -105,6 +108,7 @@ class View(object):
         """Return a generator for panel items URLs.
         """
         _ = self.request.translate
+
         def pack(item):
             url, name, icon = item
             d = {
@@ -203,8 +207,7 @@ class View(object):
         return None
 
 
-@view_config(route_name='archive', renderer='templates/indexLTE.pt',
-             request_method="GET", title=_('Document Archive'))
+@view_config(title=_('Document Archive'))
 class ArchiveView(View):
     """View for archive
     """
@@ -327,8 +330,7 @@ margin-right:5px;
         """
 
 
-@view_config(route_name="debug_graph", renderer='templates/indexLTE.pt',
-             title=_("Debug graph"))
+@view_config(title=_("Debug graph"))
 class GraphView(View):
 
     __acl__ = [
@@ -356,8 +358,7 @@ class GraphView(View):
     '''
 
 
-@view_config(route_name="debug_search", renderer='templates/search.pt',
-             title=_("Debug search"))  # , permission='view' )
+@view_config(title=_("Debug search"))
 class SearchView(View):
 
     @property
@@ -419,7 +420,6 @@ class SearchView(View):
         yield from self.sparql(Q, self.doc)
 
 
-@view_config(route_name="get_docs", renderer='templates/doc_table.pt')
 class DocsView(View):
 
     @property
@@ -500,7 +500,6 @@ class SendDocView(View):
         return response
 
 
-@view_config(route_name="get_doc")
 class ShowDocView(SendDocView):
     """Show a document
     """
@@ -527,8 +526,7 @@ class ShowDocView(SendDocView):
         return response
 
 
-@view_config(route_name="login", renderer="templates/loginLTE.pt",
-             title=_("Login"), request_method=("GET", "POST"))
+@view_config(title=_("Login"))
 class LoginRegisterView(View):
     LOGIN = """
     SELECT DISTINCT ?hash ?name
@@ -616,22 +614,19 @@ class LoginRegisterView(View):
         return d
 
 
-@view_config(route_name="register", renderer="templates/loginLTE.pt",
-             title=_("Register"))
+@view_config(title=_("Register"))
 class RegisterView(LoginRegisterView):
     pass
 
 
-@view_config(route_name="logout", renderer="templates/loginLTE.pt",
-             title=_("Logout"))
+@view_config(title=_("Logout"))
 class LogoutView(LoginRegisterView):
 
     def action(self):
         self.unregister()
 
 
-@view_config(route_name="restore_password", renderer="templates/restore_login.pt",
-             title=_("Restore password"))
+@view_config(title=_("Restore password"))
 class RestorePasswordView(View):
 
     def action(self):
@@ -653,8 +648,7 @@ class RestorePasswordView(View):
             task.enqueue(view=self)
 
 
-@view_config(route_name='maintain', renderer='templates/maintain.pt',
-             title=_("Maintainance View"))
+@view_config(title=_("Maintainance View"))
 class MaintainanceView(View):
 
     def answer(self):
@@ -662,25 +656,21 @@ class MaintainanceView(View):
         ContentIndexTask().enqueue(block=False, view=self)
 
 
-@view_config(route_name='metal_test', renderer='templates/test.pt',
-             title=_("Test View"))
+@view_config(title=_("Test View"))
 class MetalTestView(View):
     pass
 
 
-@view_config(route_name='email', renderer='templates/indexLTE.pt',
-             title=_("E-Mail"))
+@view_config(title=_("E-Mail"))
 class EmailView(View):
     pass
 
 
-@view_config(route_name='dashboard', renderer='templates/indexLTE.pt',
-             title=_('Dashboard'))
+@view_config(title=_('Dashboard'))
 class DashboardView(View):
     pass
 
 
-@view_config(route_name='upload', request_method="POST", renderer='json')
 class UploadDocView(View):
 
     def __call__(self):
@@ -729,7 +719,8 @@ class UploadDocView(View):
         logger.debug((rc, doc_id, storage.db.error()))
         if rc:
             request.response.status_code = 400
-            return {'error': 'already exists', 'explanation': 'the file is already stored'}
+            return {'error': 'already exists',
+                    'explanation': 'the file is already stored'}
 
         headers = things
 
@@ -747,35 +738,5 @@ class UploadDocView(View):
         return things
 
 
-@view_config(route_name="profile")
 class ProfileView(View):
     pass
-
-# FIXME: NOT NEEDED any more
-
-
-def includeme(config):
-    # config.scan("icc.cellula.views")
-    config.scan()
-    config.add_route('dashboard', "/")
-    config.add_route('archive', "/archive")
-    config.add_route('email', "/mail")
-    config.add_route('profile', "/profile")
-    config.add_route('upload', "/file_upload")
-    config.add_route('get_docs', "/docs")
-    config.add_route('get_doc', "/doc")
-
-    config.add_route('login', "/login")
-    config.add_route('register', "/register")
-    config.add_route('logout', "/logout")
-    config.add_route('restore_password', "/restore")
-
-    config.add_route('debug_graph', "/archive_debug")
-    config.add_route('debug_search', "/search")
-    config.add_route('metal_test', "/metal")
-    config.add_route('maintain', "/maintain")
-
-    config.add_subscriber('icc.cellula.subscribers.add_base_template',
-                          'pyramid.events.BeforeRender')
-
-    # config.scan()

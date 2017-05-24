@@ -91,6 +91,106 @@
       pattern="/maintain"
       />
 
+  <!-- views -->
+  <view
+      route_name="archive"
+      renderer="templates/indexLTE.pt"
+      request_method="GET"
+      view=".views.ArchiveView"
+      />
+
+  <view
+      route_name="debug_graph"
+      renderer="templates/indexLTE.pt"
+      view=".views.GraphView"
+      />
+
+  <view
+      route_name="debug_search"
+      renderer="templates/search.pt"
+      view=".views.SearchView"
+      />
+
+  <view
+      route_name="get_docs"
+      renderer="templates/doc_table.pt"
+      view=".views.DocsView"
+      />
+
+  <view
+      route_name="get_doc"
+      view=".views.ShowDocView"
+      />
+
+  <view
+      route_name="login"
+      renderer="templates/loginLTE.pt"
+      request_method="GET"
+      view=".views.LoginRegisterView"
+      />
+
+  <view
+      route_name="login"
+      renderer="templates/loginLTE.pt"
+      request_method="POST"
+      view=".views.LoginRegisterView"
+      />
+
+  <view
+      route_name="register"
+      renderer="templates/loginLTE.pt"
+      view=".views.RegisterView"
+      />
+
+  <view
+      route_name="logout"
+      renderer="templates/loginLTE.pt"
+      view=".views.LogoutView"
+      />
+
+  <view
+      route_name="restore_password"
+      renderer="templates/restore_login.pt"
+      view=".views.RestorePasswordView"
+      />
+
+  <view
+      route_name="maintain"
+      renderer="templates/maintain.pt"
+      view=".views.MaintainanceView"
+      />
+
+  <view
+      route_name="metal_test"
+      renderer="templates/test.pt"
+      request_method="GET"
+      view=".views.MetalTestView"
+      />
+
+  <view
+      route_name="email"
+      renderer="templates/indexLTE.pt"
+      view=".views.EmailView"
+      />
+
+  <view
+      route_name="upload"
+      renderer="json"
+      request_method="POST"
+      view=".views.UploadDocView"
+      />
+
+  <view
+      route_name="dashboard"
+      renderer="templates/indexLTE.pt"
+      view=".views.DashboardView"
+      />
+
+  <view
+      route_name="profile"
+      view=".views.ProfileView"
+      />
+
   <!-- FIXME: ideally not needed -->
   <subscriber
       for="pyramid.events.BeforeRender"
