@@ -1,10 +1,8 @@
 from pyramid.renderers import get_renderer
 from zope.component import getUtility
+from icc.cellula.interfaces import IWorker, ILock, IQueue
 
-#from pyramid.events import subscriber, BeforeRender
 
-
-#@subscriber(BeforeRender)
 def add_base_template(event):
     """Add base templates.
     """
@@ -15,5 +13,9 @@ def add_base_template(event):
 
 
 def start_worker_queue(event):
+    print("---------------> 1")
     qeue = getUtility(IWorker, name="queue")
     qeue.start()
+    getUtility(ILock, name="singleton")
+    getUtility(IQueue, name="tasks")
+    print("---------------> 2")

@@ -1,16 +1,22 @@
-<configure
+<!-- <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     >
-  <include package="zope.component" file="meta.zcml" />
+  <include package="zope.component" file="meta.zcml" /> -->
+<configure xmlns="http://pylonshq.com/pyramid">
+
+  <include package="pyramid_zcml" />
+
   <!--  <i18n:registerTranslations directory="locales" /> -->
 
   <!-- Must be before queue utility as it uses this lock -->
+
   <utility
       factory="threading.Lock"
       provides="icc.cellula.interfaces.ILock"
       name="singleton"
       />
+
   <utility
       factory="icc.cellula.workers.QueueThread"
       name="queue"
@@ -91,6 +97,7 @@
       provides="icc.cellula.interfaces.IQueue"
       name="tasks"
       />
+
   <utility
       factory="threading.Lock"
       provides="icc.cellula.interfaces.ILock"

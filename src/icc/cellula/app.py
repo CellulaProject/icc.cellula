@@ -1,14 +1,7 @@
 """Main entry point
 """
-from configparser import ConfigParser, ExtendedInterpolation
-from zope.configuration.xmlconfig import xmlconfig
-from pkg_resources import resource_filename, resource_stream
-from zope.component import getSiteManager, getUtility
-from zope.interface import Interface
-from icc.cellula.interfaces import IWorker
-from pyramid.interfaces import IAuthorizationPolicy, IAuthenticationPolicy
-import sys
-import os
+from zope.component import getUtility, getSiteManager
+from .interfaces import IQueue, ILock, IWorker
 import logging
 logger = logging.getLogger("icc.cellula")
 
@@ -31,5 +24,7 @@ config.set_request_factory(request_factory)
 
 
 def configuration(config, **settings):
+    # config.hook_zca()
+
     config.load_zcml("configure.zcml")
     config.load_zcml("webapp.zcml")
