@@ -16,11 +16,14 @@
       name="queue"
       />
 
-  <include package="icc.restfuldocs" />
+  <!--
+      <include package="icc.restfuldocs" />
+      -->
   <include package="icc.contentstorage" />
   <include package="icc.rdfservice" />
-  <include package="icc.restfuldocs" />
-  <include package="icc.elstorage" />
+  <!--
+      <include package="icc.elstorage" />
+      -->
 
   <utility
       factory="icc.contentstorage.kyotocabinet.Storage"
@@ -52,16 +55,17 @@
       name="rdf_service"
       />
 
-  <!--
   <utility
       factory="icc.rdfservice.DocMetadataStorage"
       name="documents"
-      /> -->
+      />
 
+  <!--
   <utility
       factory="icc.elstorage.ElasticRDFStorage"
       name="documents"
       />
+      -->
 
   <utility
       factory="icc.cellula.auth.AuthenticationPolicy"

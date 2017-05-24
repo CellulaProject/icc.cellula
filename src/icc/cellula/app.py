@@ -50,7 +50,7 @@ config.set_request_factory(request_factory)
 """
 
 
-def configuration(global_config, **settings):
+def configuration(config, **settings):
     # config = Configurator(settings=settings,
     #     authentication_policy=getUtility(IAuthenticationPolicy, "authen_policy"),
     #     authorization_policy=getUtility(IAuthorizationPolicy,   "author_policy")
@@ -62,5 +62,3 @@ def configuration(global_config, **settings):
     # ???? config.scan("icc.restfuldocs.views")
 
     # FIXME: Start queue upon "application ready" event !!! not here
-    qeue = getUtility(IWorker, name="queue")
-    qeue.start()

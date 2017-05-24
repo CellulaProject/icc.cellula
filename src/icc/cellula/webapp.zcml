@@ -94,9 +94,14 @@
   <!-- FIXME: ideally not needed -->
   <subscriber
       for="pyramid.events.BeforeRender"
-      handler="icc.cellula.subscribers.add_base_tempfile"
+      handler="icc.cellula.subscribers.add_base_template"
       />
 
   <!-- -->
+  <subscriber
+      for="pyramid.events.ApplicationCreated"
+      handler="icc.cellula.subscribers.start_worker_queue"
+      />
+
 
 </configure>

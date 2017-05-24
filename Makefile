@@ -1,6 +1,6 @@
 .PHONY: env dev install test edit dev-icc.rdfservice \
     dev-icc.restfuldocs py pot init-ru update-ru comp-cat \
-    upd-cat adjust-ini devel
+    upd-cat adjust-ini devel serv serve server
 
 LPYTHON=python3
 V=$(PWD)/../$(LPYTHON)
@@ -30,6 +30,8 @@ install: env comp-cat
 
 edit:
 	cd src && emacs
+
+serv server serve: test
 
 test: adjust-ini
 	@ip a | grep 2001 || true
