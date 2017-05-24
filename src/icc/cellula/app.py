@@ -12,27 +12,7 @@ import os
 import logging
 logger = logging.getLogger("icc.cellula")
 
-package = __name__
-ini_file = None
-for arg in sys.argv:
-    if arg.lower().endswith('.ini'):
-        ini_file = arg
-if ini_file == None:
-    raise ValueError('.ini file not found')
-#_config=resource_filename(package, ini_file) # FIXME how to determine?
-_config = ini_file
-
-config_utility = ConfigParser(
-    defaults=os.environ, interpolation=ExtendedInterpolation())
-
-config_utility.read(_config)
-GSM = getSiteManager()
-GSM.registerUtility(config_utility, Interface, name="configuration")
-
-"""
-from pyramid.request import Request
-from pyramid.request import Response
-
+"""# FIXME: Make it configurable subscriber.
 def request_factory(environ):
     request = Request(environ)
     if request.is_xhr:
@@ -51,14 +31,5 @@ config.set_request_factory(request_factory)
 
 
 def configuration(config, **settings):
-    # config = Configurator(settings=settings,
-    #     authentication_policy=getUtility(IAuthenticationPolicy, "authen_policy"),
-    #     authorization_policy=getUtility(IAuthorizationPolicy,   "author_policy")
-    # )
-
     config.load_zcml("configure.zcml")
     config.load_zcml("webapp.zcml")
-
-    # ???? config.scan("icc.restfuldocs.views")
-
-    # FIXME: Start queue upon "application ready" event !!! not here
