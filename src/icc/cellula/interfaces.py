@@ -68,5 +68,24 @@ class ILock(Interface):
 
 
 class IMailer(Interface):
-    """MArk a component to be mailer
+    """Mark a component to be mailer
     """
+
+
+class IRTMetadataIndex(Interface):
+    """Index metadata features.
+    """
+
+    def put(features, id):
+        """Put features data into the index
+        under the `id`.
+        """
+
+    def remove(id):
+        """Remove features form index identified by
+        `id`
+        """
+
+    def query(query):
+        """Run `query` return list of corresponding
+        document data."""

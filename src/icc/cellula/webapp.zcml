@@ -191,6 +191,16 @@
       view=".views.ProfileView"
       />
 
+  <static
+      name="script"
+      path="icc.cellula:static/script"
+      />
+
+  <static
+      name="/dist/css/cellula.css"
+      path="icc.cellula:static/AdminLTE/dist/css/cellula.css"
+      />
+
   <!-- FIXME: ideally not needed -->
   <subscriber
       for="pyramid.events.BeforeRender"

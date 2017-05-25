@@ -37,13 +37,14 @@ class ThreadWorker(object):
             self.waiting = True
             self.task = None
             #logger.debug("waiting for a task.")
-            wrk = getUtility(IWorker, name="queue")
             if logger.isEnabledFor(logging.DEBUG):
+                wrk = getUtility(IWorker, name="queue")
                 logger.debug("Queue %s has %d tasks. Workers occupied: %d; free:%d" % (tasks,
                                                                                        tasks.qsize(), wrk.processing(), wrk.waiting()))
                 logger.debug("Singleton tasks: {}".format(tasks.singletons))
                 logger.debug("Active Tasks:{}".format(wrk.tasks()))
-            del wrk
+                del wrk
+
             self.task = task = tasks.get()
             task.locks = []
 

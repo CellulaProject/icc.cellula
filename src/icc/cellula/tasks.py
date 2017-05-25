@@ -10,6 +10,7 @@ from zope.interface import implementer, Interface
 from string import Template
 import time
 import logging
+from .interfaces import IRTMetadataIndex
 logger = logging.getLogger('icc.cellula')
 
 
@@ -113,8 +114,10 @@ class DocumentProcessingTask(DocumentTask):
         if self.text_content:
             self.enqueue(DocumentStoreTask(self.text_content,
                                            self.new_headers, key='text-id'))
-            self.enqueue(ContentIndexTask())
+            # self.enqueue(ContentIndexTask())
         self.enqueue(DocumentMetaStoreTask(self.new_headers))
+        self.enqueue(DocumentElasticIndexTask(
+            self.text_content, self.new_headers))
         # self.enqueue(MetaIndexTask())
 
 
@@ -137,7 +140,7 @@ class MetadataStorageQueryMixin(object):
             q = Template(self.__class__.query).substitute(**qp)
             if 'LIMIT' in qp:
                 q += " LIMIT {LIMIT}\n".format(**qp)
-            if doc_meta == None:
+            if doc_meta is None:
                 logger.error("Storage '{}' not found.".format(graph))
                 return []
             return doc_meta.sparql(query=q)
@@ -256,6 +259,21 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
             logger.error(
                 "Document '{}' has metadata, but does not its content!".format(self.doc_id))
             # FIXME Document must be eliminated from matadatastorage
+
+
+class DocumentElasticIndexTask(DocumentTask):
+    priority = 20  # the lowest priority
+    delay = 5  # sec
+    processing = "thread"
+
+    def run(self):
+        id = self.headers["id"]
+        logger.info(
+            "------------- Content index task run ----------------------------")
+        # logger.debug(self.content[:100])
+        # logger.debug(self.headers.keys())
+        estore = getUtility(IRTMetadataIndex, "elastic")
+        estore.put(self.headers, id=id)
 
 
 @implementer(ISingletonTask)

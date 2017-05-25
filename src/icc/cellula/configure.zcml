@@ -48,10 +48,12 @@
       name="recoll"
       />
 
+  <!--
   <utility
       factory="icc.cellula.indexer.SphinxIndexer"
       name="indexer"
       />
+  -->
 
   <utility
       factory="icc.rdfservice.RDFService"
@@ -63,12 +65,10 @@
       name="documents"
       />
 
-  <!--
   <utility
-      factory="icc.elstorage.ElasticRDFStorage"
-      name="documents"
+      factory="icc.cellula.elstorage.MetadataStorage"
+      name="elastic"
       />
-      -->
 
   <utility
       factory="icc.cellula.auth.AuthenticationPolicy"
