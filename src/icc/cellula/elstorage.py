@@ -15,6 +15,7 @@ class ElasticStorage(object):
         self.index = index
         self.engine = Elasticsearch([self.url])
         self.doctype = doctype
+        refresh = refresh.lower() not in ["0", "", "off", "false"]
         self.refresh = refresh
 
     def put(self, features, id):
@@ -25,12 +26,60 @@ class ElasticStorage(object):
                           refresh=self.refresh
                           )
 
+    def get(self, id):
+        return self.engine.get(index=self.index,
+                               doc_type=self.doctype,
+                               refresh=self.refresh,
+                               id=id)
+
     def remove(self, id):
-        pass
+        return self.engine.delete(index=self.index,
+                                  doc_type=self.doctype,
+                                  refresh=self.refresh,
+                                  id=id)
 
     def query(self, query):
         """Run query return list of corresponding
         document data."""
+        hits = self.engine.search(index=self.index,
+                                  doc_type=self.doctype,
+                                  #body={"query": {"match_all": {}}}
+                                  body={
+                                      "query": {
+                                          "simple_query_string": {
+                                              "query": query,
+                                              "analyzer": "snowball",
+                                              # "fields": ["body^5","_all"],
+                                              "default_operator": "and"
+                                          }
+                                      }
+                                  }
+                                  )
+        return self.convert(hits)
+
+    def convert(self, hits):
+        total = hits["hits"]["total"]
+        hits = [hit["_source"] for hit in hits["hits"]["hits"]]
+        return total, hits
+
+    def documents(self, min=None, max=None):
+        """Return a "representative" list of documents, e.g.,
+        for list table construction.
+        """
+        hits = self.engine.search(index=self.index,
+                                  doc_type=self.doctype,
+                                  body={
+                                      "from": 0,
+                                      "size": 20,
+                                      "query": {"match_all": {}
+                                                }
+                                  }
+                                  )
+
+        return self.convert(hits)
+
+    def refresh(self):
+        return self.engine.refresh(index=self.index)
 
 
 class MetadataStorage(ElasticStorage):

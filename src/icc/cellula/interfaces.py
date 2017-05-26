@@ -81,6 +81,10 @@ class IRTMetadataIndex(Interface):
         under the `id`.
         """
 
+    def get(id):
+        """Return a document having supplied `id`
+        """
+
     def remove(id):
         """Remove features form index identified by
         `id`
@@ -89,3 +93,11 @@ class IRTMetadataIndex(Interface):
     def query(query):
         """Run `query` return list of corresponding
         document data."""
+
+    def documants():
+        """Return a "representative" list of documents.
+        """
+
+    def refresh():
+        """Refresh the index
+        """

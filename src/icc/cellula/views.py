@@ -9,6 +9,7 @@ from icc.contentstorage import hexdigest
 from zope.component import getUtility, queryUtility
 
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
+from icc.cellula.interfaces import IRTMetadataIndex
 from icc.cellula.indexer.interfaces import IIndexer
 
 from rdflib import Literal
@@ -429,7 +430,8 @@ class DocsView(View):
         dmax = datetime.timedelta(days=+1)
         tmin = now + dmin
         tmax = now + dmax
-        g = getUtility(IRDFStorage, "documents")
+        # g = getUtility(IRDFStorage, "documents")
+        g = getUtility(IRTMetadataIndex, "elastic")
         return g.documents(min=tmin, max=tmax)
 
 

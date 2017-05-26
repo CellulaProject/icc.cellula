@@ -18,12 +18,12 @@
         <td i18n:translate=''>File</td>
         <td i18n:translate=''>Incoming #</td>
       </tr>
-      <tr tal:repeat="r view.docs">
-        <td tal:content="r[0]"></td>
-        <td tal:content="r[1]"></td>
+      <tr tal:repeat="r view.docs[1]">
+        <td tal:content="string:'NODATE'"></td>
+        <td tal:content="r['title'] | nothing"></td>
         <td>
           <a href="#"
-             tal:attributes="href string:${request.route_url('get_doc')}?doc_id=${r[2]}" tal:content="r[3]" target="_blank"></a>
+             tal:attributes="href string:${request.route_url('get_doc')}?doc_id=${r['id']}" tal:content="r['File-Name'] | r['id']" target="_blank"></a>
         </td>
         <td>
           <form>
