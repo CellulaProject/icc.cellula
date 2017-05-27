@@ -202,6 +202,15 @@
       renderer="templates/marc.pt"
       />
 
+  <!--
+  <view
+      route_name="marc-import-results"
+      view=".marc.views.View"
+      renderer="templates/marc.pt"
+      attr = "result_table"
+      />
+      -->
+
   <static
       name="script"
       path="icc.cellula:static/script"

@@ -12,25 +12,63 @@ class View(views.View, cviews.View):
     """
     title = _("Import book data into MARC records")
 
-    # @property
-    # def body(self):
-    #     return "BODY"
+    def action(self):
+        pass
 
-    # def action(self):
-    #     pass
+    def answer(self):
+        return [
+            {
+                "File-Name": "qweqwe.pdf",
+                "title": "Title qwewqe",
+                "id": "293581304534 34534",
+                "ISBN": "90123-123",
+                "author": "sdd"
+            },
+            {
+                "File-Name": "qweqwe.pdf",
+                "title": "Title qwewqe",
+                "id": "293581304534 34534",
+                "ISBN": "90123-123",
+                "author": "sdd"
+            },
+            {
+                "File-Name": "qweqwe.pdf",
+                "title": "Title qwewqe",
+                "id": "293581304534 34534",
+                "ISBN": "90123-123",
+                "author": "sdd"
+            },
+            {
+                "File-Name": "qweqwe.pdf",
+                "title": "Title qwewqe",
+                "id": "293581304534 34534",
+                "ISBN": "90123-123",
+                "author": "sdd"
+            },
+            {
+                "File-Name": "qweqwe.pdf",
+                "title": "Title qwewqe",
+                "id": "293581304534 34534",
+                "ISBN": "90123-123",
+                "author": "sdd"
+            },
+            {
+                "File-Name": "qweqwe.pdf",
+                "title": "Title qwewqe",
+                "id": "293581304534 34534",
+                "ISBN": "90123-123",
+                "author": "sdd"
+            },
+            {
+                "File-Name": "qweqwe.pdf",
+                "title": "Title qwewqe",
+                "id": "293581304534 34534",
+                "ISBN": "90123-123",
+                "author": "sdd"
+            }
+        ]
 
-    # def answer(self):
-    #     return
+    progress = "Made 3 books..."
 
-    # def __call__(self):
-    #     self.action()
-    #     answer = self.answer()
-    #     view = {'view': self}
-    #     if answer != None:
-    #         view['answer'] = answer
-    #     # if self.context != None:
-    #     #    view['context']=self.context
-    #     # template
-    #     # attrs
-    #     self.request.response.headers['Access-Control-Allow-Origin'] = '*'
-    #     return view
+    def result_table(self):
+        return self()
