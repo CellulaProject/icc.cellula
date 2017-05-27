@@ -7,19 +7,19 @@
     <div class="panel panel-default" tal:define="src view.answer">
       <div class="panel-heading">Search result</div>
       <div class="panel-body">
-        <p>Found results: <span tal:replace="src.total_found"></span></p>
+        <p>Found results: <span tal:replace="view.answer[0]"></span></p>
       </div>
-      <div tal:condition="src['total_found']>0 | nothing" tal:omit-tag="">
+      <div tal:condition="view.matches | nothing" tal:omit-tag="">
         <!-- <pre tal:content="src"/> -->
         <table class="table">
           <tr tal:repeat="r view.matches">
-            <td tal:content="r[0]">Date</td>
-            <td tal:content="r[1] | default" i18n:translate=''>No Title</td>
+            <td tal:content="string: NONE">Date</td>
+            <td tal:content="r['title'] | default" i18n:translate=''>No Title</td>
             <td>
               <a href="#"
                  tal:attributes="href
-                                 string:${request.route_url('get_doc')}?doc_id=${r[3]}"
-                 tal:content="r[2]"
+                                 string:${request.route_url('get_doc')}?doc_id=${r['id']}"
+                 tal:content="r['File-Name'] | r['id']"
                  target="_blank">
               </a>
               <!-- <span tal:content="r"></span> -->
@@ -27,7 +27,7 @@
           </tr>
         </table>
       </div>
-      <div tal:condition="not: src['total_found'] | True">
+      <div tal:condition="not: view.matches | default">
         The query produced no results.
       </div>
     </div>

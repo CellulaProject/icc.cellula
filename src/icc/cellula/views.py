@@ -368,28 +368,28 @@ class SearchView(View):
         answer = None
         matches = []
         FORMAT = 'n3'
-        indexer = queryUtility(IIndexer, name="indexer")
+        # indexer = queryUtility(IIndexer, name="indexer")
+        indexer = queryUtility(IRTMetadataIndex, name="elastic")
         self.doc = queryUtility(IRDFStorage, name="documents")
 
         query = self.request.GET.get("q", None)
 
         self.answer = None
 
-        if query == None:
+        if query is None:
             return "<strong>No Query supplied.</strong>"
 
         q = "Query:" + query + "<br/> resulted to:<br/>"
-        if indexer == None:
+        if indexer is None:
             return q + "<strong>No SEARCH engine present!</strong>"
-        self.answer = indexer.search(query)
+        # self.answer = indexer.search(query)
+        self.answer = indexer.query(query)
 
-        ms = []
+        # for m in self.answer[2]:
+        #     for r in self.proc_match(m):
+        #         ms.append(r)
 
-        for m in self.answer['matches']:
-            for r in self.proc_match(m):
-                ms.append(r)
-
-        self.matches = ms
+        self.matches = self.answer[1]
 
         return q
 
