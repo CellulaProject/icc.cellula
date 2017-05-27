@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="main.macros['page']">
+    <tal:block metal:fill-slot="content">
+        <div tal:define="_dummy view.body" tal:omit-tag="" ></div>
+
+        <div class="panel panel-default" tal:define="src view.answer" tal:condition="nothing">
+            <div class="panel-heading">Search result</div>
+            <div class="panel-body">
+                <p>Found results: <span tal:replace="view.answer[0]"></span></p>
+            </div>
+            <div tal:condition="view.matches | nothing" tal:omit-tag="">
+                <!-- <pre tal:content="src"/> -->
+                <table class="table">
+                    <tr tal:repeat="r view.matches">
+                        <td tal:content="string: NONE">Date</td>
+                        <td tal:content="r['title'] | default" i18n:translate=''>No Title</td>
+                        <td>
+                            <a href="#"
+                               tal:attributes="href
+                                     string:${request.route_url('get_doc')}?doc_id=${r['id']}"
+                               tal:content="r['File-Name'] | r['id']"
+                               target="_blank">
+                            </a>
+                            <!-- <span tal:content="r"></span> -->
+                            <td>
+                    </tr>
+                </table>
+            </div>
+            <div tal:condition="not: view.matches | default">
+                The query produced no results.
+            </div>
+        </div>
+    </tal:block>
+</html>

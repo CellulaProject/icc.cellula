@@ -27,6 +27,11 @@
       />
 
   <route
+      name="marc"
+      pattern="/marc"
+      />
+
+  <route
       name="email"
       pattern="/mail"
       />
@@ -189,6 +194,12 @@
   <view
       route_name="profile"
       view=".views.ProfileView"
+      />
+
+  <view
+      route_name="marc"
+      view=".marc.views.View"
+      renderer="templates/marc.pt"
       />
 
   <static
