@@ -97,7 +97,6 @@ class ElasticStorage(object):
                                     "field": "isbn"
                                 }
                             },
-                            # ... < -- your other constraints, if any
                         ],
                         "must": [
                             {
