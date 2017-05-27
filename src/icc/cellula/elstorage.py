@@ -94,17 +94,17 @@ class ElasticStorage(object):
                         "must_not": [
                             {
                                 "exists": {
-                                    "field": "price"
+                                    "field": "isbn"
                                 }
                             },
                             # ... < -- your other constraints, if any
                         ],
                         "must": [
                             {
-                                "exists": {
-                                    "field": "File-Name"
+                                "match": {
+                                    "mimetype": "image/vnd.djvu"
                                 }
-                            },
+                            }
                         ]
                     }
                 }
