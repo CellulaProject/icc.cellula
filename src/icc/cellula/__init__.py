@@ -1,4 +1,25 @@
 from __future__ import print_function
+from zope.i18nmessageid import MessageFactory
+
+_ = _N = MessageFactory("isu.webapp")
+
+
+class view_config(object):
+    __view_properties__ = {
+        'title': _('====TITLE====='),
+        # 'context':None, # a clash with add_wiew
+    }
+
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+
+    def __call__(self, wrapped):
+        props = wrapped.__view_properties__ = {}
+        for prop, default in self.__class__.__view_properties__.items():
+            value = self.kwargs.pop(prop, default)
+            props[prop] = value
+
+        return wrapped
 
 
 def includeme(global_config, **settings):

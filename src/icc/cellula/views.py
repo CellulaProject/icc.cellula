@@ -26,6 +26,9 @@ from pyramid.security import remember, forget
 from pyramid.httpexceptions import HTTPFound
 
 import icc.cellula.mailing as mailing
+from . import view_config
+from zope.i18nmessageid import MessageFactory
+
 
 import cgi
 from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask, EmailSendTask
@@ -34,6 +37,8 @@ import random
 
 import logging
 logger = logging.getLogger('icc.cellula')
+_ = _N = MessageFactory("isu.webapp")
+
 
 DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 DATE_TIME_FORMAT_IN = "%Y-%m-%d %H:%M:%S%z"
@@ -41,24 +46,6 @@ DATE_TIME_FORMAT_IN = "%Y-%m-%d %H:%M:%S%z"
 
 def _(x):
     return x
-
-
-class view_config(object):
-    __view_properties__ = {
-        'title': _('====TITLE====='),
-        # 'context':None, # a clash with add_wiew
-    }
-
-    def __init__(self, **kwargs):
-        self.kwargs = kwargs
-
-    def __call__(self, wrapped):
-        props = wrapped.__view_properties__ = {}
-        for prop, default in self.__class__.__view_properties__.items():
-            value = self.kwargs.pop(prop, default)
-            props[prop] = value
-
-        return wrapped
 
 
 class View(object):
@@ -75,9 +62,10 @@ class View(object):
     panel_routes = [
         ('dashboard', _('Dashboard'), 'fa-dashboard'),
         ('archive', _('Archive'), 'fa-database'),
-        ('metal_test', _('Metal'), 'fa-table'),
+        ('marc', _('MARC'), 'fa-university'),
+        # ('metal_test', _('Metal'), 'fa-table'),
         ('maintain', _('Maintain'), 'fa-cogs'),
-        ('debug_graph', _('Debug'), 'fa-wrench'),
+        # ('debug_graph', _('Debug'), 'fa-wrench'),
     ]
 
     def __init__(self, *args, **kwargs):
