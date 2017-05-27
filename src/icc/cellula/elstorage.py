@@ -84,7 +84,11 @@ class ElasticStorage(object):
 
     def query_noisbn(self, body):
         body["query"] = {
-            "filtered": {
+            "bool": {
+                "must": {
+                    "match_all": {}
+                },
+
                 "filter": {
                     "bool": {
                         "must_not": [
@@ -103,12 +107,10 @@ class ElasticStorage(object):
                             },
                         ]
                     }
-                },
-                "query": {
-                    "match_all": {}
                 }
             }
         }
+
         return body
 
     def refresh(self):
