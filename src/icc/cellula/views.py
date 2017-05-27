@@ -420,7 +420,7 @@ class DocsView(View):
         tmax = now + dmax
         # g = getUtility(IRDFStorage, "documents")
         g = getUtility(IRTMetadataIndex, "elastic")
-        return g.documents(min=tmin, max=tmax)
+        return g.query(variant="documents", min=tmin, max=tmax)
 
 
 class SendDocView(View):

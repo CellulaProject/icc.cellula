@@ -3,6 +3,8 @@ from .interfaces import IRTMetadataIndex
 from isu.enterprise.interfaces import IConfigurator
 from zope.component import getUtility
 from elasticsearch import Elasticsearch
+import logging
+logger = logging.getLogger('icc.cellula')
 
 
 @implementer(IRTMetadataIndex)
@@ -38,22 +40,33 @@ class ElasticStorage(object):
                                   refresh=self.refresh,
                                   id=id)
 
-    def query(self, query):
+    def query(self, query=None, variant=None, count=20, start=0, **kwargs):
         """Run query return list of corresponding
         document data."""
+        body = {
+            "size": count,
+            "from": start,
+            "query": {
+                "simple_query_string": {
+                    "query": query,
+                    "analyzer": "snowball",
+                    # "fields": ["body^5","_all"],
+                    "default_operator": "and"
+                }
+            }
+        }
+
+        if variant is not None and variant:
+            method_name = "query_" + variant
+            method = getattr(self, method_name)
+            body = method(body, **kwargs)
+        if logger.isEnabledFor(logging.DEBUG):
+            import pprint
+            logger.debug("Query body :{}".format(pprint.pformat(body)))
+
         hits = self.engine.search(index=self.index,
                                   doc_type=self.doctype,
-                                  #body={"query": {"match_all": {}}}
-                                  body={
-                                      "query": {
-                                          "simple_query_string": {
-                                              "query": query,
-                                              "analyzer": "snowball",
-                                              # "fields": ["body^5","_all"],
-                                              "default_operator": "and"
-                                          }
-                                      }
-                                  }
+                                  body=body
                                   )
         return self.convert(hits)
 
@@ -62,21 +75,41 @@ class ElasticStorage(object):
         hits = [hit["_source"] for hit in hits["hits"]["hits"]]
         return total, hits
 
-    def documents(self, min=None, max=None):
+    def query_documents(self, body, min=None, max=None):
         """Return a "representative" list of documents, e.g.,
         for list table construction.
         """
-        hits = self.engine.search(index=self.index,
-                                  doc_type=self.doctype,
-                                  body={
-                                      "from": 0,
-                                      "size": 20,
-                                      "query": {"match_all": {}
-                                                }
-                                  }
-                                  )
+        body["query"] = {"match_all": {}}
+        return body
 
-        return self.convert(hits)
+    def query_noisbn(self, body):
+        body["query"] = {
+            "filtered": {
+                "filter": {
+                    "bool": {
+                        "must_not": [
+                            {
+                                "exists": {
+                                    "field": "price"
+                                }
+                            },
+                            # ... < -- your other constraints, if any
+                        ],
+                        "must": [
+                            {
+                                "exists": {
+                                    "field": "File-Name"
+                                }
+                            },
+                        ]
+                    }
+                },
+                "query": {
+                    "match_all": {}
+                }
+            }
+        }
+        return body
 
     def refresh(self):
         return self.engine.refresh(index=self.index)

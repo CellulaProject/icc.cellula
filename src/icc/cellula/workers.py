@@ -135,7 +135,12 @@ class Task(object):
     priority = 5
     processing = "thread"
 
-    def __init__(self, procedure=None, args=None, kwargs=None, queue=None, foreign=False):
+    def __init__(self,
+                 procedure=None,
+                 args=None,
+                 kwargs=None,
+                 queue=None,
+                 foreign=False):
         """
         """
         self.set_queue(queue)
@@ -321,9 +326,9 @@ class PriorityQueue(queue.PriorityQueue):
             if task_existed:
                 return True
         ctx = None
-        if view != None:
+        if view is not None:
             ctx = {"request": view.request, 'registry': view.request.registry}
-        if context != None:
+        if context is not None:
             ctx = context
         task.set_context(ctx)
         return queue.PriorityQueue.put(self, task, *args, **kwargs)
