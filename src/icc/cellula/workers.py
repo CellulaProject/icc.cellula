@@ -39,8 +39,12 @@ class ThreadWorker(object):
             #logger.debug("waiting for a task.")
             if logger.isEnabledFor(logging.DEBUG):
                 wrk = getUtility(IWorker, name="queue")
-                logger.debug("Queue %s has %d tasks. Workers occupied: %d; free:%d" % (tasks,
-                                                                                       tasks.qsize(), wrk.processing(), wrk.waiting()))
+                logger.debug("Queue %s has %d tasks. "
+                             "Workers occupied: %d; free:%d" %
+                             (tasks,
+                              tasks.qsize(),
+                              wrk.processing(),
+                              wrk.waiting()))
                 logger.debug("Singleton tasks: {}".format(tasks.singletons))
                 logger.debug("Active Tasks:{}".format(wrk.tasks()))
                 del wrk
@@ -52,24 +56,14 @@ class ThreadWorker(object):
             for _ in range(manager_pop):
                 manager.pop()
             manager_pop = 0
-            print("""
-
-                       1: {}
-
-                       """.format(task.context_thread_data))
             if task.context_thread_data:
-                print("""
-
-                       2: {}
-
-                       """.format(task.context_thread_data))
                 manager.push(task.context_thread_data)
                 manager_pop += 1
 
             self.waiting = False
             logger.info("got a task %s" % task)
             if ITerminationTask.providedBy(task):
-                task_done()
+                task.finalize()
                 logger.info("finished task %s" % task)
                 return
             task.phase = "prepare"
@@ -93,10 +87,11 @@ class ThreadWorker(object):
                 traceback.print_exc(file=f)
                 logger.error(f.getvalue())
                 logger.error(
-                    '{!r}; some code did not run correctly, proceed with finalization.'.format(e))
+                    '{!r}; some code did not run correctly,'
+                    'proceed with finalization.'.format(e))
                 rc = None
                 self.release_locks(task)
-            if rc != None and results != None:
+            if rc is not None and results is not None:
                 task.result = rc
                 results.put(task)
             task.phase = "finalize"
@@ -157,35 +152,36 @@ class Task(object):
         self.context_thread_data = context
 
     def run(self):
-        if procedure == None:
+        if self.procedure is None:
             return
         n = self.queue
         kw = self.kwargs
         k = {}
-        if kw != None:
+        if kw is not None:
             k.update(kw)
         if n:
             q = GetQueue(n)
-            if not 'queue' in k:
+            if 'queue' not in k:
                 k['queue'] = q
         a = self.args
-        if a == None:
+        if a is None:
             a = tuple()
         # foreign !!!
-        return apply(self.procedure, args=a, keywords=k)
+        return self.procedure(args=a, keywords=k)
 
     def enqueue(self, task=None, context=None, view=None, block=False):
-        if task == None:  # Means enqueue itself
+        if task is None:  # Means enqueue itself
             task = self
         else:
             ctx = self.context_thread_data
-            if context == None:
+            if context is None:
                 context = ctx
         # FIXME I do not unserstand what for is this line.
         if self.processing == "process" and self.phase == "run":
             raise RuntimeError("cannot enqueue new task in foreign process")
         q = GetQueue("tasks")
-        return q.put(task, block=block, context=context, view=view)
+        rc = q.put(task, block=block, context=context, view=view)
+        return rc
 
     def prepare(self):
         pass
@@ -193,8 +189,8 @@ class Task(object):
     def finalize(Self):
         pass
 
-    def __cmp__(self, other):
-        return cmp(self.priority, other.priority)
+    # def __cmp__(self, other):
+    #     return cmp(self.priority, other.priority)
 
     def __lt__(self, other):
         return self.priority < other.priority
@@ -226,7 +222,9 @@ class QueueThread(threading.Thread):
         config = getUtility(Interface, "configuration")["workers"]
         self.threads = int(config.get("threads", 2))
         self.processes = int(config.get("processes", 2))
-        logger.debug("Configured: %d threads and %d processes, Queue: %s. PID=%d. %s" %
+        self.tmpdir = config.get("tmpdir", "/tmp")
+        logger.debug("Configured: %d threads and %d processes, "
+                     "Queue: %s. PID=%d. %s" %
                      (
                          self.threads,
                          self.processes,
