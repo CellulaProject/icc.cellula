@@ -82,6 +82,35 @@ class ElasticStorage(object):
         body["query"] = {"match_all": {}}
         return body
 
+    def query_isbn(self, body):
+        body["query"] = {
+            "bool": {
+                "must": {
+                    "match_all": {}
+                },
+
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {
+                                "exists": {
+                                    "field": "isbn"
+                                }
+                            },
+                            {
+                                "match": {
+                                    "mimetype": "image/vnd.djvu"
+                                }
+                            }
+
+                        ]
+                    }
+                }
+            }
+        }
+
+        return body
+
     def query_noisbn(self, body):
         body["query"] = {
             "bool": {

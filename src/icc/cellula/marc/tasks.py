@@ -31,6 +31,7 @@ class IssueDataTask(Task):
         for doc in docs:
             logger.debug(doc["File-Name"])
             logger.debug(doc["mimetype"])
+            id = doc["id"]
             content = storage.get(doc["id"])
             if isinstance(content, (str, bytes)):
                 logger.debug("Content length: {}".format(len(content)))
@@ -47,3 +48,26 @@ class IssueDataTask(Task):
             else:
                 logger.debug("No data found.")
                 continue
+            # query isbn with isbnlib
+            if r.isbn:
+                rc = r.query_with_isbn(services=("wcat", "goob", "openl"))
+            else:
+                continue
+            if rc:
+                doc["isbn"] = r.isbn
+            else:
+                continue
+            for k, fs in rc.items():
+                if fs is None:
+                    continue
+                for fk, fv in fs.items():
+                    fk = fk.lower()
+                    doc[fk] = fv
+                    logger.debug("{} = {}".format(fk, fv))
+            metadata.put(doc, id)
+
+            import pudb
+            pu.db
+
+            logger.info(
+                "Book {title} filename: {File-Name} stored!".format(doc))

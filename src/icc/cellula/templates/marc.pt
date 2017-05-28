@@ -3,7 +3,7 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       metal:use-macro="main.macros['page']">
     <tal:block metal:fill-slot="content">
-        <div class="panel panel-default" tal:define="src view.answer">
+        <div class="panel panel-default">
             <div class="panel-heading" i18n:translate="">Process Books</div>
             <div class="panel-body">
                 <form method="POST">
@@ -12,25 +12,29 @@
                 </form>
                 <p id="progress" tal:content="view.progress | nothing"></p>
             </div>
-            <div tal:condition="view.answer() | nothing" tal:omit-tag="">
-                <table class="table">
+            <div tal:condition="answer | nothing" tal:omit-tag="">
+                <table class="table" style="width:100%;">
                     <thead>
-                        <th i18n:translate="">File
+                        <tr>
+                        <th i18n:translate="" style="width:30%;">File
                         </th>
-                        <th i18n:translate="">ISBN
+                        <th i18n:translate="" style="width:13em;">ISBN
                         </th>
-                        <th i18n:translate="">Title
+                        <th i18n:translate="" style="width:30%;">Title
                         </th>
-                        <th i18n:translate="">Author
+                        <th i18n:translate="" style="width:5em%;">Author
                         </th>
                         <th i18n:translate="">MARC
                         </th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <tr tal:repeat="r view.answer()">
-                            <td tal:content="r['File-Name'] | r['id'] | default" i18n:translate=""> No File </td>
-                            <td tal:content="r['ISBN'] | default" ></td>
-                            <td tal:content="r['title'] | default" ></td>
+                        <tr tal:repeat="r answer">
+                            <td tal:content="r['File-Name'][-20:] | r['id'] | default" i18n:translate=""> No File </td>
+                            <td tal:content="r['isbn'] | default" ></td>
+                            <td><a tal:content="r['title'] | default" href="#"
+                                   tal:attributes="href  string:${request.route_url('get_doc')}?doc_id=${r['id']}"
+                                ></a></td>
                             <td tal:content="r['author'] | default"></td>
                             <!--
                             <td>

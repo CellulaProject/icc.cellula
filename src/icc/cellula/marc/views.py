@@ -3,6 +3,8 @@ from icc.cellula import views as cviews
 #from icc.cellula import view_config
 from zope.i18nmessageid import MessageFactory
 from .tasks import IssueDataTask
+from zope.component import getUtility
+from icc.cellula.interfaces import IRTMetadataIndex
 
 import logging
 
@@ -21,10 +23,10 @@ class View(views.View, cviews.View):
         if self.request.method == "POST":
             self.progress = "Acquirement started."
             IssueDataTask().enqueue(block=False, view=self)
-        pass
 
     def answer(self):
-        return []
+        metadata = getUtility(IRTMetadataIndex, name="elastic")
+        return metadata.query(variant="isbn")[1]
 
     def result_table(self):
         return self()
