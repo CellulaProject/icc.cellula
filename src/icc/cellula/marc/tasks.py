@@ -21,7 +21,7 @@ class IssueDataTask(Task):
     def run(self):
         logger.info("Ran {}".format(self.__class__))
         metadata = getUtility(IRTMetadataIndex, "elastic")
-        count, docs = metadata.query(variant="noisbn", count=10)
+        count, docs = metadata.query(variant="noisbn", count=1000)
         logger.debug("Found {} documents".format(count))
         if count == 0:
             logger.debug("No document for processing.")
@@ -65,9 +65,6 @@ class IssueDataTask(Task):
                     doc[fk] = fv
                     logger.debug("{} = {}".format(fk, fv))
             metadata.put(doc, id)
-
-            import pudb
-            pu.db
 
             logger.info(
                 "Book {title} filename: {File-Name} stored!".format(doc))

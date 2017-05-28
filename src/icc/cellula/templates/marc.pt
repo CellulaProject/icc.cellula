@@ -31,7 +31,7 @@
                     <tbody>
                         <tr tal:repeat="r answer">
                             <td tal:content="r['File-Name'][-20:] | r['id'] | default" i18n:translate=""> No File </td>
-                            <td tal:content="r['isbn'] | default" ></td>
+                            <td tal:content="r['isbn-13'] | r['isbn-10'] | r['isbn'] | default" ></td>
                             <td><a tal:content="r['title'] | default" href="#"
                                    tal:attributes="href  string:${request.route_url('get_doc')}?doc_id=${r['id']}"
                                 ></a></td>
