@@ -15,6 +15,7 @@ _ = _N = MessageFactory("isu.webapp")
 class IssueDataTask(Task):
 
     def run(self):
+        from marcds.importer.issuerecog import DJVUtoMARC
         logger.info("Ran {}".format(self.__class__))
         metadata = getUtility(IRTMetadataIndex, "elastic")
         count, docs = metadata.query(variant="noisbn", count=10)
@@ -26,5 +27,12 @@ class IssueDataTask(Task):
         for doc in docs:
             logger.debug(doc["File-Name"])
             logger.debug(doc["mimetype"])
-            content = storage.get(doc["id"])
+            content_stream = storage.get(doc["id"], stream=True)
             logger.debug("Content length: {}".format(len(content)))
+            r = DataPageRecognizer(content_stream)
+            data = r.issue_data(noexc=True)
+            if data is not None:
+                logger.debug("Got some data {}".format(data))
+            else:
+                logger.debug("No data found.")
+                continue
