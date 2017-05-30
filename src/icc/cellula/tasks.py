@@ -3,7 +3,6 @@ from icc.cellula.workers import Task, GetQueue
 from icc.cellula.extractor.interfaces import IExtractor
 from icc.cellula.indexer.interfaces import IIndexer
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
-from icc.contentstorage.interfaces import IContentStorage
 from icc.cellula.interfaces import ILock, ISingletonTask, IQueue, IWorker, IMailer
 from zope.component import getUtility, queryUtility
 from zope.interface import implementer, Interface
@@ -11,6 +10,7 @@ from string import Template
 import time
 import logging
 from .interfaces import IRTMetadataIndex
+from icc.cellula import default_storage
 logger = logging.getLogger('icc.cellula')
 
 
@@ -39,7 +39,7 @@ class DocumentStoreTask(DocumentTask):
 
     def run(self):
 
-        storage = getUtility(IContentStorage, name="content")
+        storage = default_storage()
         lock = getUtility(ILock, name="content")
         lock.acquire()
         self.locks.append(lock)
@@ -105,7 +105,7 @@ class DocumentProcessingTask(DocumentTask):
 
         if text_p:
             self.text_content = cont_data['text-body'].encode('utf-8')
-            storage = getUtility(IContentStorage, name="content")
+            storage = default_storage()
             ext_things['text-id'] = storage.hash(self.text_content)
 
         self.new_headers = ext_things
@@ -243,7 +243,7 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
         headers["id"] = self.doc_id
         headers["restore-metadata"] = True
         logger.debug(headers)
-        storage = getUtility(IContentStorage, "content")
+        storage = default_storage()
 
         try:
             content = self.content = storage.get(self.doc_id)

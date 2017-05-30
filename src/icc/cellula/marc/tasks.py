@@ -4,7 +4,7 @@ from icc.cellula.interfaces import ISingletonTask
 from icc.cellula.workers import Task
 from zope.component import getUtility
 from icc.cellula.interfaces import IRTMetadataIndex, IWorker
-from icc.contentstorage.interfaces import IContentStorage
+from icc.cellula import default_storage
 import pymarc
 from marcds.importer.issuerecog import DJVUtoMARC
 import logging
@@ -26,7 +26,7 @@ class IssueDataTask(Task):
         if count == 0:
             logger.debug("No document for processing.")
             return
-        storage = getUtility(IContentStorage, name="content")
+        storage = default_storage()
         queue_thread = getUtility(IWorker, name="queue")
         for doc in docs:
             logger.debug(doc["File-Name"])

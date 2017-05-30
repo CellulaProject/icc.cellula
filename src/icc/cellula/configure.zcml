@@ -34,6 +34,17 @@
       />
 
   <utility
+      factory="icc.contentstorage.kyotocabinet.components.LocationStorage"
+      name="locations"
+      />
+
+  <utility
+      provides="icc.contentstorage.interfaces.IContentStorage"
+      factory="icc.contentstorage.scanners.ScannerStorage"
+      name="scanner"
+      />
+
+  <utility
       factory="icc.cellula.extractor.LibExtractorExtractor"
       name="extractor"
       />

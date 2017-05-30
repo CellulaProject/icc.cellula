@@ -4,7 +4,7 @@ from cornice import Service
 from pyramid.response import Response, FileResponse
 import pyramid.view
 from pprint import pprint, pformat
-from icc.contentstorage.interfaces import IContentStorage
+from icc.cellula import default_storage
 from icc.contentstorage import hexdigest
 from zope.component import getUtility, queryUtility
 
@@ -464,7 +464,7 @@ class SendDocView(View):
         return Response("<h>Document not found.</h>", content_type='text/html')
 
     def serve(self, key, content_type=None, file_name=None, content=True):
-        storage = getUtility(IContentStorage, name='content')
+        storage = default_storage()
         body = storage.get(key)
 
         f = tempfile.NamedTemporaryFile()
@@ -495,7 +495,7 @@ class ShowDocView(SendDocView):
     """
 
     def serve(self, key, content_type=None, file_name=None, content=True):
-        storage = getUtility(IContentStorage, name='content')
+        storage = default_storage()
         try:
             body = storage.get(key)
         except ValueError:
@@ -701,7 +701,7 @@ class UploadDocView(View):
 
         things['File-Name'] = fs.filename
 
-        storage = getUtility(IContentStorage, name='content')
+        storage = default_storage()
 
         content = fs.value  # file
         doc_id = things['id'] = storage.hash(content)

@@ -1,5 +1,8 @@
 from __future__ import print_function
 from zope.i18nmessageid import MessageFactory
+from isu.enterprise.interfaces import IConfigurator
+from icc.contentstorage.interfaces import IContentStorage
+from zope.component import getUtility
 
 _ = _N = MessageFactory("isu.webapp")
 
@@ -20,6 +23,12 @@ class view_config(object):
             props[prop] = value
 
         return wrapped
+
+
+def default_storage():
+    config = getUtility(IConfigurator, "configuration")
+    storage_name = config["app:main"]["content_storage"]
+    return getUtility(IContentStorage, storage_name)
 
 
 def includeme(global_config, **settings):

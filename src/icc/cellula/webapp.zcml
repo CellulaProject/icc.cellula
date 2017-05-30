@@ -233,5 +233,10 @@
       handler="icc.cellula.subscribers.start_worker_queue"
       />
 
+  <subscriber
+      for="pyramid.events.ApplicationCreated"
+      handler="icc.contentstorage.scanners.initialize_subscriber"
+      />
+
 
 </configure>
