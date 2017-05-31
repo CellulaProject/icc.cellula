@@ -31,7 +31,14 @@ from zope.i18nmessageid import MessageFactory
 
 
 import cgi
-from icc.cellula.tasks import DocumentAcceptingTask, GetQueue, ContentIndexTask, MetadataRestoreTask, EmailSendTask
+from icc.cellula.tasks import (
+    DocumentAcceptingTask,
+    GetQueue,
+    ContentIndexTask,
+    MetadataRestoreTask,
+    EmailSendTask,
+    FileSystemScanTask
+)
 import random
 
 
@@ -736,4 +743,6 @@ class ProfileView(View):
 @view_config(title=_("Scan File System"))
 class ScanView(View):
     def action(self):
-        pass
+        if self.request.method == "POST":
+            FileSystemScanTask().enqueue(
+                block=False, view=self)

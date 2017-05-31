@@ -2,11 +2,10 @@ from icc.cellula.workers import Task, GetQueue
 
 from icc.cellula.extractor.interfaces import IExtractor
 from icc.cellula.indexer.interfaces import IIndexer
-from icc.rdfservice.interfaces import IRDFStorage, IGraph
-from icc.cellula.interfaces import ILock, ISingletonTask,
-from icc.cellula.interfaces import IQueue, IWorker, IMailer
+from icc.rdfservice.interfaces import IRDFStorage
+from icc.cellula.interfaces import ILock, ISingletonTask
+from icc.cellula.interfaces import IWorker, IMailer
 from icc.contentstorage.interfaces import IFileSystemScanner
-from zope.component import getUtility, queryUtility
 from zope.interface import implementer, Interface
 from string import Template
 import time
@@ -354,16 +353,17 @@ class FileSystemScanTask(Task):
             return
         if phase == "start":
             self.files.append(filename)
+            logger.debug("Added {} file".format(filename))
 
     def run(self):
         storage = default_storage()
-        if not IFileSystemScanner.implementedBy(storage):
-            raise RuntimeError("the storage does not support ccanning")
+        if not IFileSystemScanner.providedBy(storage):
+            raise RuntimeError("the storage does not support scanning")
 
         files = []
         # Collect all files recursively
         # Collect only new (unknown to location storage)
-        storage.scan_path(cb=self.process, scanonly=True)
+        storage.scan_directories(cb=self.process, scanonly=True)
         # Divide file set into subsets and
         # process the subsets with a
         # sequence of subtasks.
