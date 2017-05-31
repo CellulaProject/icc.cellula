@@ -205,8 +205,8 @@ class MetadataRestoreTask(Task, MetadataStorageQueryMixin):
             # Process next bunch
             self.enqueue(MetadataRestoreTask(self.processed + lids))
             pass
-        if lids + self.processed > 0:
-            self.enqueue(ContentIndexTask())
+        # if lids + self.processed > 0:
+        #     self.enqueue(ContentIndexTask())
 
 
 class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
