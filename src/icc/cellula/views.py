@@ -65,6 +65,7 @@ class View(object):
         ('marc', _('MARC'), 'fa-university'),
         # ('metal_test', _('Metal'), 'fa-table'),
         ('maintain', _('Maintain'), 'fa-cogs'),
+        ('scan', _('Scan'), 'fa-forward'),
         # ('debug_graph', _('Debug'), 'fa-wrench'),
     ]
 
@@ -730,3 +731,9 @@ class UploadDocView(View):
 
 class ProfileView(View):
     pass
+
+
+@view_config(title=_("Scan File System"))
+class ScanView(View):
+    def action(self):
+        pass

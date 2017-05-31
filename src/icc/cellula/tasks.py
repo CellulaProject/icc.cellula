@@ -3,7 +3,9 @@ from icc.cellula.workers import Task, GetQueue
 from icc.cellula.extractor.interfaces import IExtractor
 from icc.cellula.indexer.interfaces import IIndexer
 from icc.rdfservice.interfaces import IRDFStorage, IGraph
-from icc.cellula.interfaces import ILock, ISingletonTask, IQueue, IWorker, IMailer
+from icc.cellula.interfaces import ILock, ISingletonTask,
+from icc.cellula.interfaces import IQueue, IWorker, IMailer
+from icc.contentstorage.interfaces import IFileSystemScanner
 from zope.component import getUtility, queryUtility
 from zope.interface import implementer, Interface
 from string import Template
@@ -310,7 +312,7 @@ class ContentIndexTask(Task):
         self.lock.release()
 
     def finalize(self):
-        # Restart if indexing failed due to buzyness.
+        # Restart if indexing failed due to busy CPU.
         if not self.index_run:
             logger.debug("Restart Indexing")
             time.sleep(self.delay)
@@ -335,3 +337,23 @@ class EmailSendTask(Task):
             self.mailer.send(self.message)
         else:
             debug.error("Couldn't send message {}".format(self.message))
+
+
+class FileSystemScanTask(Task):
+    """Scan filesystem, find files fom a regular set and
+    connect them to archive.
+    """
+    priority = 30
+
+    def run(self):
+        storage = default_storage()
+        if not IFileSystemScanner.implementedBy(storage):
+            raise RuntimeError("the storage does not support ccanning")
+
+        files = []
+        # Collect all files recursively
+        # Collect only new (unknown to location storage)
+        storage.scan_directories()
+        # Divide file set into subsets and
+        # process the subsets with a
+        # sequence of subtasks.

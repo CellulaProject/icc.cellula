@@ -32,6 +32,11 @@
       />
 
   <route
+      name="scan"
+      pattern="/scan"
+      />
+
+  <route
       name="email"
       pattern="/mail"
       />
@@ -200,6 +205,12 @@
       route_name="marc"
       view=".marc.views.View"
       renderer="templates/marc.pt"
+      />
+
+  <view
+      route_name="scan"
+      view=".views.ScanView"
+      renderer="templates/scan.pt"
       />
 
   <!--
