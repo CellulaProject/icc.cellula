@@ -345,6 +345,16 @@ class FileSystemScanTask(Task):
     """
     priority = 30
 
+    def __init__(self, *args, **kwargs):
+        super(FileSystemScanTask, self).__init__(*args, **kwargs)
+        self.files = []
+
+    def process(self, phase, filename, count, new):
+        if not new:
+            return
+        if phase == "start":
+            self.files.append(filename)
+
     def run(self):
         storage = default_storage()
         if not IFileSystemScanner.implementedBy(storage):
@@ -353,7 +363,7 @@ class FileSystemScanTask(Task):
         files = []
         # Collect all files recursively
         # Collect only new (unknown to location storage)
-        storage.scan_directories()
+        storage.scan_path(cb=self.process, scanonly=True)
         # Divide file set into subsets and
         # process the subsets with a
         # sequence of subtasks.
