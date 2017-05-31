@@ -360,7 +360,6 @@ class FileSystemScanTask(Task):
         if not IFileSystemScanner.providedBy(storage):
             raise RuntimeError("the storage does not support scanning")
 
-        files = []
         # Collect all files recursively
         # Collect only new (unknown to location storage)
         storage.scan_directories(cb=self.process, scanonly=True)
