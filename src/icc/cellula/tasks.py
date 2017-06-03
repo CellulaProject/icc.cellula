@@ -389,6 +389,7 @@ class ScannedFilesProcessingTask(Task):
         self.processed = 0
 
     def run(self):
+        storage = default_storage()
         while True:
             if not self.files:
                 return
@@ -398,7 +399,7 @@ class ScannedFilesProcessingTask(Task):
                 return
             filename = self.files.pop()
             logger.debug("PROCESSING {}".format(filename))
-            # FIXME: Processing
+            storage
             self.processed += 1
 
     def finalize(self):
