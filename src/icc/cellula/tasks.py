@@ -6,7 +6,9 @@ from icc.rdfservice.interfaces import IRDFStorage
 from icc.cellula.interfaces import ILock, ISingletonTask
 from icc.cellula.interfaces import IWorker, IMailer
 from icc.contentstorage.interfaces import IFileSystemScanner
+from isu.enterprise.interfaces import IConfigurator
 from zope.interface import implementer, Interface
+from zope.component import getUtility
 from string import Template
 import time
 import logging
@@ -205,7 +207,6 @@ class MetadataRestoreTask(Task, MetadataStorageQueryMixin):
         if lids >= self.max_number:
             # Process next bunch
             self.enqueue(MetadataRestoreTask(self.processed + lids))
-            pass
         # if lids + self.processed > 0:
         #     self.enqueue(ContentIndexTask())
 
@@ -352,8 +353,11 @@ class FileSystemScanTask(Task):
         if not new:
             return
         if phase == "start":
-            self.files.append(filename)
-            logger.debug("Added {} file".format(filename))
+            if new:
+                self.files.append(filename)
+                logger.debug("Added {} file".format(filename))
+            else:
+                logger.debug("Skipping {} file".format(filename))
 
     def run(self):
         storage = default_storage()
@@ -366,3 +370,39 @@ class FileSystemScanTask(Task):
         # Divide file set into subsets and
         # process the subsets with a
         # sequence of subtasks.
+
+    def finalize(self):
+        def_bunch_size = 10
+        config = getUtility(IConfigurator, "configuration")
+        bunch_size = config.getint(
+            "scanner", "bunch_size", fallback=def_bunch_size)
+        if self.files:
+            self.enqueue(ScannedFilesProcessingTask(self.files, bunch_size))
+
+
+class ScannedFilesProcessingTask(Task):
+
+    def __init__(self, files, bunch_size=10):
+        super(ScannedFilesProcessingTask, self).__init__()
+        self.files = files
+        self.bunch_size = bunch_size
+        self.processed = 0
+
+    def run(self):
+        while True:
+            if not self.files:
+                return
+            if self.bunch_size == 0:
+                return
+            if self.processed == self.bunch_size:
+                return
+            filename = self.files.pop()
+            logger.debug("PROCESSING {}".format(filename))
+            # FIXME: Processing
+            self.processed += 1
+
+    def finalize(self):
+        if self.files and \
+           self.processed == self.bunch_size:  # Did not happened exceptions.
+            self.enqueue(ScannedFilesProcessingTask(
+                self.files, self.bunch_size))
