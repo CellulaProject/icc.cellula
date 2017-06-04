@@ -19,9 +19,20 @@ logger = logging.getLogger('icc.cellula')
 
 class DocumentTask(Task):
 
-    def __init__(self, content, headers):
+    def __init__(self, content=None, headers=None, id=None, *args, **kwargs):
+        super(DocumentTask, self).__init__(*args, **kwargs)
+        if content is None:
+            if id is None:
+                raise ValueError("no content and no id supplied")
         self.content = content
+        if headers is None:
+            headers = {}
         self.headers = headers
+        self._id = id
+
+    def actualize(self):
+        storage = default_storage()
+        self.content = storage.get(self._id)
 
 
 class DocumentStoreTask(DocumentTask):
@@ -47,13 +58,7 @@ class DocumentStoreTask(DocumentTask):
         lock.acquire()
         self.locks.append(lock)
         storage.begin()
-        nid_ = storage.put(self.content, self.headers)
-        id_ = self.headers.get(self.key, nid_)
-        if id_ != nid_:
-            storage.abort()
-            self.locks.pop()
-            lock.release()
-            raise RuntimeError("ids differ %s:%s" % (id_, nid_))
+        id_ = storage.put(self.content, features=self.headers)
         storage.commit()
         self.locks.pop()
         lock.release()
@@ -85,6 +90,9 @@ class DocumentProcessingTask(DocumentTask):
 
         self.text_content = None
         self.new_headers = {}
+
+        self.actualize()
+
         things = self.headers
 
         extractor = getUtility(IExtractor, name='extractor')
@@ -118,9 +126,12 @@ class DocumentProcessingTask(DocumentTask):
             self.enqueue(DocumentStoreTask(self.text_content,
                                            self.new_headers, key='text-id'))
             # self.enqueue(ContentIndexTask())
-        self.enqueue(DocumentMetaStoreTask(self.new_headers))
-        self.enqueue(DocumentElasticIndexTask(
-            self.text_content, self.new_headers))
+        if self.new_headers:
+            self.enqueue(DocumentMetaStoreTask(self.new_headers))
+        if self.text_content and \
+           self.new_headers:  # FIXME: Empty text and empty features?
+            self.enqueue(DocumentElasticIndexTask(
+                self.text_content, self.new_headers))
         # self.enqueue(MetaIndexTask())
 
 
@@ -198,6 +209,7 @@ class MetadataRestoreTask(Task, MetadataStorageQueryMixin):
     def run(self):
         self.doc_ids = self.sparql(graph="documents", LIMIT=self.max_number)
         self.doc_ids = list(self.doc_ids)  # Must be a list, not a generator.
+        # FIXME: Reconstruct for common interface.
 
     def finalize(self):
         lids = 0
@@ -349,12 +361,12 @@ class FileSystemScanTask(Task):
         super(FileSystemScanTask, self).__init__(*args, **kwargs)
         self.files = []
 
-    def process(self, phase, filename, count, new):
+    def process(self, phase, pathname, filename, count, new):
         if not new:
             return
         if phase == "start":
             if new:
-                self.files.append(filename)
+                self.files.append((pathname, filename))
                 logger.debug("Added {} file".format(filename))
             else:
                 logger.debug("Skipping {} file".format(filename))
@@ -387,6 +399,7 @@ class ScannedFilesProcessingTask(Task):
         self.files = files
         self.bunch_size = bunch_size
         self.processed = 0
+        self.further = []  # List for files to further processing
 
     def run(self):
         storage = default_storage()
@@ -397,9 +410,15 @@ class ScannedFilesProcessingTask(Task):
                 return
             if self.processed == self.bunch_size:
                 return
-            filename = self.files.pop()
+            pathname, filename = self.files.pop()
             logger.debug("PROCESSING {}".format(filename))
-            storage
+            features = {
+                "File-Name": filename,
+                "Path-Name": pathname}
+            if storage.processfile(pathname, features):
+                logger.debug("Processed {}".format(pathname))
+                self.further.append((features["id"], features))
+
             self.processed += 1
 
     def finalize(self):
@@ -407,3 +426,6 @@ class ScannedFilesProcessingTask(Task):
            self.processed == self.bunch_size:  # Did not happened exceptions.
             self.enqueue(ScannedFilesProcessingTask(
                 self.files, self.bunch_size))
+
+        for id, features in self.further:
+            self.enqueue(DocumentProcessingTask(id=id, headers=features))

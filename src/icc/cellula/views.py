@@ -651,7 +651,7 @@ class MaintainanceView(View):
 
     def answer(self):
         MetadataRestoreTask().enqueue(block=False, view=self)
-        ContentIndexTask().enqueue(block=False, view=self)
+        # ContentIndexTask().enqueue(block=False, view=self)
 
 
 @view_config(title=_("Test View"))
@@ -742,6 +742,7 @@ class ProfileView(View):
 
 @view_config(title=_("Scan File System"))
 class ScanView(View):
+
     def action(self):
         if self.request.method == "POST":
             FileSystemScanTask().enqueue(
