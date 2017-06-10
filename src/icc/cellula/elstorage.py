@@ -7,18 +7,36 @@ import logging
 logger = logging.getLogger('icc.cellula')
 
 
+class Answer(list):
+    """This is a list having
+    additional attributes. So we can do
+    self[hit_no] and
+    self.total
+    """
+
+    def __str__(self):
+        return "<{} count={}>".format(self.__class__.__name__, self.total)
+
+
 @implementer(IRTMetadataIndex)
 class ElasticStorage(object):
 
     def __init__(self, url, index,
                  doctype="document",
-                 refresh=True):
+                 refresh=True,
+                 timeouts=None):
         self.url = url
         self.index = index
         self.engine = Elasticsearch([self.url])
         self.doctype = doctype
         refresh = refresh.lower() not in ["0", "", "off", "false"]
         self.refresh = refresh
+        if timeouts is None or not timeouts:
+            timeouts = {
+                "service": 60,
+                "ui": 10
+            }
+        self.timeouts = timeouts
 
     def put(self, features, id):
         self.engine.index(index=self.index,
@@ -68,12 +86,17 @@ class ElasticStorage(object):
                                   doc_type=self.doctype,
                                   body=body
                                   )
-        return self.convert(hits)
+        return self.convert(hits, start=start, count=count)
 
-    def convert(self, hits):
+    def convert(self, hits, start, count):
         total = hits["hits"]["total"]
-        hits = [hit["_source"] for hit in hits["hits"]["hits"]]
-        return total, hits
+        answer = Answer()
+        answer.total = total
+        [answer.append(hit["_source"]) for hit in hits["hits"]["hits"]]
+        answer.start = start
+        answer.total = total
+        logger.debug("Answer: {}".format(answer))
+        return answer
 
     def query_documents(self, body, min=None, max=None):
         """Return a "representative" list of documents, e.g.,
@@ -155,7 +178,14 @@ class MetadataStorage(ElasticStorage):
         doctype = section.get("doctype", "document")
         refresh = section.get("refresh", "True")  # FIXME: Convert to Boolean
         url = section.get("URL", "http://localhost:9200/")
+        timeouts = {}
+        for name in section.keys():
+            if name.startswith("timeout."):
+                k = name.split(".")[1]
+                timeouts[k] = section.getint(name)
+        logger.debug("Timeouts: {}".format(timeouts))
         super(MetadataStorage, self).__init__(url=url,
                                               index=index,
                                               doctype=doctype,
-                                              refresh=refresh)
+                                              refresh=refresh,
+                                              timeouts=timeouts)
