@@ -2,6 +2,7 @@ from zope.i18nmessageid import MessageFactory
 from zope.interface import implementer
 from icc.cellula.interfaces import ISingletonTask
 from icc.cellula.workers import Task
+from icc.cellula.tasks import DocumentTask
 from zope.component import getUtility
 from icc.cellula.interfaces import IRTMetadataIndex, IWorker
 from icc.cellula import default_storage
@@ -10,6 +11,7 @@ import pprint
 from marcds.importer.issuerecog import DJVUtoMARC
 import logging
 import tempfile
+from . import MIME_TYPE
 
 logger = logging.getLogger('icc.cellula')
 
@@ -70,3 +72,14 @@ class IssueDataTask(Task):
             logger.debug(pprint.pformat(doc))
             logger.info(
                 "Book {title} filename: {File-Name} stored!".format(doc))
+
+
+class MARCImportTask(DocumentTask):
+    def __init__(self, content, features=None, *args, **kwargs):
+        # FIXME: refactor headers -> features
+        if features is None:
+            features = {}
+        features["mimetype"] = MIME_TYPE
+        super(DocumentTask, self).__init__(content=content,
+                                           headers=features,
+                                           *args, **kwargs)
