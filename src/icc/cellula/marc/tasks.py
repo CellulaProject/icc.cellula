@@ -6,6 +6,7 @@ from zope.component import getUtility
 from icc.cellula.interfaces import IRTMetadataIndex, IWorker
 from icc.cellula import default_storage
 import pymarc
+import pprint
 from marcds.importer.issuerecog import DJVUtoMARC
 import logging
 import tempfile
@@ -66,5 +67,6 @@ class IssueDataTask(Task):
                     logger.debug("{} = {}".format(fk, fv))
             metadata.put(doc, id)
 
+            logger.debug(pprint.pformat(doc))
             logger.info(
                 "Book {title} filename: {File-Name} stored!".format(doc))

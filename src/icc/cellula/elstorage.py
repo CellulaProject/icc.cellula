@@ -78,14 +78,17 @@ class ElasticStorage(object):
             method_name = "query_" + variant
             method = getattr(self, method_name)
             body = method(body, **kwargs)
+            timeout = self.timeouts.get("service", 10)
+        else:
+            timeout = self.timeouts.get("ui", 30)
         if logger.isEnabledFor(logging.DEBUG):
             import pprint
             logger.debug("Query body :{}".format(pprint.pformat(body)))
 
         hits = self.engine.search(index=self.index,
                                   doc_type=self.doctype,
-                                  body=body
-                                  )
+                                  body=body,
+                                  request_timeout=timeout)
         return self.convert(hits, start=start, count=count)
 
     def convert(self, hits, start, count):
