@@ -9,17 +9,18 @@
       Documents
     </div>
     <div class="panel-body">
-      <p i18n:translate=''>Documents for the last five days</p>
+        <p i18n:translate=''>Documents for the last five days. Total count -
+            <span tal:content="view.docs.total">0.0</span></p>
     </div>
     <table class="table">
       <tr>
         <td i18n:translate="table_data">Date</td>
         <td i18n:translate=''>Title</td>
-        <td i18n:translate=''>File</td>
+        <td i18n:translate=''>File name</td>
         <td i18n:translate=''>Incoming #</td>
       </tr>
-      <tr tal:repeat="r view.docs[1]">
-        <td tal:content="string:'NODATE'"></td>
+      <tr tal:repeat="r view.docs">
+        <td tal:content="string:"></td>
         <td tal:content="r['title'] | nothing"></td>
         <td>
           <a href="#"

@@ -7,14 +7,14 @@
     <div class="panel panel-default" tal:define="src view.answer">
       <div class="panel-heading">Search result</div>
       <div class="panel-body">
-        <p>Found results: <span tal:replace="view.answer[0]"></span></p>
+        <p>Found results: <span tal:replace="view.answer.total"></span></p>
       </div>
       <div tal:condition="view.matches | nothing" tal:omit-tag="">
         <!-- <pre tal:content="src"/> -->
         <table class="table">
           <tr tal:repeat="r view.matches">
-            <td tal:content="string: NONE">Date</td>
-            <td tal:content="r['title'] | default" i18n:translate=''>No Title</td>
+            <td tal:content="string: ">Date</td>
+            <td tal:content="r['title'] | default" i18n:translate=''></td>
             <td>
               <a href="#"
                  tal:attributes="href

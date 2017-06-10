@@ -21,9 +21,9 @@ class IssueDataTask(Task):
     def run(self):
         logger.info("Ran {}".format(self.__class__))
         metadata = getUtility(IRTMetadataIndex, "elastic")
-        count, docs = metadata.query(variant="noisbn", count=1000)
-        logger.debug("Found {} documents".format(count))
-        if count == 0:
+        docs = metadata.query(variant="noisbn", count=1000)
+        logger.debug("Found {} documents".format(docs.count))
+        if docs.count == 0:
             logger.debug("No document for processing.")
             return
         storage = default_storage()

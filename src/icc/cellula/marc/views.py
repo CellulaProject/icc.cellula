@@ -26,7 +26,7 @@ class View(views.View, cviews.View):
 
     def answer(self):
         metadata = getUtility(IRTMetadataIndex, name="elastic")
-        return metadata.query(variant="isbn")[1]
+        return metadata.query(variant="isbn")
 
     def result_table(self):
         return self()

@@ -385,7 +385,7 @@ class SearchView(View):
         #     for r in self.proc_match(m):
         #         ms.append(r)
 
-        self.matches = self.answer[1]
+        self.matches = self.answer
 
         return q
 

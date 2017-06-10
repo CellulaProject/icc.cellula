@@ -10,22 +10,39 @@
                     <button class="btn btn-primary" type="submit" i18n:translate="">Make 10</button>
                     <button class="btn btn-danger" type="submit" i18n:translate="">Make All</button>
                 </form>
+                <hr/>
+                <div class="col-lg-6 col-sm-6 col-12">
+                    <h4 i18n:translate="">Import RUSMARC records</h4>
+                    <div class="input-group">
+                        <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                                <span i18n:translate="">Browse</span>&hellip;
+                                <input type="file" style="display: none;" multiple>
+                            </span>
+                        <input type="text" class="form-control" readonly>
+                        <button class="btn btn-" type="submit" i18n:translate="">Import</button>
+                        </label>
+                    </div>
+                    <span class="help-block" i18n:translate="">
+                        Select one or more files with RUSMARC data.
+                    </span>
+                </div>
                 <p id="progress" tal:content="view.progress | nothing"></p>
             </div>
             <div tal:condition="answer | nothing" tal:omit-tag="">
                 <table class="table" style="width:100%;">
                     <thead>
                         <tr>
-                        <th i18n:translate="" style="width:30%;">File
-                        </th>
-                        <th i18n:translate="" style="width:13em;">ISBN
-                        </th>
-                        <th i18n:translate="" style="width:30%;">Title
-                        </th>
-                        <th i18n:translate="" style="width:5em%;">Author
-                        </th>
-                        <th i18n:translate="">MARC
-                        </th>
+                            <th i18n:translate="" style="width:30%;">File
+                            </th>
+                            <th i18n:translate="" style="width:13em;">ISBN
+                            </th>
+                            <th i18n:translate="" style="width:30%;">Title
+                            </th>
+                            <th i18n:translate="" style="width:5em%;">Author
+                            </th>
+                            <th i18n:translate="">MARC
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,15 +54,15 @@
                                 ></a></td>
                             <td tal:content="r['author'] | default"></td>
                             <!--
-                            <td>
-                                <a href="#"
-                                   tal:attributes="href
-                                         string:${request.route_url('get_doc')}?doc_id=${r['id']}"
-                                   tal:content="r['File-Name'] | r['id']"
-                                   target="_blank">
-                                </a>
-                            </td>
-                            -->
+                                 <td>
+                                 <a href="#"
+                                 tal:attributes="href
+                                 string:${request.route_url('get_doc')}?doc_id=${r['id']}"
+                                 tal:content="r['File-Name'] | r['id']"
+                                 target="_blank">
+                                 </a>
+                                 </td>
+                               -->
                             <td>
                                 <a class="btn btn-default">>>></a>
                             </td>
@@ -60,7 +77,33 @@
     </tal:block>
     <tal:block metal:fill-slot="script-src">
         <script type="text/javascript">
+         $(function() {
 
+             // We can attach the `fileselect` event to all file inputs on the page
+             $(document).on('change', ':file', function() {
+                 var input = $(this),
+                     numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                     label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                 input.trigger('fileselect', [numFiles, label]);
+             });
+
+             // We can watch for our custom `fileselect` event like this
+             $(document).ready( function() {
+                 $(':file').on('fileselect', function(event, numFiles, label) {
+
+                     var input = $(this).parents('.input-group').find(':text'),
+                         log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                     if( input.length ) {
+                         input.val(log);
+                     } else {
+                         if( log ) alert(log);
+                     }
+
+                 });
+             });
+
+         });
         </script>
     </tal:block>
 </html>
