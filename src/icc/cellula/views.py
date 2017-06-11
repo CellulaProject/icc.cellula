@@ -714,7 +714,7 @@ class UploadDocView(View):
         content = fs.value  # file
         doc_id = things['id'] = storage.hash(content)
         rc = storage.resolve(doc_id)
-        logger.debug((rc, doc_id, storage.db.error()))
+        logger.debug("Resolving: {}, {}".format(rc, doc_id))
         if rc:
             request.response.status_code = 400
             return {'error': 'already exists',

@@ -14,6 +14,7 @@ import time
 import logging
 from .interfaces import IRTMetadataIndex
 from icc.cellula import default_storage
+import pprint
 logger = logging.getLogger('icc.cellula')
 
 
@@ -31,8 +32,9 @@ class DocumentTask(Task):
         self._id = id
 
     def actualize(self):
-        storage = default_storage()
-        self.content = storage.get(self._id)
+        if self.content is None:
+            storage = default_storage()
+            self.content = storage.get(self._id)
 
 
 class DocumentStoreTask(DocumentTask):
@@ -120,6 +122,12 @@ class DocumentProcessingTask(DocumentTask):
             ext_things['text-id'] = storage.hash(self.text_content)
 
         self.new_headers = ext_things
+        if logger.isEnabledFor(logging.DEBUG):
+            fs = {}
+            fs.update(ext_things)
+            if 'text-body' in fs:
+                del fs['text-body']
+            logger.debug("Features:{}".format(pprint.pformat(fs)))
 
     def finalize(self):
         if self.text_content:
