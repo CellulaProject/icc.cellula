@@ -5,6 +5,7 @@ from zope.i18nmessageid import MessageFactory
 from .tasks import IssueDataTask
 from zope.component import getUtility
 from icc.cellula.interfaces import IRTMetadataIndex
+import pprint
 
 import logging
 
@@ -20,9 +21,19 @@ class View(views.View, cviews.View):
     title = _("Import book data into MARC records")
 
     def action(self):
-        if self.request.method == "POST":
-            self.progress = "Acquirement started."
-            IssueDataTask().enqueue(block=False, view=self)
+        req = self.request
+        if req.method == "POST":
+            post = req.POST
+            logger.debug("Import: {}".format(pprint.pformat(post)))
+            if post.get("make10", False) or \
+               post.get("makeall", False):
+                self.progress = _("Acquirement started.")
+                IssueDataTask().enqueue(block=False, view=self)
+                return
+
+            if post.get("import", False):
+                self.progress = _("MARC import started.")
+                return
 
     def answer(self):
         metadata = getUtility(IRTMetadataIndex, name="elastic")

@@ -7,8 +7,14 @@
             <div class="panel-heading" i18n:translate="">Process Books</div>
             <div class="panel-body">
                 <form method="POST">
-                    <button class="btn btn-primary" type="submit" i18n:translate="">Make 10</button>
-                    <button class="btn btn-danger" type="submit" i18n:translate="">Make All</button>
+                    <button class="btn btn-primary"
+                            type="submit"
+                            name="make10"
+                            i18n:translate="">Make 10</button>
+                    <button class="btn btn-danger"
+                            type="submit"
+                            name="makeall"
+                            i18n:translate="">Make All</button>
                 </form>
                 <hr/>
                 <form method="POST">
@@ -21,7 +27,11 @@
                                     <input type="file" style="display: none;" multiple>
                                 </span>
                                 <input type="text" class="form-control" readonly>
-                                <button class="btn btn-primary" type="submit" i18n:translate="">Import</button>
+                                <button
+                                    class="btn btn-primary"
+                                    type="submit"
+                                    name="import"
+                                    i18n:translate="">Import</button>
                             </label>
                         </div>
                         <span class="help-block" i18n:translate="">
