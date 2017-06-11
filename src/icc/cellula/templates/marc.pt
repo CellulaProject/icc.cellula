@@ -11,22 +11,24 @@
                     <button class="btn btn-danger" type="submit" i18n:translate="">Make All</button>
                 </form>
                 <hr/>
-                <div class="col-lg-6 col-sm-6 col-12">
-                    <h4 i18n:translate="">Import RUSMARC records</h4>
-                    <div class="input-group">
-                        <label class="input-group-btn">
-                            <span class="btn btn-primary">
-                                <span i18n:translate="">Browse</span>&hellip;
-                                <input type="file" style="display: none;" multiple>
-                            </span>
-                        <input type="text" class="form-control" readonly>
-                        <button class="btn btn-" type="submit" i18n:translate="">Import</button>
-                        </label>
+                <form method="POST">
+                    <div class="col-lg-6 col-sm-6 col-12">
+                        <h4 i18n:translate="">Import RUSMARC records</h4>
+                        <div class="input-group">
+                            <label class="input-group-btn">
+                                <span class="btn btn-default">
+                                    <span i18n:translate="">Browse</span>&hellip;
+                                    <input type="file" style="display: none;" multiple>
+                                </span>
+                                <input type="text" class="form-control" readonly>
+                                <button class="btn btn-primary" type="submit" i18n:translate="">Import</button>
+                            </label>
+                        </div>
+                        <span class="help-block" i18n:translate="">
+                            Select one or more files with RUSMARC data.
+                        </span>
                     </div>
-                    <span class="help-block" i18n:translate="">
-                        Select one or more files with RUSMARC data.
-                    </span>
-                </div>
+                </form>
                 <p id="progress" tal:content="view.progress | nothing"></p>
             </div>
             <div tal:condition="answer | nothing" tal:omit-tag="">
