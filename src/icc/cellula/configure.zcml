@@ -82,6 +82,11 @@
       />
 
   <utility
+      factory="icc.cellula.elstorage.MetadataStorage"
+      name="marc"
+      />
+
+  <utility
       factory="icc.cellula.auth.AuthenticationPolicy"
       provides="pyramid.interfaces.IAuthenticationPolicy"
       name="authen_policy"

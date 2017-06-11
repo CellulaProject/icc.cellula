@@ -12,6 +12,7 @@ from marcds.importer.issuerecog import DJVUtoMARC
 import logging
 import tempfile
 from . import MIME_TYPE
+from icc.cellula.tasks import DocumentTask
 
 logger = logging.getLogger('icc.cellula')
 
@@ -99,6 +100,8 @@ class MARCStreamImportTask(Task):
 
 
 class MARCRecordsImportTask(Task):
+    delay = 5
+
     def __init__(self, records, count, features):
         super(MARCRecordsImportTask, self).__init__()
         self.records = records
@@ -118,9 +121,12 @@ class MARCRecordsImportTask(Task):
                 break
 
             rec = self.records.pop()
-            self.processed.append(rec)
             # processing
             logger.debug("Processing record: {}".format(str(rec)))
+            # logger.debug("As marc: {}".format(rec.as_marc()))
+            content = rec.as_marc(encoding="utf-8")
+            d = rec.as_dict()
+            self.processed.append((content, d))
             count -= 1
 
     def finalize(self):
@@ -131,4 +137,27 @@ class MARCRecordsImportTask(Task):
         else:
             MARCRecordsImportTask(records=self.records,
                                   count=self.count,
-                                  features=self.features)
+                                  features=self.features).enqueue()
+            MARCContentStoreTask(content=self.processed,
+                                 headers=self.features).enqueue()
+            MARCContentIndexTask(content=self.processed,
+                                 headers=self.features).enqueue()
+
+
+class MARCContentStoreTask(DocumentTask):
+    def run(self):
+        storage = default_storage()
+        for rec in self.content:
+            fs = rec[1]
+            key = storage.put(rec[0])
+            fs["id"] = key
+            fs.update(self.headers)
+
+
+class MARCContentIndexTask(DocumentTask):
+    def run(self):
+        indexer = getUtility(IRTMetadataIndex, "marc")
+        for rec in self.content:
+            d = rec[1]
+            id = d["id"]
+            indexer.put(d, id)
