@@ -24,7 +24,10 @@
                             <label class="input-group-btn">
                                 <span class="btn btn-default">
                                     <span i18n:translate="">Browse</span>&hellip;
-                                    <input type="file" style="display: none;" multiple>
+                                    <input type="file"
+                                           style="display: none;"
+                                           name="files"
+                                           >
                                 </span>
                                 <input type="text" class="form-control" readonly>
                                 <button

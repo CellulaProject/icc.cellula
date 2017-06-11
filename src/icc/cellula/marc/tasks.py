@@ -6,8 +6,8 @@ from icc.cellula.tasks import DocumentTask
 from zope.component import getUtility
 from icc.cellula.interfaces import IRTMetadataIndex, IWorker
 from icc.cellula import default_storage
-import pymarc
 import pprint
+from pymarc import rusmarcxml
 from marcds.importer.issuerecog import DJVUtoMARC
 import logging
 import tempfile
@@ -74,12 +74,59 @@ class IssueDataTask(Task):
                 "Book {title} filename: {File-Name} stored!".format(doc))
 
 
-class MARCImportTask(DocumentTask):
-    def __init__(self, content, features=None, *args, **kwargs):
+class MARCStreamImportTask(Task):
+    def __init__(self, stream, features=None,
+                 *args, **kwargs):
         # FIXME: refactor headers -> features
+        super(DocumentTask, self).__init__(*args, **kwargs)
         if features is None:
             features = {}
         features["mimetype"] = MIME_TYPE
-        super(DocumentTask, self).__init__(content=content,
-                                           headers=features,
-                                           *args, **kwargs)
+        self.stream = stream
+        self.features = features
+
+    def run(self):
+        self.records = rusmarcxml.parse_xml_to_array(self.stream)
+
+    def finalize(self):
+        if self.records:
+            conf = getUtility(IConfigurator, "configuration")
+            size = conf["marc"].getint("bunch_size", 10)
+            MARCRecordsImportTask(records=self.records,
+                                  count=size,
+                                  features=self.features
+                                  ).enqueue()
+
+
+class MARCRecordsImportTask(Task):
+    def __init__(self, records, count, features):
+        self.records = records
+        self.count = count
+        self.features = features
+        self.processed = []
+
+    def run(self):
+        # process
+        count = self.count
+        if count == 0:
+            raise ValueError("zero-sized bunch")
+        while True:
+            if count <= 0:
+                break
+            if not self.records:
+                break
+
+            rec = self.records.pop()
+            self.processed.append(rec)
+            # processing
+            logger.debug("Processing record: {}".format(str(rec)))
+            connt -= 1
+
+    def finalize(self):
+        if len(self.processed) < self.count:
+            # Something bad happened or all the records already processed
+            return
+        else:
+            MARCRecordsImportTask(records=self.records,
+                                  count=self.count,
+                                  features=self.features)

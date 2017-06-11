@@ -1,8 +1,8 @@
 from isu.webapp import views
 from icc.cellula import views as cviews
-#from icc.cellula import view_config
+# from icc.cellula import view_config
 from zope.i18nmessageid import MessageFactory
-from .tasks import IssueDataTask
+from .tasks import IssueDataTask, MARCStreamImportTask
 from zope.component import getUtility
 from icc.cellula.interfaces import IRTMetadataIndex
 import pprint
@@ -33,6 +33,11 @@ class View(views.View, cviews.View):
 
             if "import" in post:
                 self.progress = _("MARC import started.")
+                fileslist = post.getall('files')
+                logger.debug("MARC: Files listing: {}".format(fileslist))
+                for f in fileslist:
+                    MARCStreamImportTask(stream=f.file).enqueue(
+                        block=False, view=self)
                 logger.info("MARC: Import started.")
                 return
 
