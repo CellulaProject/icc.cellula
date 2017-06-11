@@ -2,7 +2,7 @@ from zope.i18nmessageid import MessageFactory
 from zope.interface import implementer
 from icc.cellula.interfaces import ISingletonTask
 from icc.cellula.workers import Task
-from icc.cellula.tasks import DocumentTask
+from isu.enterprise.interfaces import IConfigurator
 from zope.component import getUtility
 from icc.cellula.interfaces import IRTMetadataIndex, IWorker
 from icc.cellula import default_storage
@@ -15,7 +15,7 @@ from . import MIME_TYPE
 
 logger = logging.getLogger('icc.cellula')
 
-_ = _N = MessageFactory("isu.webapp")
+_ = _N = MessageFactory("icc.cellula")
 
 
 @implementer(ISingletonTask)
@@ -78,7 +78,7 @@ class MARCStreamImportTask(Task):
     def __init__(self, stream, features=None,
                  *args, **kwargs):
         # FIXME: refactor headers -> features
-        super(DocumentTask, self).__init__(*args, **kwargs)
+        super(MARCStreamImportTask, self).__init__(*args, **kwargs)
         if features is None:
             features = {}
         features["mimetype"] = MIME_TYPE
@@ -100,6 +100,7 @@ class MARCStreamImportTask(Task):
 
 class MARCRecordsImportTask(Task):
     def __init__(self, records, count, features):
+        super(MARCRecordsImportTask, self).__init__()
         self.records = records
         self.count = count
         self.features = features
@@ -120,11 +121,12 @@ class MARCRecordsImportTask(Task):
             self.processed.append(rec)
             # processing
             logger.debug("Processing record: {}".format(str(rec)))
-            connt -= 1
+            count -= 1
 
     def finalize(self):
         if len(self.processed) < self.count:
             # Something bad happened or all the records already processed
+            logger.debug("No more processing possible.")
             return
         else:
             MARCRecordsImportTask(records=self.records,

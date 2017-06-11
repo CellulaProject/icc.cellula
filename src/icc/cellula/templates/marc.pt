@@ -17,7 +17,7 @@
                             i18n:translate="">Make All</button>
                 </form>
                 <hr/>
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="col-lg-6 col-sm-6 col-12">
                         <h4 i18n:translate="">Import RUSMARC records</h4>
                         <div class="input-group">
