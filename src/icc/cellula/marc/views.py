@@ -25,14 +25,15 @@ class View(views.View, cviews.View):
         if req.method == "POST":
             post = req.POST
             logger.debug("Import: {}".format(pprint.pformat(post)))
-            if post.get("make10", False) or \
-               post.get("makeall", False):
+            if "make10" in post or "makeall" in post:
                 self.progress = _("Acquirement started.")
+                logger.info("MARC: Acquirement started.")
                 IssueDataTask().enqueue(block=False, view=self)
                 return
 
-            if post.get("import", False):
+            if "import" in post:
                 self.progress = _("MARC import started.")
+                logger.info("MARC: Import started.")
                 return
 
     def answer(self):
