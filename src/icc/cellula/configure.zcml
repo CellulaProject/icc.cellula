@@ -82,7 +82,7 @@
       />
 
   <utility
-      factory="icc.cellula.elstorage.MetadataStorage"
+      factory="icc.cellula.elstorage.MARCStorage"
       name="marc"
       />
 
