@@ -486,9 +486,9 @@ class SendDocView(View):
         f.write(body)
         f.seek(0, 0)
         mimeType = content_type
-        if mimeType == None and content:
+        if mimeType is None and content:
             mimeType == "application/octet-stream"
-        elif mimeType == None and not content:
+        elif mimeType is None and not content:
             if content.upper().find("</BODY"):
                 mimeType = "text/html"
                 file_name += '.html'
@@ -516,9 +516,9 @@ class ShowDocView(SendDocView):
         except ValueError:
             return Response("<h>Cannot find document with ID={}</h>".format(key))
         mimeType = content_type
-        if mimeType == None and content:
+        if mimeType is None and content:
             mimeType == "application/octet-stream"
-        elif mimeType == None and not content:
+        elif mimeType is None and not content:
             if content.upper().find("</BODY"):
                 mimeType = "text/html"
                 file_name += '.html'
