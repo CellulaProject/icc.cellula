@@ -1,29 +1,25 @@
 """ Cornice services.
 """
-from cornice import Service
 from pyramid.response import Response, FileResponse
-import pyramid.view
-from pprint import pprint, pformat
 from icc.cellula import default_storage
 from icc.contentstorage import hexdigest
 from zope.component import getUtility, queryUtility
 
-from icc.rdfservice.interfaces import IRDFStorage, IGraph
+from icc.rdfservice.interfaces import IRDFStorage
 from icc.cellula.interfaces import IRTMetadataIndex
-from icc.cellula.indexer.interfaces import IIndexer
+# from icc.cellula.indexer.interfaces import IIndexer
 
-from rdflib import Literal
+# from rdflib import Literal
 from pyparsing import ParseException
 import tempfile
 import datetime
-from string import Template
 
-from icc.cellula.auth import *
+# from icc.cellula.auth import *
 
 from pyramid.security import Allow
 from pyramid.security import Everyone, Authenticated
 from pyramid.security import remember, forget
-from pyramid.httpexceptions import HTTPFound
+# from pyramid.httpexceptions import HTTPFound
 
 import icc.cellula.mailing as mailing
 from . import view_config
@@ -33,8 +29,8 @@ from zope.i18nmessageid import MessageFactory
 import cgi
 from icc.cellula.tasks import (
     DocumentAcceptingTask,
-    GetQueue,
-    ContentIndexTask,
+    #    GetQueue,
+    #    ContentIndexTask,
     MetadataRestoreTask,
     EmailSendTask,
     FileSystemScanTask
@@ -88,7 +84,7 @@ class View(object):
         _ = _T = self.request.translate
         self._ = _
         kw = kwargs
-        #self.context=kw.get('context', kw.get('ob',None))
+        # self.context=kw.get('context', kw.get('ob',None))
 
         self.title = _T(kw.get('title', _vp.get('title')))
         self.exception = None
@@ -159,7 +155,7 @@ class View(object):
         answer attributes to python values.
         """
         def tp_(o):
-            if o == None:
+            if o is None:
                 return o
             else:
                 return o  # o.toPython()
@@ -338,7 +334,7 @@ class GraphView(View):
     def body(self):
         FORMAT = 'n3'
         g = queryUtility(IRDFStorage, name=self.request.GET.get("name", "doc"))
-        if g == None:
+        if g is None:
             return "<strong>No such graph found.</strong>"
         s = g.serialize(format=FORMAT).decode("utf-8")
         h = "Graph size: " + str(len(g)) + " triples<br/>" + \
@@ -355,7 +351,7 @@ class GraphView(View):
     '''
 
 
-@view_config(title=_("Debug search"))
+@view_config(title=_("Document search"))
 class SearchView(View):
 
     @property
@@ -471,11 +467,14 @@ class SendDocView(View):
         if doc_id:
             Q = self.Q_doc.format(doc_id)
             for (fileName, mimeType) in self.sparql(Q, doc):
-                return self.serve(doc_id, content_type=mimeType, file_name=fileName, content=True)
+                return self.serve(doc_id,
+                                  content_type=mimeType,
+                                  file_name=fileName, content=True)
         if ann_id:
             for (mimeType,) in self.sparql(self.Q_ann.format(ann_id), doc):
                 logger.debug("Serving hasBody of mimeType:" + str(mimeType))
-                return self.serve(ann_id, content_type=mimeType, file_name="annotation", content=False)
+                return self.serve(ann_id, content_type=mimeType,
+                                  file_name="annotation", content=False)
         req.response.status_code = 404
         return Response("<h>Document not found.</h>", content_type='text/html')
 
@@ -578,11 +577,11 @@ class LoginRegisterView(View):
         stay = p.get('remember', '')
         sign_in = p.get('sign_in', None)
         sign_up = p.get('sign_up', None)
-        if sign_up != None:
+        if sign_up is not None:
             if '' in [email, password, confirm]:
                 logger.error("Wrong Sign_Up parameters")
                 return
-        if sign_in != None:
+        if sign_in is not None:
             if None in [email, password]:
                 logger.error("Wrong Sign_In parameters")
                 return
@@ -595,7 +594,7 @@ class LoginRegisterView(View):
             for passwd_hash, user_name in agents.sparql(q):
                 print("----->", passwd_hash, user_name)
         # check or register user
-        if sign_in != None:
+        if sign_in is not None:
             if stay == 'on':
                 max_age = 864000  # 10 days FIXME
                 headers = remember(req, email, max_age=max_age)
@@ -639,7 +638,7 @@ class RestorePasswordView(View):
         p = self.request.POST
         restore = p.get("restore", None)
         self.name = "John Doe"  # FIXME
-        if restore != None:
+        if restore is not None:
             recipient = p.get("email", '').strip()
             if not recipient:
                 return  # FIXME Message
@@ -693,9 +692,11 @@ class UploadDocView(View):
 
         fs = request.POST.get('file', None)
 
-        if fs == None:
+        if fs is None:
             request.response.status_code = 400
-            return {'error': 'no file', 'explanation': 'check input form if it contains "file" field'}
+            return {'error': 'no file',
+                    'explanation':
+                    'check input form if it contains "file" field'}
 
         def _(v):
             v = v.strip()
@@ -706,9 +707,12 @@ class UploadDocView(View):
                     return v
                     things.update({k: _(v) for k, v in fs.headers.items()})
 
-        if fs.filename == None:
+        if fs.filename is None:
             request.response.status_code = 400
-            return {'error': 'no file', 'explanation': 'check input form if it contains "file" field of type file'}
+            return {'error': 'no file',
+                    'explanation':
+                    'check input form if it '
+                    'contains "file" field of type file'}
 
         #hash128=(request.POST.get("hash128_low", None),request.POST.get("hash128_high", None));
             #hash128=[int(d) for d in hash128];

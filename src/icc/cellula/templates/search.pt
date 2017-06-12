@@ -55,8 +55,8 @@
                         <td>
                             <a href="#"
                                tal:attributes="href
-                                     string:${request.route_url('get_doc')}?doc_id=${r['id']}"
-                               tal:content="r['File-Name'] | r['id']"
+                                     string:${request.route_url('marc')}?marc_id=${r['id']}"
+                               tal:content="r['240'] | r['id']"
                                target="_blank">
                             </a>
                             <!-- <span tal:content="r"></span> -->
