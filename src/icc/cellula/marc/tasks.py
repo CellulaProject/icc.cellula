@@ -13,6 +13,7 @@ import logging
 import tempfile
 from . import MIME_TYPE
 from icc.cellula.tasks import DocumentTask
+from icc.contentstorage import hexdigest
 
 logger = logging.getLogger('icc.cellula')
 
@@ -134,14 +135,12 @@ class MARCRecordsImportTask(Task):
         if len(self.processed) < self.count:
             # Something bad happened or all the records already processed
             logger.debug("No more processing possible.")
-            return
         else:
             MARCRecordsImportTask(records=self.records,
                                   count=self.count,
                                   features=self.features).enqueue()
+        if self.processed:
             MARCContentStoreTask(content=self.processed,
-                                 headers=self.features).enqueue()
-            MARCContentIndexTask(content=self.processed,
                                  headers=self.features).enqueue()
 
 
@@ -152,8 +151,15 @@ class MARCContentStoreTask(DocumentTask):
             fs = rec[1]
             marc = rec[0]
             key = storage.put(marc)
+            key = hexdigest(key)
+            logger.debug("MARC storage: put MARC for key: {}".format(key))
             fs["id"] = key
             fs.update(self.headers)
+
+    def finalize(self):
+        if self.content:
+            MARCContentIndexTask(content=self.content,
+                                 headers=self.headers).enqueue()
 
 
 class MARCContentIndexTask(DocumentTask):
@@ -162,4 +168,6 @@ class MARCContentIndexTask(DocumentTask):
         for rec in self.content:
             d = rec[1]
             id = d["id"]
+            # logger.debug("Reord to be saved: {}".format(d))
             indexer.put(d, id)
+            logger.debug("MARC index: put MARC for id: {}".format(id))
