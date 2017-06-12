@@ -151,10 +151,12 @@ class MARCContentStoreTask(DocumentTask):
             fs = rec[1]
             marc = rec[0]
             key = storage.put(marc)
-            key = hexdigest(key)
-            logger.debug("MARC storage: put MARC for key: {}".format(key))
-            fs["id"] = key
+            hkey = hexdigest(key)
+            logger.debug("MARC storage: put MARC for key: {}".format(hkey))
+            fs["id"] = hkey
             fs.update(self.headers)
+            mrc = storage.get(key)
+            assert mrc == marc
 
     def finalize(self):
         if self.content:

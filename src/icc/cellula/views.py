@@ -24,7 +24,7 @@ from pyramid.security import remember, forget
 import icc.cellula.mailing as mailing
 from . import view_config
 from zope.i18nmessageid import MessageFactory
-
+import pprint
 
 import cgi
 from icc.cellula.tasks import (
@@ -392,6 +392,24 @@ class SearchView(View):
             self.marc_answer = []
 
         return q
+
+    def marc(self, id=None, indexed=None):
+        if id is not None:
+            storage = default_storage()
+            marc = storage.get(id)
+            return marc
+        if indexed is not None:
+            pprint.pprint(indexed)
+            fs = indexed["fields"]
+            for f in fs:
+                if '245' in f:
+                    nf = f['245']
+                    sfs = nf['subfields']
+                    for sf in sfs:
+                        if 'a' in sf:
+                            title = sf['a']
+                            return title
+            return "ID=" + indexed['id']
 
     def proc_match(self, match):
         for row in self.proc_attrs(match['attrs']):

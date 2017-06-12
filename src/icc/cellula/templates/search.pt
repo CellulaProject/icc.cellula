@@ -56,7 +56,7 @@
                             <a href="#"
                                tal:attributes="href
                                      string:${request.route_url('marc')}?marc_id=${r['id']}"
-                               tal:content="r['240'] | r['id']"
+                               tal:content="view.marc(indexed=r)"
                                target="_blank">
                             </a>
                             <!-- <span tal:content="r"></span> -->
