@@ -172,11 +172,12 @@ class ElasticStorage(object):
 
 
 class MetadataStorage(ElasticStorage):
+    __storage_name__ = "elastic"
 
     def __init__(self):
         # Use configurator
         conf = getUtility(IConfigurator, name="configuration")
-        section = conf["elastic"]
+        section = conf[self.__class__.__storage_name__]
         index = section.get("index", "metadata")
         doctype = section.get("doctype", "document")
         refresh = section.get("refresh", "True")  # FIXME: Convert to Boolean
@@ -192,3 +193,7 @@ class MetadataStorage(ElasticStorage):
                                               doctype=doctype,
                                               refresh=refresh,
                                               timeouts=timeouts)
+
+
+class MARCStorage(MetadataStorage):
+    __storage_name__ = "marc"

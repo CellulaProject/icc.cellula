@@ -124,7 +124,8 @@ class MARCRecordsImportTask(Task):
             # processing
             logger.debug("Processing record: {}".format(str(rec)))
             # logger.debug("As marc: {}".format(rec.as_marc()))
-            content = rec.as_marc(encoding="utf-8")
+            rec.force_utf8 = True
+            content = rec.as_marc()
             d = rec.as_dict()
             self.processed.append((content, d))
             count -= 1
@@ -149,7 +150,8 @@ class MARCContentStoreTask(DocumentTask):
         storage = default_storage()
         for rec in self.content:
             fs = rec[1]
-            key = storage.put(rec[0])
+            marc = rec[0]
+            key = storage.put(marc)
             fs["id"] = key
             fs.update(self.headers)
 

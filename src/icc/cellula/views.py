@@ -366,6 +366,7 @@ class SearchView(View):
         FORMAT = 'n3'
         # indexer = queryUtility(IIndexer, name="indexer")
         indexer = queryUtility(IRTMetadataIndex, name="elastic")
+        marc_indexer = queryUtility(IRTMetadataIndex, name="marc")
         self.doc = queryUtility(IRDFStorage, name="documents")
 
         query = self.request.GET.get("q", None)
@@ -386,6 +387,13 @@ class SearchView(View):
         #         ms.append(r)
 
         self.matches = self.answer
+
+        if marc_indexer is not None:
+            self.marc_answer = marc_indexer.query(query)
+            self.has_marc = len(self.marc_answer) > 0
+        else:
+            self.has_marc = False
+            self.marc_answer = []
 
         return q
 
