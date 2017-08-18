@@ -2,7 +2,7 @@ from zope.interface import implementer
 from .interfaces import IRTMetadataIndex
 from isu.enterprise.interfaces import IConfigurator
 from zope.component import getUtility
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, exceptions
 import logging
 logger = logging.getLogger('icc.cellula')
 
@@ -57,6 +57,21 @@ class ElasticStorage(object):
                                   doc_type=self.doctype,
                                   refresh=self.refresh,
                                   id=id)
+
+    def remove_index(self, index=None):
+        """
+        Removes index at all. Used for DEBUGGING and TESTING.
+        """
+        if index is None:
+            index = self.index
+        try:
+            self.engine.indices.delete(index=index,
+                                       # master_timeout=self.timeouts.get(
+                                       #    "service", 30),
+                                       # ignore_unavailable=True
+                                       )
+        except exceptions.NotFoundError:
+            pass
 
     def query(self, query=None, variant=None, count=20, start=0, **kwargs):
         """Run query return list of corresponding
