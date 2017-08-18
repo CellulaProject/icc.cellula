@@ -25,10 +25,14 @@ class view_config(object):
         return wrapped
 
 
-def default_storage():
+def get_storage(name):
+    return getUtility(IContentStorage, name)
+
+
+def default_storage(type="content_storage"):
     config = getUtility(IConfigurator, "configuration")
-    storage_name = config["app:main"]["content_storage"]
-    return getUtility(IContentStorage, storage_name)
+    storage_name = config["app:main"][type]
+    return get_storage(storage_name)
 
 
 def includeme(global_config, **settings):
