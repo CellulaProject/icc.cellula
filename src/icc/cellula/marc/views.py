@@ -56,7 +56,10 @@ class View(views.View, cviews.View):
 
     def answer(self):
         metadata = getUtility(IRTMetadataIndex, name="elastic")
-        return metadata.query(variant="isbn")
+        try:
+            return metadata.query(variant="isbn")
+        except Exception as e:
+            return repr(e)
 
     def result_table(self):
         return self()

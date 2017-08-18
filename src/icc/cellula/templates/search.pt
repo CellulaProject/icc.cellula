@@ -4,7 +4,7 @@
       metal:use-macro="main.macros['page']"
 >
     <tal:block metal:fill-slot="content">
-        <div tal:define="_dummy view.body" tal:omit-tag="" ></div>
+        <div tal:define="_dummy view.body" tal:omit-tag="" tal:on-error="nothing"></div>
         <div class="panel panel-default" tal:define="src view.answer">
             <div class="panel-heading" i18n:translate="">Document search result</div>
             <div class="panel-body">
@@ -12,7 +12,7 @@
                        i18n:translate=""
                    >Found results:</span>
                     <span
-                        tal:replace="view.answer.total">
+                        tal:replace="view.answer.total" tal:on-error="string: No resuls (An error happend)">
                     </span>
                 </p>
             </div>
@@ -37,7 +37,7 @@
             <div tal:condition="not: view.matches | default">
                 The query produced no results (documents).
             </div>
-            <div class="panel-body" tal:condition="view.has_marc">
+            <div class="panel-body" tal:condition="view.has_marc | nothing">
                 <p><span
                        i18n:translate=""
                    >MARC search results:</span>
@@ -46,7 +46,7 @@
                     </span>
                 </p>
             </div>
-            <div tal:condition="view.has_marc" tal:omit-tag="">
+            <div tal:condition="view.has_marc | nothing" tal:omit-tag="">
                 <!-- <pre tal:content="src"/> -->
                 <table class="table">
                     <tr tal:repeat="r view.marc_answer">

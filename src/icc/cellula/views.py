@@ -135,7 +135,7 @@ class View(object):
         self.action()
         answer = self.answer()
         view = {'view': self}
-        if answer != None:
+        if answer is None:
             view['answer'] = answer
         # if self.context != None:
         #    view['context']=self.context

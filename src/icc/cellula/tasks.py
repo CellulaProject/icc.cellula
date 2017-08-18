@@ -8,7 +8,7 @@ from icc.cellula.interfaces import IWorker, IMailer
 from icc.contentstorage.interfaces import IFileSystemScanner
 from isu.enterprise.interfaces import IConfigurator
 from zope.interface import implementer, Interface
-from zope.component import getUtility
+from zope.component import getUtility, queryUtility
 from string import Template
 import time
 import logging
@@ -74,7 +74,10 @@ class DocumentMetaStoreTask(DocumentTask):
         self.headers = headers
 
     def run(self):
-        doc_meta = getUtility(IRDFStorage, name='documents')
+        doc_meta = queryUtility(IRDFStorage, name='documents')
+        if doc_meta is None:
+            logger.info("No Metadata storage found.")
+            return False
         lock = getUtility(ILock, name="documents")
         lock.acquire()
         self.locks.append(lock)
