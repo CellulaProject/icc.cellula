@@ -743,6 +743,7 @@ class UploadDocView(View):
 
         content = fs.value  # file
         doc_id = things['id'] = storage.hash(content)
+        logger.debug("Fast supply id:'{}'".format(doc_id))
         rc = storage.resolve(doc_id)
         logger.debug("Resolving: {}, {}".format(rc, doc_id))
         if rc:

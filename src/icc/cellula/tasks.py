@@ -60,7 +60,22 @@ class DocumentStoreTask(DocumentTask):
         lock.acquire()
         self.locks.append(lock)
         storage.begin()
-        id_ = storage.put(self.content, features=self.headers)
+
+        features = self.headers
+
+        id_ = storage.put(self.content, features=features)
+
+        if self.key in features:
+            fid = features[self.key]
+            if fid != id_:
+                raise ValueError(
+                    "ids are not equal supplied:'{}'"
+                    ", stored:'{}'".format(id_, fid))
+        else:
+            logger.debug(
+                "Supply id during storage (as it was empty):'{}'".format(id_))
+            features[self.key] = id_
+
         storage.commit()
         self.locks.pop()
         lock.release()
@@ -274,7 +289,8 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
             content = self.content = storage.get(self.doc_id)
         except KeyError:
             logger.error("Content key invalid! Removing meta for it.")
-            for _ in self.prolog_query("icc:annotation_remove(target,'$tid')", graph="documents", tid=self.doc_id):
+            for _ in self.prolog_query("icc:annotation_remove(target,'$tid')",
+                                       graph="documents", tid=self.doc_id):
                 logger.info("Removed document with id: {}".format(self.doc_id))
 
     def finalize(self):
@@ -282,7 +298,8 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
             self.enqueue(DocumentProcessingTask(self.content, self.headers))
         else:
             logger.error(
-                "Document '{}' has metadata, but does not its content!".format(self.doc_id))
+                "Document '{}' has metadata, "
+                "but does not its content!".format(self.doc_id))
             # FIXME Document must be eliminated from matadatastorage
 
 
@@ -294,7 +311,7 @@ class DocumentElasticIndexTask(DocumentTask):
     def run(self):
         id = self.headers["id"]
         logger.info(
-            "------------- Content index task run ----------------------------")
+            "Content index task runs.")
         # logger.debug(self.content[:100])
         # logger.debug(self.headers.keys())
         estore = getUtility(IRTMetadataIndex, "elastic")
@@ -359,7 +376,7 @@ class EmailSendTask(Task):
         if self.message():
             self.mailer.send(self.message)
         else:
-            debug.error("Couldn't send message {}".format(self.message))
+            logger.error("Couldn't send message {}".format(self.message))
 
 
 class FileSystemScanTask(Task):
