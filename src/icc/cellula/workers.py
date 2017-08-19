@@ -197,7 +197,7 @@ class Task(object):
 
 
 @implementer(ITerminationTask)
-class TerminationTask(object):
+class TerminationTask(Task):
     """Task, whose process preduces worker
     processing cycle to be terminated."""
     priority = 100
@@ -205,6 +205,9 @@ class TerminationTask(object):
 
     def __init__(self, *args, **kwargs):
         pass
+
+    def run(self):
+        raise RuntimeError("Should not be run!")
 
 
 @implementer(IWorker)
@@ -253,13 +256,9 @@ class QueueThread(threading.Thread):
             p.start()
         if not self.thread_pool:
             # we are the only thread
-            logger.info("Scrifice myself for processing.")
+            logger.info("Sacrifice myself for processing.")
             w = ThreadWorker()
             w()
-            # Must not reach, by idea.
-        while True:
-            if not self.join_worker():
-                break
 
     def is_waiting(self, worker):
         if hasattr(worker, 'waiting'):
