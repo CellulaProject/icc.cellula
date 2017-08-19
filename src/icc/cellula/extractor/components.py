@@ -3,7 +3,8 @@ from zope.interface import implementer, Interface
 from zope.component import getUtility
 import subprocess as sp
 import tempfile
-import os, os.path
+import os
+import os.path
 from collections import OrderedDict
 from configparser import ConfigParser
 import logging
@@ -30,7 +31,7 @@ class LibExtractorExtractor(object):
 
         execpathname = config[self.config_section].get('exec_path', None)
 
-        if execpathname == None:
+        if execpathname is None:
             cp = sp.run(["which", self.extractor_binary],
                         stdout=sp.PIPE,
                         stdin=sp.PIPE)
@@ -65,7 +66,7 @@ class LibExtractorExtractor(object):
         if executable is None:
             executable = self.extractor
 
-        print([executable] + list(params))
+        logger.debug(str(executable) + ' '.join(list(params)))
         cp = sp.run([executable] + list(params),
                     stdout=sp.PIPE,
                     stderr=sp.PIPE)
@@ -299,8 +300,6 @@ class RecollExtractor(object):
 
         script = script.lstrip("\\").strip()
         logger.debug("Filter: " + script)
-        if self.debug > 10:
-            print("DBUG:Filter: " + script)
         try:
             way, cmd = script.split()
         except ValueError:
@@ -328,7 +327,8 @@ class RecollExtractor(object):
                 'exec'
         ):  # FIXME Make some difference for execm (exec many filters)
             try:
-                out = self.run(tmpfile, executable=executable, ignore_err=True)
+                out = self.run(tmpfile, executable=executable,
+                               ignore_err=True)
             except FileNotFoundError:
                 out = self.run(tmpfile,
                                executable=cmd,
@@ -352,8 +352,8 @@ class RecollExtractor(object):
             raise ValueError("no executable")
 
         executable_CMD = [executable] + list(params)
-        if self.debug:
-            print("DEBUG:executable_CMD:", executable_CMD)
+
+        logger.debug("executable_CMD: {}".format(executable_CMD))
 
         cp = sp.run(executable_CMD, stdout=sp.PIPE, stderr=sp.PIPE)
         if cp.stderr and not ignore_err:
