@@ -444,8 +444,9 @@ class ScannedFilesProcessingTask(Task):
                 "File-Name": filename,
                 "Path-Name": pathname}
             if storage.processfile(pathname, features):
-                logger.debug("Processed {}".format(pathname))
-                self.further.append((features["id"], features))
+                pid_ = features["id"]
+                logger.debug("Processed {} id={}".format(pathname, pid_))
+                self.further.append((pid_, features))
 
             self.processed += 1
 

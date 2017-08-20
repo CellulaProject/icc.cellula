@@ -195,6 +195,9 @@ class Task(object):
     def __lt__(self, other):
         return self.priority < other.priority
 
+    def __str__(self):
+        return "<{} [{}]>".format(self.__class__.__name__, hex(id(self)))
+
 
 @implementer(ITerminationTask)
 class TerminationTask(Task):
