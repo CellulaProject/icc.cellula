@@ -359,4 +359,4 @@ class RecollExtractor(object):
         if cp.stderr and not ignore_err:
             err = cp.stderr.decode(encoding).strip()
             raise RuntimeError(err)
-        return cp.stdout.decode(encoding)
+        return cp.stdout.decode(encoding, errors='replace')
