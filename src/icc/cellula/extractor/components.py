@@ -72,7 +72,8 @@ class LibExtractorExtractor(object):
                     stderr=sp.PIPE)
         if cp.stderr and not ignore_err:
             if len(cp.stderr) > 0:
-                raise RuntimeError(cp.stderr.decode('utf-8').strip())
+                raise RuntimeError(cp.stderr.decode(
+                    'utf-8', errors='replace').strip())
             else:
                 raise RuntimeError("NO DESCRIPTION")
         return cp.stdout.decode('utf-8', errors="replace")
@@ -317,7 +318,7 @@ class RecollExtractor(object):
         meta.setdefault("text|mimetype", "text/html")
 
         if cmd == 'internal':
-            meta['text-body'] = content.decode('utf8')
+            meta['text-body'] = content.decode('utf8', errors='replace')
             return meta
 
         executable = os.path.join(self.filterdir, cmd)
@@ -357,6 +358,6 @@ class RecollExtractor(object):
 
         cp = sp.run(executable_CMD, stdout=sp.PIPE, stderr=sp.PIPE)
         if cp.stderr and not ignore_err:
-            err = cp.stderr.decode(encoding).strip()
+            err = cp.stderr.decode(encoding, errors='replace').strip()
             raise RuntimeError(err)
         return cp.stdout.decode(encoding, errors='replace')
