@@ -253,7 +253,7 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
     """Find a document by its id in the storage,
     load it, process it with a DocumentProcessingTask.
     """
-    priority = 8
+    priority = 7
     processing = "thread"
     query = """
         SELECT DISTINCT ?mimeType ?fileName
@@ -304,8 +304,8 @@ class DocumentMetadataRestoreTask(Task, MetadataStorageQueryMixin):
 
 
 class DocumentElasticIndexTask(DocumentTask):
-    priority = 20  # the lowest priority
-    delay = 5  # sec
+    priority = 7  # the lowest priority
+    delay = 1  # sec
     processing = "thread"
 
     def run(self):
@@ -421,6 +421,7 @@ class FileSystemScanTask(Task):
 
 
 class ScannedFilesProcessingTask(Task):
+    priority = 8
 
     def __init__(self, files, bunch_size=10):
         super(ScannedFilesProcessingTask, self).__init__()
