@@ -75,7 +75,7 @@ class LibExtractorExtractor(object):
                 raise RuntimeError(cp.stderr.decode('utf-8').strip())
             else:
                 raise RuntimeError("NO DESCRIPTION")
-        return cp.stdout.decode('utf-8')
+        return cp.stdout.decode('utf-8', errors="replace")
 
     def extract(self, content, headers=None):
         """Run extractor over content data.
