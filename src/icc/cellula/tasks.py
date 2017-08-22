@@ -412,6 +412,7 @@ class FileSystemScanTask(Task):
         # process the subsets with a
         # sequence of subtasks.
         self.files = shuffle(self.files)
+        logger.debug("Suffled.")
 
     def finalize(self):
         def_bunch_size = 10
