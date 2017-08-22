@@ -421,6 +421,8 @@ class FileSystemScanTask(Task):
             "scanner", "bunch_size", fallback=def_bunch_size)
         if self.files:
             self.enqueue(ScannedFilesProcessingTask(self.files, bunch_size))
+        else:
+            logger.debug("No files found.")
 
 
 class ScannedFilesProcessingTask(Task):
