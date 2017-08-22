@@ -16,6 +16,7 @@ from .interfaces import IRTMetadataIndex
 from icc.cellula import default_storage
 import pprint
 logger = logging.getLogger('icc.cellula')
+from random import shuffle
 
 
 class DocumentTask(Task):
@@ -406,10 +407,11 @@ class FileSystemScanTask(Task):
 
         # Collect all files recursively
         # Collect only new (unknown to location storage)
-        storage.scan_directories(cb=self.process, scanonly=True, count=100)
+        storage.scan_directories(cb=self.process, scanonly=True)
         # Divide file set into subsets and
         # process the subsets with a
         # sequence of subtasks.
+        self.files = shuffle(self.files)
 
     def finalize(self):
         def_bunch_size = 10
