@@ -406,7 +406,7 @@ class FileSystemScanTask(Task):
 
         # Collect all files recursively
         # Collect only new (unknown to location storage)
-        storage.scan_directories(cb=self.process, scanonly=True)
+        storage.scan_directories(cb=self.process, scanonly=True, count=100)
         # Divide file set into subsets and
         # process the subsets with a
         # sequence of subtasks.
@@ -458,4 +458,5 @@ class ScannedFilesProcessingTask(Task):
                 self.files, self.bunch_size))
 
         for id, features in self.further:
+            logger.debug("SFPT:Adding DocumentProcessingTask {}.".format(id))
             self.enqueue(DocumentProcessingTask(id=id, headers=features))
