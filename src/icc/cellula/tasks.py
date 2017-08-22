@@ -15,8 +15,10 @@ import logging
 from .interfaces import IRTMetadataIndex
 from icc.cellula import default_storage
 import pprint
-logger = logging.getLogger('icc.cellula')
 from random import shuffle
+from icc.contentstorage import GOOD_MIMES
+
+logger = logging.getLogger('icc.cellula')
 
 
 class DocumentTask(Task):
@@ -107,6 +109,13 @@ class DocumentProcessingTask(DocumentTask):
     priority = 8
     processing = "process"
 
+    def allowed_type(self, features):
+        for key in ["Content-Type", "mimetype"]:
+            if key in features:
+                v = features[key]
+                return v in GOOD_MIMES
+        return True
+
     def run(self):
 
         self.text_content = None
@@ -116,8 +125,14 @@ class DocumentProcessingTask(DocumentTask):
 
         things = self.headers
 
+        if not self.allowed_type(things):
+            return
+
         extractor = getUtility(IExtractor, name='extractor')
         ext_data = extractor.extract(self.content, things)
+
+        if not self.allowed_type(ext_data):
+            return
 
         ext_things = {}
         ext_things.update(things)
@@ -411,7 +426,7 @@ class FileSystemScanTask(Task):
         # Divide file set into subsets and
         # process the subsets with a
         # sequence of subtasks.
-        self.files = shuffle(self.files)
+        shuffle(self.files)
         logger.debug("Suffled.")
 
     def finalize(self):
