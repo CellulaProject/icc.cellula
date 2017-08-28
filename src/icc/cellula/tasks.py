@@ -113,7 +113,14 @@ class DocumentProcessingTask(DocumentTask):
         for key in ["Content-Type", "mimetype"]:
             if key in features:
                 v = features[key]
-                return v in GOOD_MIMES
+                if type(v) in [list, tuple]:
+                    for _ in v:
+                        if _ in GOOD_MIMES:
+                            return True
+                    else:
+                        return False
+                else:
+                    return v in GOOD_MIMES
         return True
 
     def run(self):
@@ -326,7 +333,7 @@ class DocumentElasticIndexTask(DocumentTask):
 
     def run(self):
         id = self.headers["id"]
-        logger.info(
+        logger.debug(
             "Content index task runs.")
         # logger.debug(self.content[:100])
         # logger.debug(self.headers.keys())
@@ -405,15 +412,13 @@ class FileSystemScanTask(Task):
         super(FileSystemScanTask, self).__init__(*args, **kwargs)
         self.files = []
 
-    def process(self, phase, pathname, filename, count, new):
-        if not new:
-            return
+    def process(self, phase, pathname, filename, count, new, good):
         if phase == "start":
-            if new:
+            if new and good:
                 self.files.append((pathname, filename))
-                logger.debug("Added {} file".format(filename))
+                logger.debug("SCAN:Added {} file".format(filename))
             else:
-                logger.debug("Skipping {} file".format(filename))
+                logger.debug("SCAN:Skipping {} file".format(filename))
 
     def run(self):
         storage = default_storage()
@@ -422,12 +427,12 @@ class FileSystemScanTask(Task):
 
         # Collect all files recursively
         # Collect only new (unknown to location storage)
-        storage.scan_directories(cb=self.process, scanonly=True)
+        storage.scan_directories(cb=self.process, scanonly=True, count=100)
         # Divide file set into subsets and
         # process the subsets with a
         # sequence of subtasks.
         shuffle(self.files)
-        logger.debug("Suffled.")
+        logger.debug("SCAN:Suffled {} files.".format(len(self.files)))
 
     def finalize(self):
         def_bunch_size = 10
