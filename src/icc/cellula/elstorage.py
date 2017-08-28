@@ -92,18 +92,25 @@ class ElasticStorage(object):
         if variant is not None and variant:
             method_name = "query_" + variant
             method = getattr(self, method_name)
-            body = method(body, **kwargs)
+            kw = {}
+            kw.update(kwargs)
+            kw["query"] = query
+            body = method(body, **kw)
             timeout = self.timeouts.get("service", 10)
         else:
             timeout = self.timeouts.get("ui", 30)
         if logger.isEnabledFor(logging.DEBUG):
             import pprint
-            logger.debug("Query body :{}".format(pprint.pformat(body)))
+            logger.debug("ELASTIC:Query body :{}".format(pprint.pformat(body)))
 
         hits = self.engine.search(index=self.index,
                                   doc_type=self.doctype,
                                   body=body,
                                   request_timeout=timeout)
+        # if logger.isEnabledFor(logging.DEBUG):
+        #     import pprint
+        #     logger.debug(pprint.pformat(hits)[:1000])
+
         return self.convert(hits, start=start, count=count)
 
     def convert(self, hits, start, count):
@@ -113,17 +120,17 @@ class ElasticStorage(object):
         [answer.append(hit["_source"]) for hit in hits["hits"]["hits"]]
         answer.start = start
         answer.total = total
-        logger.debug("Answer: {}".format(answer))
+        logger.debug("ELASTIC:Answer: {}".format(answer))
         return answer
 
-    def query_documents(self, body, min=None, max=None):
+    def query_documents(self, body, min=None, max=None, query=None):
         """Return a "representative" list of documents, e.g.,
         for list table construction.
         """
         body["query"] = {"match_all": {}}
         return body
 
-    def query_isbn(self, body):
+    def query_isbn(self, body, query=None):
         body["query"] = {
             "bool": {
                 "must": {
@@ -152,7 +159,7 @@ class ElasticStorage(object):
 
         return body
 
-    def query_noisbn(self, body):
+    def query_noisbn(self, body, query=None):
         body["query"] = {
             "bool": {
                 "must": {
@@ -174,6 +181,30 @@ class ElasticStorage(object):
                                     "mimetype": "image/vnd.djvu"
                                 }
                             }
+                        ]
+                    }
+                }
+            }
+        }
+
+        return body
+
+    def query_byid(self, body, query=None):
+        body["query"] = {
+            "bool": {
+                "must": {
+                    "match_all": {}
+                },
+
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {
+                                "match": {
+                                    "_id": query
+                                }
+                            }
+
                         ]
                     }
                 }

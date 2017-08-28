@@ -5,6 +5,7 @@ from icc.cellula.indexer.interfaces import IIndexer
 from icc.rdfservice.interfaces import IRDFStorage
 from icc.cellula.interfaces import ILock, ISingletonTask
 from icc.cellula.interfaces import IWorker, IMailer
+from icc.cellula.interfaces import IRTMetadataIndex
 from icc.contentstorage.interfaces import IFileSystemScanner
 from isu.enterprise.interfaces import IConfigurator
 from zope.interface import implementer, Interface
@@ -457,6 +458,8 @@ class ScannedFilesProcessingTask(Task):
 
     def run(self):
         storage = default_storage()
+        indexer = queryUtility(IRTMetadataIndex, name="elastic")
+
         while True:
             if not self.files:
                 return
@@ -465,16 +468,21 @@ class ScannedFilesProcessingTask(Task):
             if self.processed == self.bunch_size:
                 return
             pathname, filename = self.files.pop()
-            logger.debug("PROCESSING {}".format(filename))
+            logger.info("SCAN:Processing {}, {} files left.".format(
+                filename, len(self.files)))
             features = {
                 "File-Name": filename,
                 "Path-Name": pathname}
             if storage.processfile(pathname, features):
                 pid_ = features["id"]
-                logger.debug("Processed {} id={}".format(pathname, pid_))
-                self.further.append((pid_, features))
-
-            self.processed += 1
+                rc = indexer.query(pid_, variant="byid")
+                logger.debug("SCAN:Query id={} -> {}".format(pid_, rc.total))
+                if rc.total < 1:
+                    self.further.append((pid_, features))
+                    self.processed += 1
+                else:
+                    logger.debug("SCAN:Skipping as it already processed")
+                logger.debug("SCAN:Processed {} id={}".format(pathname, pid_))
 
     def finalize(self):
         if self.files and \
