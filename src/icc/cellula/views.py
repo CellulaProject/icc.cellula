@@ -47,7 +47,7 @@ DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 DATE_TIME_FORMAT_IN = "%Y-%m-%d %H:%M:%S%z"
 
 
-def _(x):
+def _(x): # FIXME: Install real localizer
     return x
 
 
@@ -723,7 +723,7 @@ class UploadDocView(View):
                 if v.startswith("'") and v.endswith("'"):
                     v = v.strip("'")
                     return v
-                    things.update({k: _(v) for k, v in fs.headers.items()})
+        things.update({k: _(v) for k, v in fs.headers.items()})
 
         if fs.filename is None:
             request.response.status_code = 400
